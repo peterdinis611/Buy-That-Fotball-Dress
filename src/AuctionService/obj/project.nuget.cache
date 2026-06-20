@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "sZ+cuBJ+Cao=",
+  "success": true,
+  "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/AuctionService.csproj",
+  "expectedPackageFiles": [
+    "/Users/peterdinis/.nuget/packages/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
