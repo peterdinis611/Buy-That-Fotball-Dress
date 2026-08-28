@@ -1,11 +1,21 @@
 {
   "version": 2,
-  "dgSpecHash": "qS2/z9+kOBw=",
+  "dgSpecHash": "0s8LW/NwUTg=",
   "success": true,
   "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/SearchService.csproj",
   "expectedPackageFiles": [
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/dnsclient/1.6.1/dnsclient.1.6.1.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/masstransit/9.2.1/masstransit.9.2.1.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/masstransit.abstractions/9.2.1/masstransit.abstractions.9.2.1.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/masstransit.rabbitmq/9.2.1/masstransit.rabbitmq.9.2.1.nupkg.sha512",
     "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512"
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/mongodb.bson/3.11.1/mongodb.bson.3.11.1.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/mongodb.driver/3.11.1/mongodb.driver.3.11.1.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/rabbitmq.client/7.2.2/rabbitmq.client.7.2.2.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/sharpcompress/0.48.1/sharpcompress.0.48.1.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/snappier/1.3.1/snappier.1.3.1.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/zstdsharp.port/0.7.3/zstdsharp.port.0.7.3.nupkg.sha512"
   ],
   "logs": [
     {

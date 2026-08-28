@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using AuctionService.Data;
 using AuctionService.Services;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,22 @@ builder.Services.AddDbContext<AuctionDbContext>(opt =>
 });
 
 builder.Services.AddScoped<IAuctionsService, AuctionsService>();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMq:Host"] ?? "localhost", "/", h =>
+        {
+            h.Username(builder.Configuration["RabbitMq:Username"] ?? "guest");
+            h.Password(builder.Configuration["RabbitMq:Password"] ?? "guest");
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
+
+builder.Services.AddHostedService<AuctionSeedHostedService>();
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 
@@ -39,24 +56,4 @@ if (!app.Environment.IsDevelopment())
 app.UseAuthorization();
 app.MapControllers();
 
-await SeedDatabaseAsync(app);
-
 app.Run();
-
-static async Task SeedDatabaseAsync(WebApplication app)
-{
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<AuctionDbContext>();
-    var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>()
-        .CreateLogger("DbInitializer");
-
-    try
-    {
-        await DbInitializer.InitializeAsync(context, logger);
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "An error occurred while seeding the database.");
-        throw;
-    }
-}
