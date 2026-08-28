@@ -17,7 +17,8 @@ public static class DbInitializer
 
         if (await context.Auctions.AnyAsync(cancellationToken))
         {
-            logger.LogInformation("Database already contains auctions, skipping seed.");
+            logger.LogInformation("Database already contains auctions, skipping auction seed.");
+            await SeedBidsIfEmptyAsync(context, logger, cancellationToken);
             return;
         }
 
@@ -168,7 +169,8 @@ public static class DbInitializer
                 Id = Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466"),
                 ReservePrice = 400,
                 Seller = "selecao.archive",
-                Winner = "jerseyhunter",
+                Winner = "kitvault",
+                HighBidder = "kitvault",
                 SoldAmount = 620,
                 CurrentHighBid = 620,
                 AuctionEnd = now.AddDays(-1),
@@ -222,5 +224,62 @@ public static class DbInitializer
             await publishEndpoint.Publish(auction.ToAuctionCreated(), cancellationToken);
 
         logger.LogInformation("Seeded {Count} auctions.", auctions.Count);
+        await SeedBidsIfEmptyAsync(context, logger, cancellationToken);
+    }
+
+    private static async Task SeedBidsIfEmptyAsync(
+        AuctionDbContext context,
+        ILogger logger,
+        CancellationToken cancellationToken)
+    {
+        if (await context.Bids.AnyAsync(cancellationToken))
+        {
+            logger.LogInformation("Database already contains bids, skipping bid seed.");
+            return;
+        }
+
+        var now = DateTime.UtcNow;
+        var shots = new (Guid AuctionId, string Bidder, int Amount)[]
+        {
+            (Guid.Parse("0f6c8a21-5e44-4b7d-9c18-2d3a91e5b860"), "kitvault", 200),
+            (Guid.Parse("7d2e9b54-1c80-4f36-a9d1-5b8c0e4f2173"), "kitvault", 230),
+            (Guid.Parse("c3a1f4d2-8b6e-4c91-9f20-1a7b5e3d8c44"), "campnou.store", 280),
+            (Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466"), "kitvault", 620),
+            (Guid.Parse("5e7a2c14-8f39-41b6-ad50-2c9d6e1b8077"), "kitvault", 80)
+        };
+
+        var seeded = 0;
+        foreach (var (auctionId, bidder, amount) in shots)
+        {
+            var auction = await context.Auctions.FirstOrDefaultAsync(x => x.Id == auctionId, cancellationToken);
+            if (auction is null)
+                continue;
+
+            context.Bids.Add(new Bid
+            {
+                Id = Guid.NewGuid(),
+                AuctionId = auctionId,
+                Bidder = bidder,
+                Amount = amount,
+                CreatedAt = now.AddHours(-4)
+            });
+
+            auction.CurrentHighBid = amount;
+            auction.HighBidder = bidder;
+            if (auction.Status is Status.Finished)
+            {
+                auction.Winner = bidder;
+                auction.SoldAmount = amount;
+            }
+
+            auction.UpdatedAt = now;
+            seeded++;
+        }
+
+        if (seeded == 0)
+            return;
+
+        await context.SaveChangesAsync(cancellationToken);
+        logger.LogInformation("Seeded {Count} bids onto the dressing-room sheet.", seeded);
     }
 }

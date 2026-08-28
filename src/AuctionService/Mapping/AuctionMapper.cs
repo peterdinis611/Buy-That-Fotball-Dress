@@ -12,6 +12,7 @@ public static class AuctionMapper
         ReservePrice = auction.ReservePrice,
         Seller = auction.Seller,
         Winner = auction.Winner,
+        HighBidder = auction.HighBidder,
         SoldAmount = auction.SoldAmount,
         CurrentHighBid = auction.CurrentHighBid,
         CreatedAt = auction.CreatedAt,

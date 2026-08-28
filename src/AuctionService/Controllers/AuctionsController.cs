@@ -17,10 +17,28 @@ public class AuctionsController(IAuctionsService auctionsService) : ControllerBa
     public async Task<ActionResult<IReadOnlyList<AuctionDto>>> GetAll(
         [FromQuery] string? club,
         [FromQuery] Status? status,
+        [FromQuery] string? seller,
         CancellationToken cancellationToken)
     {
-        var auctions = await auctionsService.GetAllAsync(club, status, cancellationToken);
+        var auctions = await auctionsService.GetAllAsync(club, status, seller, cancellationToken);
         return Ok(auctions);
+    }
+
+    [Authorize]
+    [HttpGet("mine")]
+    [ProducesResponseType(typeof(PlayerSheetDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<PlayerSheetDto>> GetMine(CancellationToken cancellationToken)
+    {
+        var username = CurrentUsername();
+        if (username is null)
+            return Unauthorized();
+
+        var result = await auctionsService.GetPlayerSheetAsync(username, cancellationToken);
+        if (!result.IsSuccess)
+            return Problem(title: result.Error, statusCode: result.StatusCode);
+
+        return Ok(result.Value);
     }
 
     [HttpGet("{id:guid}")]
@@ -51,6 +69,27 @@ public class AuctionsController(IAuctionsService auctionsService) : ControllerBa
             return Problem(title: result.Error, statusCode: result.StatusCode);
 
         return CreatedAtAction(nameof(GetById), new { id = result.Value!.Id }, result.Value);
+    }
+
+    [Authorize]
+    [HttpPost("{id:guid}/bids")]
+    [ProducesResponseType(typeof(AuctionDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<AuctionDto>> PlaceBid(
+        Guid id,
+        PlaceBidDto dto,
+        CancellationToken cancellationToken)
+    {
+        var bidder = CurrentUsername();
+        if (bidder is null)
+            return Unauthorized();
+
+        var result = await auctionsService.PlaceBidAsync(id, bidder, dto.Amount, cancellationToken);
+        return ToActionResult(result);
     }
 
     [Authorize]

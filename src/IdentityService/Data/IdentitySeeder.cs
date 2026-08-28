@@ -11,6 +11,7 @@ public static class IdentitySeeder
     private static readonly (string Username, string Email, string DisplayName)[] Squad =
     [
         ("kitvault", "kitvault@kitvault.test", "Kit Vault"),
+        ("jerseyhunter", "hunter@kitvault.test", "Jersey Hunter"),
         ("campnou.store", "campnou@kitvault.test", "Camp Nou Store"),
         ("anfield.kits", "anfield@kitvault.test", "Anfield Kits"),
         ("munich.matchworn", "munich@kitvault.test", "Munich Matchworn"),

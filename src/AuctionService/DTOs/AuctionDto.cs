@@ -8,6 +8,7 @@ public class AuctionDto
     public int ReservePrice { get; set; }
     public required string Seller { get; set; }
     public string? Winner { get; set; }
+    public string? HighBidder { get; set; }
     public int? SoldAmount { get; set; }
     public int? CurrentHighBid { get; set; }
     public DateTime CreatedAt { get; set; }
