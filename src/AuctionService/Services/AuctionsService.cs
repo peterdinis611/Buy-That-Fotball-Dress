@@ -3,11 +3,13 @@ using AuctionService.Data;
 using AuctionService.DTOs;
 using AuctionService.Entities;
 using AuctionService.Mapping;
+using Contracts;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionService.Services;
 
-public sealed class AuctionsService(AuctionDbContext db) : IAuctionsService
+public sealed class AuctionsService(AuctionDbContext db, IPublishEndpoint publishEndpoint) : IAuctionsService
 {
     public async Task<IReadOnlyList<AuctionDto>> GetAllAsync(
         string? club,
@@ -56,6 +58,7 @@ public sealed class AuctionsService(AuctionDbContext db) : IAuctionsService
 
         db.Auctions.Add(auction);
         await db.SaveChangesAsync(cancellationToken);
+        await publishEndpoint.Publish(auction.ToAuctionCreated(), cancellationToken);
 
         return Result<AuctionDto>.Success(auction.ToDto());
     }
@@ -80,6 +83,7 @@ public sealed class AuctionsService(AuctionDbContext db) : IAuctionsService
 
         auction.ApplyUpdate(dto);
         await db.SaveChangesAsync(cancellationToken);
+        await publishEndpoint.Publish(auction.ToAuctionUpdated(), cancellationToken);
 
         return Result<AuctionDto>.Success(auction.ToDto());
     }
@@ -96,6 +100,7 @@ public sealed class AuctionsService(AuctionDbContext db) : IAuctionsService
 
         db.Auctions.Remove(auction);
         await db.SaveChangesAsync(cancellationToken);
+        await publishEndpoint.Publish(new AuctionDeleted { Id = id }, cancellationToken);
 
         return Result.Success();
     }

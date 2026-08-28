@@ -32,3 +32,15 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/obj/Debug/net10.0/SearchService.pdb
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/obj/Debug/net10.0/SearchService.genruntimeconfig.cache
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/obj/Debug/net10.0/ref/SearchService.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/DnsClient.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/MassTransit.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/MassTransit.Abstractions.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/MassTransit.RabbitMqTransport.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/MongoDB.Bson.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/MongoDB.Driver.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/RabbitMQ.Client.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/SharpCompress.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/Snappier.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/ZstdSharp.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/Contracts.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/bin/Debug/net10.0/Contracts.pdb

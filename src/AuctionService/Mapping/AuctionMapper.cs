@@ -1,5 +1,6 @@
 using AuctionService.DTOs;
 using AuctionService.Entities;
+using Contracts;
 
 namespace AuctionService.Mapping;
 
@@ -105,4 +106,52 @@ public static class AuctionMapper
 
         auction.UpdatedAt = DateTime.UtcNow;
     }
+
+    public static AuctionCreated ToAuctionCreated(this Auction auction) => new()
+    {
+        Id = auction.Id,
+        ReservePrice = auction.ReservePrice,
+        Seller = auction.Seller,
+        Winner = auction.Winner,
+        SoldAmount = auction.SoldAmount,
+        CurrentHighBid = auction.CurrentHighBid,
+        CreatedAt = auction.CreatedAt,
+        UpdatedAt = auction.UpdatedAt,
+        AuctionEnd = auction.AuctionEnd,
+        Status = auction.Status.ToString(),
+        Club = auction.Item.Club,
+        PlayerName = auction.Item.PlayerName,
+        PlayerNumber = auction.Item.PlayerNumber,
+        Season = auction.Item.Season,
+        Size = auction.Item.Size,
+        Color = auction.Item.Color,
+        KitType = auction.Item.KitType,
+        Condition = auction.Item.Condition,
+        League = auction.Item.League,
+        ImageUrl = auction.Item.ImageUrl
+    };
+
+    public static AuctionUpdated ToAuctionUpdated(this Auction auction) => new()
+    {
+        Id = auction.Id,
+        ReservePrice = auction.ReservePrice,
+        Seller = auction.Seller,
+        Winner = auction.Winner,
+        SoldAmount = auction.SoldAmount,
+        CurrentHighBid = auction.CurrentHighBid,
+        CreatedAt = auction.CreatedAt,
+        UpdatedAt = auction.UpdatedAt,
+        AuctionEnd = auction.AuctionEnd,
+        Status = auction.Status.ToString(),
+        Club = auction.Item.Club,
+        PlayerName = auction.Item.PlayerName,
+        PlayerNumber = auction.Item.PlayerNumber,
+        Season = auction.Item.Season,
+        Size = auction.Item.Size,
+        Color = auction.Item.Color,
+        KitType = auction.Item.KitType,
+        Condition = auction.Item.Condition,
+        League = auction.Item.League,
+        ImageUrl = auction.Item.ImageUrl
+    };
 }

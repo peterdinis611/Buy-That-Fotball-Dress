@@ -1,7 +1,11 @@
 @SearchService_HostAddress = http://localhost:5026
 
-### Search (placeholder)
+### List indexed items
 GET {{SearchService_HostAddress}}/api/search
+Accept: application/json
+
+### Filter by club
+GET {{SearchService_HostAddress}}/api/search?club=Barcelona
 Accept: application/json
 
 ###

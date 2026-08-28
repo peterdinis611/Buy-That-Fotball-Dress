@@ -1,15 +1,21 @@
 using AuctionService.Entities;
+using AuctionService.Mapping;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionService.Data;
 
 public static class DbInitializer
 {
-    public static async Task InitializeAsync(AuctionDbContext context, ILogger logger)
+    public static async Task InitializeAsync(
+        AuctionDbContext context,
+        IPublishEndpoint publishEndpoint,
+        ILogger logger,
+        CancellationToken cancellationToken = default)
     {
-        await context.Database.MigrateAsync();
+        await context.Database.MigrateAsync(cancellationToken);
 
-        if (await context.Auctions.AnyAsync())
+        if (await context.Auctions.AnyAsync(cancellationToken))
         {
             logger.LogInformation("Database already contains auctions, skipping seed.");
             return;
@@ -210,7 +216,10 @@ public static class DbInitializer
         };
 
         context.Auctions.AddRange(auctions);
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
+
+        foreach (var auction in auctions)
+            await publishEndpoint.Publish(auction.ToAuctionCreated(), cancellationToken);
 
         logger.LogInformation("Seeded {Count} auctions.", auctions.Count);
     }
