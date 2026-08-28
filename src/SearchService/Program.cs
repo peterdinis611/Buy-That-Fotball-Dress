@@ -1,26 +1,29 @@
 using System.Text.Json.Serialization;
+using FluentValidation;
 using MassTransit;
-using MongoDB.Driver;
+using Microsoft.EntityFrameworkCore;
 using SearchService.Consumers;
 using SearchService.Data;
-using SearchService.Models;
+using SearchService.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers()
+builder.Services.AddValidatorsFromAssemblyContaining<SearchQueryValidator>();
+
+builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<FluentValidationFilter>();
+    })
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
 
-builder.Services.AddSingleton<IMongoClient>(_ =>
-    new MongoClient(builder.Configuration.GetConnectionString("MongoDb")));
-
-builder.Services.AddSingleton(sp =>
-    sp.GetRequiredService<IMongoClient>()
-        .GetDatabase(builder.Configuration["MongoDb:Database"] ?? "SearchDb")
-        .GetCollection<Item>("Item"));
+builder.Services.AddDbContext<SearchDbContext>(opt =>
+{
+    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
@@ -42,7 +45,11 @@ builder.Services.AddMassTransit(x =>
             h.Password(builder.Configuration["RabbitMq:Password"] ?? "guest");
         });
 
-        cfg.UseMessageRetry(r => r.Interval(5, TimeSpan.FromSeconds(5)));
+        cfg.UseMessageRetry(r =>
+        {
+            r.Interval(5, TimeSpan.FromSeconds(5));
+            r.Ignore<ValidationException>();
+        });
         cfg.ConfigureEndpoints(context);
     });
 });

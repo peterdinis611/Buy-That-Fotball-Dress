@@ -381,6 +381,14 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[12.1.1, )"
+            },
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[12.1.1, )"
+            },
             "MassTransit.RabbitMQ": {
               "target": "Package",
               "version": "[9.2.1, )"
@@ -389,9 +397,19 @@
               "target": "Package",
               "version": "[10.0.3, )"
             },
-            "MongoDB.Driver": {
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[3.11.1, )"
+              "version": "[10.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[10.0.3, )"
             }
           },
           "imports": [

@@ -1,14 +1,8 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
 namespace SearchService.Models;
 
 public class Item
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.String)]
     public Guid Id { get; set; }
-
     public int ReservePrice { get; set; }
     public required string Seller { get; set; }
     public string? Winner { get; set; }

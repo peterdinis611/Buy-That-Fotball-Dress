@@ -4,8 +4,12 @@
 GET {{SearchService_HostAddress}}/api/search
 Accept: application/json
 
-### Filter by club
-GET {{SearchService_HostAddress}}/api/search?club=Barcelona
+### Filter live Barcelona home kits
+GET {{SearchService_HostAddress}}/api/search?club=Barcelona&status=Live&kitType=Home&page=1&pageSize=20
+Accept: application/json
+
+### Invalid query (expect 400)
+GET {{SearchService_HostAddress}}/api/search?size=XXS&page=0&minPrice=500&maxPrice=10
 Accept: application/json
 
 ###

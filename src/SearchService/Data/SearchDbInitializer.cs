@@ -1,5 +1,8 @@
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using SearchService.DTOs;
 using SearchService.Mapping;
+using SearchService.Models;
 
 namespace SearchService.Data;
 
@@ -11,11 +14,16 @@ public sealed class SearchDbInitializer(
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         using var scope = services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<SearchDbContext>();
         var items = scope.ServiceProvider.GetRequiredService<IItemRepository>();
+        var syncValidator = scope.ServiceProvider.GetRequiredService<IValidator<AuctionSyncDto>>();
+        var itemValidator = scope.ServiceProvider.GetRequiredService<IValidator<Item>>();
+
+        await db.Database.MigrateAsync(cancellationToken);
 
         if (await items.CountAsync(cancellationToken) > 0)
         {
-            logger.LogInformation("Search index already contains items, skipping HTTP sync.");
+            logger.LogInformation("Search database already contains items, skipping HTTP sync.");
             return;
         }
 
@@ -32,10 +40,36 @@ public sealed class SearchDbInitializer(
                 return;
             }
 
-            foreach (var auction in auctions)
-                await items.UpsertAsync(auction.ToItem(), cancellationToken);
+            var indexed = 0;
 
-            logger.LogInformation("Synced {Count} items from AuctionService.", auctions.Count);
+            foreach (var auction in auctions)
+            {
+                var syncResult = await syncValidator.ValidateAsync(auction, cancellationToken);
+                if (!syncResult.IsValid)
+                {
+                    logger.LogWarning(
+                        "Skipping invalid auction {Id} from HTTP sync: {Errors}",
+                        auction.Id,
+                        string.Join("; ", syncResult.Errors.Select(e => e.ErrorMessage)));
+                    continue;
+                }
+
+                var item = auction.ToItem();
+                var itemResult = await itemValidator.ValidateAsync(item, cancellationToken);
+                if (!itemResult.IsValid)
+                {
+                    logger.LogWarning(
+                        "Skipping invalid item {Id} from HTTP sync: {Errors}",
+                        item.Id,
+                        string.Join("; ", itemResult.Errors.Select(e => e.ErrorMessage)));
+                    continue;
+                }
+
+                await items.UpsertAsync(item, cancellationToken);
+                indexed++;
+            }
+
+            logger.LogInformation("Synced {Count} items from AuctionService.", indexed);
         }
         catch (Exception ex)
         {

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SearchService.Data;
+using SearchService.DTOs;
 using SearchService.Models;
 
 namespace SearchService.Controllers;
@@ -9,12 +10,13 @@ namespace SearchService.Controllers;
 public class SearchController(IItemRepository items) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<Item>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<Item>>> Get(
-        [FromQuery] string? club,
+    [ProducesResponseType(typeof(PagedResult<Item>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<PagedResult<Item>>> Get(
+        [FromQuery] SearchQuery query,
         CancellationToken cancellationToken)
     {
-        var results = await items.GetAllAsync(club, cancellationToken);
+        var results = await items.SearchAsync(query, cancellationToken);
         return Ok(results);
     }
 }
