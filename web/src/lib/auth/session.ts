@@ -1,4 +1,4 @@
-import type { AuthUser } from "./types";
+import type { AuthUser } from "@/lib/types";
 
 const TOKEN_KEY = "kitvault.token";
 const USER_KEY = "kitvault.user";

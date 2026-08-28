@@ -10,7 +10,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/AuctionService.csproj",
         "projectName": "AuctionService",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/AuctionService.csproj",
-        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget",
+        "packagesPath": "/Users/peterdinis/.nuget/packages/",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -518,7 +518,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/Contracts.csproj",
         "projectName": "Contracts",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/Contracts.csproj",
-        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget",
+        "packagesPath": "/Users/peterdinis/.nuget/packages/",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [

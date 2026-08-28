@@ -1,4 +1,4 @@
-import { SellGate } from "@/components/sell-gate";
+import { SellGate } from "@/components/sell";
 
 export default function SellPage() {
   return (

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { MatchClock } from "@/components/match-clock";
-import { AuthNav } from "@/components/auth-nav";
+import { MatchClock } from "./match-clock";
+import { AuthNav } from "@/components/auth";
 
 const links = [
   { href: "/auctions", label: "Squad" },

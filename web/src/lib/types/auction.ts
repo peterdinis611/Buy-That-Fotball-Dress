@@ -94,14 +94,6 @@ export type SearchQuery = {
   pageSize?: number;
 };
 
-export type AuthUser = {
-  id: string;
-  username: string;
-  email: string;
-  displayName: string;
-  token?: string;
-};
-
 export type CreateAuctionPayload = {
   reservePrice: number;
   auctionEnd: string;

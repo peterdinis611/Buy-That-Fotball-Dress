@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Countdown } from "@/components/countdown";
-import { JerseyBack } from "@/components/jersey-back";
+import { Countdown } from "@/components/auctions";
+import { JerseyBack } from "./jersey-back";
 import { formatMoney } from "@/lib/format";
 import type { KitListing } from "@/lib/types";
 

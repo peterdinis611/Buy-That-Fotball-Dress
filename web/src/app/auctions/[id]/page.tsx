@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Countdown } from "@/components/countdown";
-import { JerseyBack } from "@/components/jersey-back";
-import { StatusPill } from "@/components/status-pill";
+import { Countdown, StatusPill } from "@/components/auctions";
+import { JerseyBack } from "@/components/pitch";
 import { getAuction } from "@/lib/api";
 import { formatDate, formatMoney } from "@/lib/format";
 

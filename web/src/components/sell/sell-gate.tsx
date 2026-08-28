@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/components/auth-provider";
-import { SellForm } from "@/components/sell-form";
+import { useAuth } from "@/components/auth";
+import { SellForm } from "./sell-form";
 
 export function SellGate() {
   const { user, ready } = useAuth();

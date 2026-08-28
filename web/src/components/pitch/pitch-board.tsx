@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { JerseyBack } from "@/components/jersey-back";
+import { JerseyBack } from "./jersey-back";
 import type { KitListing } from "@/lib/types";
 
 const XI = [
