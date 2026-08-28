@@ -1,0 +1,7 @@
+@SearchService_HostAddress = http://localhost:5026
+
+### Search (placeholder)
+GET {{SearchService_HostAddress}}/api/search
+Accept: application/json
+
+###

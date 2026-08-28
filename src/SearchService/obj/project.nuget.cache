@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "dgSpecHash": "qS2/z9+kOBw=",
+  "success": true,
+  "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/SearchService.csproj",
+  "expectedPackageFiles": [
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/SearchService.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/SearchService.csproj",
+      "libraryId": "Microsoft.OpenApi",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}
