@@ -49,11 +49,15 @@ public sealed class AuctionsService(AuctionDbContext db, IPublishEndpoint publis
             : Result<AuctionDto>.Success(auction.ToDto());
     }
 
-    public async Task<Result<AuctionDto>> CreateAsync(CreateAuctionDto dto, CancellationToken cancellationToken)
+    public async Task<Result<AuctionDto>> CreateAsync(
+        CreateAuctionDto dto,
+        string seller,
+        CancellationToken cancellationToken)
     {
         if (dto.AuctionEnd.ToUniversalTime() <= DateTime.UtcNow)
             return Result<AuctionDto>.BadRequest("Auction end must be in the future.");
 
+        dto.Seller = seller;
         var auction = dto.ToEntity();
 
         db.Auctions.Add(auction);
@@ -66,6 +70,7 @@ public sealed class AuctionsService(AuctionDbContext db, IPublishEndpoint publis
     public async Task<Result<AuctionDto>> UpdateAsync(
         Guid id,
         UpdateAuctionDto dto,
+        string seller,
         CancellationToken cancellationToken)
     {
         var auction = await db.Auctions
@@ -74,6 +79,9 @@ public sealed class AuctionsService(AuctionDbContext db, IPublishEndpoint publis
 
         if (auction is null)
             return Result<AuctionDto>.NotFound($"Auction '{id}' was not found.");
+
+        if (!string.Equals(auction.Seller, seller, StringComparison.OrdinalIgnoreCase))
+            return Result<AuctionDto>.Forbidden("Only the seller can update this lot.");
 
         if (auction.Status is not Status.Live)
             return Result<AuctionDto>.Conflict("Only live auctions can be updated.");
@@ -88,12 +96,15 @@ public sealed class AuctionsService(AuctionDbContext db, IPublishEndpoint publis
         return Result<AuctionDto>.Success(auction.ToDto());
     }
 
-    public async Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Result> DeleteAsync(Guid id, string seller, CancellationToken cancellationToken)
     {
         var auction = await db.Auctions.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (auction is null)
             return Result.NotFound($"Auction '{id}' was not found.");
+
+        if (!string.Equals(auction.Seller, seller, StringComparison.OrdinalIgnoreCase))
+            return Result.Forbidden("Only the seller can take this shirt down.");
 
         if (auction.Status is Status.Finished)
             return Result.Conflict("Finished auctions cannot be deleted.");

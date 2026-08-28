@@ -1,4 +1,4 @@
-import { SellForm } from "@/components/sell-form";
+import { SellGate } from "@/components/sell-gate";
 
 export default function SellPage() {
   return (
@@ -17,7 +17,7 @@ export default function SellPage() {
           00
         </p>
       </div>
-      <SellForm />
+      <SellGate />
     </div>
   );
 }

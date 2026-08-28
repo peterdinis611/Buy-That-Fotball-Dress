@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createAuction } from "@/lib/api";
+import { useAuth } from "@/components/auth-provider";
 
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const kits = ["Home", "Away", "Third", "Goalkeeper", "Special"];
@@ -20,6 +21,7 @@ function defaultAuctionEnd() {
 
 export function SellForm() {
   const router = useRouter();
+  const { user } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -35,7 +37,6 @@ export function SellForm() {
     try {
       const auction = await createAuction({
         reservePrice: Number(formData.get("reservePrice")),
-        seller: String(formData.get("seller")),
         auctionEnd: new Date(endLocal).toISOString(),
         item: {
           club: String(formData.get("club")),
@@ -61,7 +62,9 @@ export function SellForm() {
   return (
     <form action={onSubmit} className="ticket reveal delay-2 p-6 md:p-8">
       <div className="grid gap-5 md:grid-cols-2">
-        <Field label="Name on the sheet" name="seller" required placeholder="fourthofficial" />
+        <p className="md:col-span-2 font-[family-name:var(--font-teko)] text-xl tracking-[0.16em] text-[var(--line)]">
+          Shirt hangs under {user?.displayName || user?.username}
+        </p>
         <Field label="Club" name="club" required placeholder="Arsenal" />
         <Field label="Player" name="playerName" required placeholder="Bukayo Saka" />
         <Field label="Number" name="playerNumber" type="number" min={0} max={99} placeholder="7" />

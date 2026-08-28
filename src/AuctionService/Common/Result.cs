@@ -17,6 +17,8 @@ public class Result
     public static Result NotFound(string error) => Fail(error, StatusCodes.Status404NotFound);
     public static Result Conflict(string error) => Fail(error, StatusCodes.Status409Conflict);
     public static Result BadRequest(string error) => Fail(error, StatusCodes.Status400BadRequest);
+    public static Result Forbidden(string error) => Fail(error, StatusCodes.Status403Forbidden);
+    public static Result Unauthorized(string error) => Fail(error, StatusCodes.Status401Unauthorized);
 }
 
 public sealed class Result<T> : Result
@@ -39,4 +41,6 @@ public sealed class Result<T> : Result
     public static new Result<T> NotFound(string error) => Fail(error, StatusCodes.Status404NotFound);
     public static new Result<T> Conflict(string error) => Fail(error, StatusCodes.Status409Conflict);
     public static new Result<T> BadRequest(string error) => Fail(error, StatusCodes.Status400BadRequest);
+    public static new Result<T> Forbidden(string error) => Fail(error, StatusCodes.Status403Forbidden);
+    public static new Result<T> Unauthorized(string error) => Fail(error, StatusCodes.Status401Unauthorized);
 }

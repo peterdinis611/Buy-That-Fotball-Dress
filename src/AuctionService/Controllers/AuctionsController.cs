@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using AuctionService.Common;
 using AuctionService.DTOs;
 using AuctionService.Entities;
 using AuctionService.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionService.Controllers;
@@ -30,14 +32,20 @@ public class AuctionsController(IAuctionsService auctionsService) : ControllerBa
         return ToActionResult(result);
     }
 
+    [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(AuctionDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<AuctionDto>> Create(
         CreateAuctionDto dto,
         CancellationToken cancellationToken)
     {
-        var result = await auctionsService.CreateAsync(dto, cancellationToken);
+        var seller = CurrentUsername();
+        if (seller is null)
+            return Unauthorized();
+
+        var result = await auctionsService.CreateAsync(dto, seller, cancellationToken);
 
         if (!result.IsSuccess)
             return Problem(title: result.Error, statusCode: result.StatusCode);
@@ -45,9 +53,12 @@ public class AuctionsController(IAuctionsService auctionsService) : ControllerBa
         return CreatedAtAction(nameof(GetById), new { id = result.Value!.Id }, result.Value);
     }
 
+    [Authorize]
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(AuctionDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<AuctionDto>> Update(
@@ -55,23 +66,39 @@ public class AuctionsController(IAuctionsService auctionsService) : ControllerBa
         UpdateAuctionDto dto,
         CancellationToken cancellationToken)
     {
-        var result = await auctionsService.UpdateAsync(id, dto, cancellationToken);
+        var seller = CurrentUsername();
+        if (seller is null)
+            return Unauthorized();
+
+        var result = await auctionsService.UpdateAsync(id, dto, seller, cancellationToken);
         return ToActionResult(result);
     }
 
+    [Authorize]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
-        var result = await auctionsService.DeleteAsync(id, cancellationToken);
+        var seller = CurrentUsername();
+        if (seller is null)
+            return Unauthorized();
+
+        var result = await auctionsService.DeleteAsync(id, seller, cancellationToken);
 
         if (!result.IsSuccess)
             return Problem(title: result.Error, statusCode: result.StatusCode);
 
         return NoContent();
     }
+
+    private string? CurrentUsername() =>
+        User.Identity?.Name
+        ?? User.FindFirstValue("unique_name")
+        ?? User.FindFirstValue(ClaimTypes.Name);
 
     private ActionResult<AuctionDto> ToActionResult(Result<AuctionDto> result)
     {

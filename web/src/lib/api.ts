@@ -1,10 +1,19 @@
-import type { Auction, CreateAuctionPayload, PagedResult, SearchItem, SearchQuery } from "./types";
+import type { Auction, AuthUser, CreateAuctionPayload, PagedResult, SearchItem, SearchQuery } from "./types";
+import { getToken } from "./session";
 
 const SERVER_API = process.env.API_URL ?? "http://localhost:5027";
 const CLIENT_API = process.env.NEXT_PUBLIC_API_URL ?? "/gateway";
 
 function apiBase() {
   return typeof window === "undefined" ? SERVER_API : CLIENT_API;
+}
+
+function authHeaders(json = false): HeadersInit {
+  const headers: Record<string, string> = {};
+  if (json) headers["Content-Type"] = "application/json";
+  const token = getToken();
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
 }
 
 async function readError(response: Response) {
@@ -76,6 +85,40 @@ export async function searchItems(params: SearchQuery = {}) {
 export async function createAuction(payload: CreateAuctionPayload) {
   const response = await fetch(`${apiBase()}/api/auctions`, {
     method: "POST",
+    headers: authHeaders(true),
+    body: JSON.stringify(payload),
+  });
+
+  if (response.status === 401) throw new Error("Kick off first.");
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
+
+  return (await response.json()) as Auction;
+}
+
+export async function login(username: string, password: string) {
+  const response = await fetch(`${apiBase()}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
+  });
+
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
+
+  return (await response.json()) as AuthUser;
+}
+
+export async function register(payload: {
+  username: string;
+  email: string;
+  password: string;
+  displayName?: string;
+}) {
+  const response = await fetch(`${apiBase()}/api/auth/register`, {
+    method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
@@ -84,5 +127,23 @@ export async function createAuction(payload: CreateAuctionPayload) {
     throw new Error(await readError(response));
   }
 
-  return (await response.json()) as Auction;
+  return (await response.json()) as AuthUser;
+}
+
+export async function getMe() {
+  const token = getToken();
+  if (!token) return null;
+
+  try {
+    const response = await fetch(`${apiBase()}/api/auth/me`, {
+      headers: authHeaders(),
+      cache: "no-store",
+    });
+
+    if (response.status === 401) return null;
+    if (!response.ok) return "unavailable" as const;
+    return (await response.json()) as AuthUser;
+  } catch {
+    return "unavailable" as const;
+  }
 }

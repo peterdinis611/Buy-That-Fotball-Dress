@@ -153,3 +153,11 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/RabbitMQ.Client.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Contracts.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Contracts.pdb
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Microsoft.IdentityModel.Logging.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Microsoft.IdentityModel.Tokens.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll

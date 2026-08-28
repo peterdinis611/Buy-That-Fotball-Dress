@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Floodlights } from "@/components/floodlights";
+import { AuthProvider } from "@/components/auth-provider";
 
 const teko = Teko({
   variable: "--font-teko",
@@ -28,9 +29,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="relative flex min-h-full flex-col">
         <Floodlights />
         <div className="grain" />
-        <SiteHeader />
-        <main className="relative z-10 flex-1">{children}</main>
-        <SiteFooter />
+        <AuthProvider>
+          <SiteHeader />
+          <main className="relative z-10 flex-1">{children}</main>
+          <SiteFooter />
+        </AuthProvider>
       </body>
     </html>
   );
