@@ -10,7 +10,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/Contracts.csproj",
         "projectName": "Contracts",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/Contracts.csproj",
-        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget",
+        "packagesPath": "/Users/peterdinis/.nuget/packages/",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -343,7 +343,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/SearchService.csproj",
         "projectName": "SearchService",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/SearchService.csproj",
-        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/331e8dad56cd3ee47fb0fc671c617f9d/nuget",
+        "packagesPath": "/Users/peterdinis/.nuget/packages/",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -391,7 +391,7 @@
             },
             "MassTransit.RabbitMQ": {
               "target": "Package",
-              "version": "[9.2.1, )"
+              "version": "[8.3.6, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
