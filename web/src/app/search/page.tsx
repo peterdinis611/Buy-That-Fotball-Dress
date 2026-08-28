@@ -1,4 +1,4 @@
-import { AuctionRow } from "@/components/auction-row";
+import { PegWall } from "@/components/kit-peg";
 import { SearchFilters } from "@/components/search-filters";
 import { searchItems } from "@/lib/api";
 import { fromSearchItem } from "@/lib/types";
@@ -28,20 +28,22 @@ export default async function SearchPage({
         <p className="reveal font-[family-name:var(--font-teko)] text-xl tracking-[0.22em] text-[var(--line)]">
           VAR check
         </p>
-        <h1 className="reveal delay-1 mt-1 text-6xl text-[var(--chalk)] md:text-7xl">Find the shirt.</h1>
+        <h1 className="reveal delay-1 mt-1 text-6xl text-[var(--chalk)] md:text-8xl">Find the shirt.</h1>
       </div>
 
       <SearchFilters query={query} />
 
-      <p className="mb-4 font-[family-name:var(--font-teko)] text-[10px] tracking-[0.28em] text-[var(--muted-foreground)] uppercase">
+      <p className="mb-6 font-[family-name:var(--font-teko)] text-lg tracking-[0.18em] text-[var(--muted-foreground)] uppercase">
         {page.totalCount} shirts on the grass
       </p>
 
-      <div className="flex flex-col gap-3">
-        {listings.map((listing, index) => (
-          <AuctionRow key={listing.id} listing={listing} index={index} />
-        ))}
-      </div>
+      {listings.length === 0 ? (
+        <p className="border border-dashed border-[var(--chalk)]/30 px-6 py-20 text-center font-[family-name:var(--font-teko)] text-3xl tracking-[0.12em] text-[var(--chalk)]/70">
+          Offside — nothing in this replay.
+        </p>
+      ) : (
+        <PegWall listings={listings} />
+      )}
     </div>
   );
 }

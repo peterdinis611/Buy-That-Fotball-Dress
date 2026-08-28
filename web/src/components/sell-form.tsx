@@ -59,9 +59,9 @@ export function SellForm() {
   }
 
   return (
-    <form action={onSubmit} className="reveal delay-2 border border-[var(--border)] bg-[var(--card)] p-6 md:p-8">
+    <form action={onSubmit} className="ticket reveal delay-2 p-6 md:p-8">
       <div className="grid gap-5 md:grid-cols-2">
-        <Field label="Your peg name" name="seller" required placeholder="kitvault" />
+        <Field label="Name on the sheet" name="seller" required placeholder="fourthofficial" />
         <Field label="Club" name="club" required placeholder="Arsenal" />
         <Field label="Player" name="playerName" required placeholder="Bukayo Saka" />
         <Field label="Number" name="playerNumber" type="number" min={0} max={99} placeholder="7" />
@@ -72,9 +72,9 @@ export function SellForm() {
         <NativeSelect label="Condition" name="condition" options={conditions} />
         <Field label="Reserve €" name="reservePrice" type="number" min={0} required placeholder="140" />
         <Field label="League" name="league" placeholder="Premier League" />
-        <Field label="Hammer time" name="auctionEnd" type="datetime-local" required defaultValue={defaultAuctionEnd()} />
+        <Field label="Final whistle" name="auctionEnd" type="datetime-local" required defaultValue={defaultAuctionEnd()} />
         <div className="md:col-span-2">
-          <Field label="Photograph URL" name="imageUrl" placeholder="https://" />
+          <Field label="Shirt photo" name="imageUrl" placeholder="https://" />
         </div>
       </div>
 
@@ -85,7 +85,7 @@ export function SellForm() {
       <Button
         type="submit"
         disabled={pending}
-        className="mt-8 h-11 w-full rounded-none border border-[var(--line)] bg-[var(--line)] font-[family-name:var(--font-teko)] text-xs tracking-[0.28em] text-[var(--pitch)] uppercase"
+        className="mt-8 h-11 w-full rounded-none border border-[var(--line)] bg-[var(--line)] font-[family-name:var(--font-teko)] text-2xl tracking-[0.14em] text-[var(--pitch)] uppercase"
       >
         {pending ? "Coming on…" : "Sub on"}
       </Button>
@@ -100,7 +100,7 @@ function Field({
 }: ComponentProps<typeof Input> & { label: string; name: string }) {
   return (
     <div className="grid gap-2">
-      <Label htmlFor={name} className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.22em] uppercase">
+      <Label htmlFor={name} className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] uppercase">
         {label}
       </Label>
       <Input
@@ -124,7 +124,7 @@ function NativeSelect({
 }) {
   return (
     <div className="grid gap-2">
-      <Label htmlFor={name} className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.22em] uppercase">
+      <Label htmlFor={name} className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] uppercase">
         {label}
       </Label>
       <select

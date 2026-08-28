@@ -29,7 +29,7 @@ export function SearchFilters({ query }: { query: SearchQuery }) {
 
   return (
     <form
-      className="reveal delay-2 mb-10 grid gap-4 border border-[var(--border)] bg-[var(--card)] p-5 md:grid-cols-5"
+      className="reveal delay-2 mb-10 grid gap-4 bg-black/50 p-5 md:grid-cols-5"
       onSubmit={(event) => event.preventDefault()}
     >
       <Filter label="Club" value={query.club ?? ""} onChange={(value) => update("club", value)} />
@@ -41,19 +41,30 @@ export function SearchFilters({ query }: { query: SearchQuery }) {
       <NativeFilter
         label="Status"
         value={query.status ?? ""}
-        options={["", "Live", "Finished", "ReserveNotMet"]}
+        options={[
+          { value: "", label: "Any" },
+          { value: "Live", label: "On pitch" },
+          { value: "Finished", label: "Full time" },
+          { value: "ReserveNotMet", label: "Red card" },
+        ]}
         onChange={(value) => update("status", value)}
       />
       <NativeFilter
         label="Size"
         value={query.size ?? ""}
-        options={["", "XS", "S", "M", "L", "XL", "XXL"]}
+        options={["", "XS", "S", "M", "L", "XL", "XXL"].map((value) => ({
+          value,
+          label: value || "Any",
+        }))}
         onChange={(value) => update("size", value)}
       />
       <NativeFilter
         label="Kit"
         value={query.kitType ?? ""}
-        options={["", "Home", "Away", "Third", "Goalkeeper", "Special"]}
+        options={["", "Home", "Away", "Third", "Goalkeeper", "Special"].map((value) => ({
+          value,
+          label: value || "Any",
+        }))}
         onChange={(value) => update("kitType", value)}
       />
     </form>
@@ -71,7 +82,7 @@ function Filter({
 }) {
   return (
     <div className="grid gap-2">
-      <Label className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.22em] uppercase">
+      <Label className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] uppercase">
         {label}
       </Label>
       <Input
@@ -94,12 +105,12 @@ function NativeFilter({
 }: {
   label: string;
   value: string;
-  options: string[];
+  options: { value: string; label: string }[];
   onChange: (value: string) => void;
 }) {
   return (
     <div className="grid gap-2">
-      <Label className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.22em] uppercase">
+      <Label className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] uppercase">
         {label}
       </Label>
       <select
@@ -108,8 +119,8 @@ function NativeFilter({
         className="h-10 rounded-none border border-[var(--border)] bg-transparent px-2 font-[family-name:var(--font-teko)] text-sm"
       >
         {options.map((option) => (
-          <option key={option || "any"} value={option} className="bg-[var(--pitch)]">
-            {option || "Any"}
+          <option key={option.value || "any"} value={option.value} className="bg-[var(--pitch)]">
+            {option.label}
           </option>
         ))}
       </select>

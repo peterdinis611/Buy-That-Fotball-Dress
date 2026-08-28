@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Countdown } from "@/components/countdown";
+import { JerseyBack } from "@/components/jersey-back";
 import { StatusPill } from "@/components/status-pill";
 import { getAuction } from "@/lib/api";
 import { formatDate, formatMoney } from "@/lib/format";
@@ -19,7 +20,7 @@ export default async function AuctionDetailPage({
 
   return (
     <div className="relative overflow-hidden">
-      <div className="pointer-events-none absolute left-[-6%] top-10 font-[family-name:var(--font-teko)] text-[48vw] leading-none text-[color-mix(in_oklab,var(--chalk)_8%,transparent)] select-none">
+      <div className="pointer-events-none absolute left-[-6%] top-6 font-[family-name:var(--font-teko)] text-[46vw] leading-none text-[color-mix(in_oklab,var(--chalk)_7%,transparent)] select-none">
         {number}
       </div>
 
@@ -27,39 +28,42 @@ export default async function AuctionDetailPage({
         <div className="reveal">
           <Link
             href="/auctions"
-            className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.3em] text-[var(--line)] uppercase"
+            className="nav-line font-[family-name:var(--font-teko)] text-lg tracking-[0.18em] text-[var(--line)] uppercase"
           >
             ← Back to the squad
           </Link>
-          <p className="mt-8 font-[family-name:var(--font-teko)] text-[11px] tracking-[0.34em] text-[var(--line)] uppercase">
+          <p className="mt-8 font-[family-name:var(--font-teko)] text-xl tracking-[0.22em] text-[var(--line)] uppercase">
             {item.club} · {item.season}
           </p>
-          <h1 className="mt-3 text-7xl leading-[0.86] text-[var(--chalk)] md:text-8xl">{item.playerName}</h1>
+          <h1 className="mt-3 text-7xl leading-[0.82] text-[var(--chalk)] md:text-8xl">{item.playerName}</h1>
           <p className="mt-6 max-w-md text-lg text-[var(--chalk)]/75">
             {item.kitType} kit in {item.color}. {item.condition}. Worn out by {auction.seller}.
           </p>
 
-          <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-5 border-t border-[var(--border)] pt-8 text-sm">
-            {[
-              ["Number", number],
-              ["Size", item.size],
-              ["League", item.league ?? "—"],
-              ["Listed", formatDate(auction.createdAt)],
-            ].map(([label, value]) => (
-              <div key={label}>
-                <dt className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.28em] text-[var(--muted-foreground)] uppercase">
-                  {label}
-                </dt>
-                <dd className="mt-1 text-[var(--chalk)]">{value}</dd>
-              </div>
-            ))}
-          </dl>
+          <div className="mt-10 flex items-center gap-8">
+            <JerseyBack number={number} color={item.color} className="h-40 w-32" />
+            <dl className="grid grid-cols-2 gap-x-8 gap-y-5 text-sm">
+              {[
+                ["Squad number", number],
+                ["Size", item.size],
+                ["Competition", item.league ?? "—"],
+                ["Listed", formatDate(auction.createdAt)],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <dt className="font-[family-name:var(--font-teko)] text-lg tracking-[0.18em] text-[var(--muted-foreground)] uppercase">
+                    {label}
+                  </dt>
+                  <dd className="mt-1 text-[var(--chalk)]">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
 
-        <aside className="reveal delay-2 relative border-4 border-[var(--chalk)] bg-black p-6 md:p-8">
+        <aside className="ticket reveal delay-2 p-6 md:p-8">
           <div className="mb-6 flex items-center justify-between">
             <StatusPill status={auction.status} />
-            <Countdown endsAt={auction.auctionEnd} className="text-sm" />
+            <Countdown endsAt={auction.auctionEnd} className="text-2xl" />
           </div>
 
           {item.imageUrl ? (
@@ -67,15 +71,15 @@ export default async function AuctionDetailPage({
             <img src={item.imageUrl} alt="" className="mb-6 aspect-[3/4] w-full object-cover" />
           ) : null}
 
-          <div className="space-y-4 border-t border-dashed border-[var(--border)] pt-6">
+          <div className="space-y-4 border-t border-dashed border-[var(--chalk)]/25 pt-6">
             <TicketLine label="Reserve" value={formatMoney(auction.reservePrice)} />
             <TicketLine
-              label="Top bid"
+              label="Scoreline"
               value={auction.currentHighBid ? formatMoney(auction.currentHighBid) : "No shot yet"}
             />
-            {auction.winner ? <TicketLine label="Winner" value={auction.winner} /> : null}
+            {auction.winner ? <TicketLine label="Man of the match" value={auction.winner} /> : null}
             {auction.soldAmount ? <TicketLine label="Final" value={formatMoney(auction.soldAmount)} /> : null}
-            <TicketLine label="Whistle" value={formatDate(auction.auctionEnd)} />
+            <TicketLine label="Final whistle" value={formatDate(auction.auctionEnd)} />
           </div>
 
           <p className="mt-8 font-[family-name:var(--font-teko)] text-lg tracking-[0.12em] text-[var(--muted-foreground)]">
@@ -90,10 +94,10 @@ export default async function AuctionDetailPage({
 function TicketLine({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline justify-between gap-4">
-      <span className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.24em] text-[var(--muted-foreground)] uppercase">
+      <span className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] text-[var(--muted-foreground)] uppercase">
         {label}
       </span>
-      <span className="text-right text-[var(--chalk)]">{value}</span>
+      <span className="text-right font-[family-name:var(--font-teko)] text-2xl text-[var(--line)]">{value}</span>
     </div>
   );
 }

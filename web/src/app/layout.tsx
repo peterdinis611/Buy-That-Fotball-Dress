@@ -3,7 +3,7 @@ import { Barlow, Teko } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { PitchMarkings } from "@/components/pitch-markings";
+import { Floodlights } from "@/components/floodlights";
 
 const teko = Teko({
   variable: "--font-teko",
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`dark ${teko.variable} ${barlow.variable} h-full`}>
       <body className="relative flex min-h-full flex-col">
-        <PitchMarkings />
+        <Floodlights />
         <div className="grain" />
         <SiteHeader />
         <main className="relative z-10 flex-1">{children}</main>
