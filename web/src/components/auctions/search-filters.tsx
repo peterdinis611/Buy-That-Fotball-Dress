@@ -91,7 +91,7 @@ function Filter({
         onKeyDown={(event) => {
           if (event.key === "Enter") onChange(event.currentTarget.value);
         }}
-        className="h-10 rounded-none"
+        className="h-10 rounded-none text-[var(--chalk)] placeholder:text-[var(--chalk)]/40"
       />
     </div>
   );
@@ -116,7 +116,7 @@ function NativeFilter({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 rounded-none border border-[var(--border)] bg-transparent px-2 font-[family-name:var(--font-teko)] text-sm"
+        className="h-10 rounded-none border border-[var(--border)] bg-black/50 px-2 font-[family-name:var(--font-teko)] text-sm text-[var(--chalk)]"
       >
         {options.map((option) => (
           <option key={option.value || "any"} value={option.value} className="bg-[var(--pitch)]">

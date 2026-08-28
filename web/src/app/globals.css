@@ -104,6 +104,30 @@
 
   html {
     background: #020b06;
+    color-scheme: dark;
+  }
+
+  input,
+  textarea,
+  select {
+    color: var(--chalk);
+    caret-color: var(--line);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: color-mix(in oklab, var(--chalk) 42%, transparent);
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: var(--chalk);
+    caret-color: var(--line);
+    box-shadow: 0 0 0 1000px #06150e inset;
+    transition: background-color 99999s ease-out;
   }
 
   body {
