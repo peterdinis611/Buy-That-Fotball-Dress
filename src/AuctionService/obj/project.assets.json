@@ -721,6 +721,19 @@
           }
         }
       },
+      "Pipelines.Sockets.Unofficial/2.2.8": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Pipelines.Sockets.Unofficial.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Pipelines.Sockets.Unofficial.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "RabbitMQ.Client/7.0.0": {
         "type": "package",
         "compile": {
@@ -874,6 +887,22 @@
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "StackExchange.Redis/2.8.58": {
+        "type": "package",
+        "dependencies": {
+          "Pipelines.Sockets.Unofficial": "2.2.8"
+        },
+        "compile": {
+          "lib/net8.0/StackExchange.Redis.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/StackExchange.Redis.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.CodeDom/6.0.0": {
         "type": "package",
         "compile": {
@@ -1015,6 +1044,19 @@
           "lib/net9.0/System.IdentityModel.Tokens.Jwt.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "Caching/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "StackExchange.Redis": "2.8.58"
+        },
+        "compile": {
+          "bin/placeholder/Caching.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Caching.dll": {}
         }
       },
       "Contracts/1.0.0": {
@@ -2598,6 +2640,29 @@
         "packageIcon.png"
       ]
     },
+    "Pipelines.Sockets.Unofficial/2.2.8": {
+      "sha512": "zG2FApP5zxSx6OcdJQLbZDk2AVlN2BNQD6MorwIfV6gVj0RRxWPEp2LXAxqDGZqeNV1Zp0BNPcNaey/GXmTdvQ==",
+      "type": "package",
+      "path": "pipelines.sockets.unofficial/2.2.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/Pipelines.Sockets.Unofficial.dll",
+        "lib/net461/Pipelines.Sockets.Unofficial.xml",
+        "lib/net472/Pipelines.Sockets.Unofficial.dll",
+        "lib/net472/Pipelines.Sockets.Unofficial.xml",
+        "lib/net5.0/Pipelines.Sockets.Unofficial.dll",
+        "lib/net5.0/Pipelines.Sockets.Unofficial.xml",
+        "lib/netcoreapp3.1/Pipelines.Sockets.Unofficial.dll",
+        "lib/netcoreapp3.1/Pipelines.Sockets.Unofficial.xml",
+        "lib/netstandard2.0/Pipelines.Sockets.Unofficial.dll",
+        "lib/netstandard2.0/Pipelines.Sockets.Unofficial.xml",
+        "lib/netstandard2.1/Pipelines.Sockets.Unofficial.dll",
+        "lib/netstandard2.1/Pipelines.Sockets.Unofficial.xml",
+        "pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
+        "pipelines.sockets.unofficial.nuspec"
+      ]
+    },
     "RabbitMQ.Client/7.0.0": {
       "sha512": "8YJz22mOSMtkbIVuVSz2HbJwbpKwRoXQ1uqbczDUt1w1Ds8dxFs6dkV/oZ8AlTmkErZjtQelHv+oBu52ud00WA==",
       "type": "package",
@@ -2707,6 +2772,30 @@
         "lib/netstandard2.0/SQLitePCLRaw.provider.e_sqlite3.dll",
         "sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512",
         "sqlitepclraw.provider.e_sqlite3.nuspec"
+      ]
+    },
+    "StackExchange.Redis/2.8.58": {
+      "sha512": "0XGRE2UoF/n2/qhCpcyBBZovpGhHu4hRtkdsx4fZFu1H5Q/Z8Q+U/z/nWwnosWDRJnEasntNatd9Mf+Isc8plg==",
+      "type": "package",
+      "path": "stackexchange.redis/2.8.58",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net461/StackExchange.Redis.dll",
+        "lib/net461/StackExchange.Redis.xml",
+        "lib/net472/StackExchange.Redis.dll",
+        "lib/net472/StackExchange.Redis.xml",
+        "lib/net6.0/StackExchange.Redis.dll",
+        "lib/net6.0/StackExchange.Redis.xml",
+        "lib/net8.0/StackExchange.Redis.dll",
+        "lib/net8.0/StackExchange.Redis.xml",
+        "lib/netcoreapp3.1/StackExchange.Redis.dll",
+        "lib/netcoreapp3.1/StackExchange.Redis.xml",
+        "lib/netstandard2.0/StackExchange.Redis.dll",
+        "lib/netstandard2.0/StackExchange.Redis.xml",
+        "stackexchange.redis.2.8.58.nupkg.sha512",
+        "stackexchange.redis.nuspec"
       ]
     },
     "System.CodeDom/6.0.0": {
@@ -2918,6 +3007,11 @@
         "system.identitymodel.tokens.jwt.nuspec"
       ]
     },
+    "Caching/1.0.0": {
+      "type": "project",
+      "path": "../Caching/Caching.csproj",
+      "msbuildProject": "../Caching/Caching.csproj"
+    },
     "Contracts/1.0.0": {
       "type": "project",
       "path": "../Contracts/Contracts.csproj",
@@ -2926,6 +3020,7 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "Caching >= 1.0.0",
       "Contracts >= 1.0.0",
       "MassTransit.RabbitMQ >= 8.3.6",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 10.0.3",
@@ -2936,7 +3031,7 @@
     ]
   },
   "packageFolders": {
-    "/Users/peterdinis/.nuget/packages/": {}
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget": {}
   },
   "project": {
     "version": "1.0.0",
@@ -2944,7 +3039,7 @@
       "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/AuctionService.csproj",
       "projectName": "AuctionService",
       "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/AuctionService.csproj",
-      "packagesPath": "/Users/peterdinis/.nuget/packages/",
+      "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget",
       "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
@@ -2960,6 +3055,9 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
+            "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/Caching.csproj": {
+              "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/Caching.csproj"
+            },
             "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/Contracts.csproj": {
               "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/Contracts.csproj"
             }

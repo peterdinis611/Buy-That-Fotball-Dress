@@ -2,13 +2,15 @@ using IdentityService.Common;
 using IdentityService.DTOs;
 using IdentityService.Entities;
 using IdentityService.Mapping;
+using Caching;
 using Microsoft.AspNetCore.Identity;
 
 namespace IdentityService.Services;
 
 public sealed class IdentityAppService(
     UserManager<ApplicationUser> userManager,
-    ITokenService tokenService) : IIdentityService
+    ITokenService tokenService,
+    IPitchCache cache) : IIdentityService
 {
     public async Task<Result<UserDto>> RegisterAsync(RegisterDto dto, CancellationToken cancellationToken)
     {
@@ -54,10 +56,17 @@ public sealed class IdentityAppService(
 
     public async Task<Result<UserDto>> GetCurrentAsync(string userId, CancellationToken cancellationToken)
     {
+        var key = CacheKeys.User(userId);
+        var cached = await cache.GetAsync<UserDto>(key, cancellationToken);
+        if (cached is not null)
+            return Result<UserDto>.Success(cached);
+
         var user = await userManager.FindByIdAsync(userId);
         if (user is null)
             return Result<UserDto>.NotFound("Player not found.");
 
-        return Result<UserDto>.Success(user.ToDto());
+        var dto = user.ToDto();
+        await cache.SetAsync(key, dto, CacheKeys.UserTtl, cancellationToken);
+        return Result<UserDto>.Success(dto);
     }
 }

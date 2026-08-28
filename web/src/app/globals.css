@@ -436,3 +436,31 @@
 .nav-line:hover::after {
   transform: scaleX(1);
 }
+
+.locker-bay {
+  position: relative;
+}
+
+.locker-bay::before {
+  content: "";
+  position: absolute;
+  inset: auto 8% 0 0;
+  height: 12px;
+  background: linear-gradient(#8a6a22, #c9a227 45%, #6b5412);
+  box-shadow: 0 10px 0 #1a1208;
+}
+
+.locker-plate {
+  background:
+    linear-gradient(180deg, #e4c36a 0%, #c9a227 42%, #8a6a22 100%);
+  box-shadow:
+    inset 0 1px 0 #f4e3a6,
+    0 10px 0 #3a2a10,
+    0 24px 40px rgb(0 0 0 / 0.35);
+  transform: rotate(1.5deg);
+}
+
+.trophy-rack .kit-hover {
+  background: color-mix(in oklab, #c9a227 12%, black);
+}
+

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Countdown, StatusPill } from "@/components/auctions";
+import { Countdown } from "@/components/auctions/countdown";
+import { StatusPill } from "@/components/auctions/status-pill";
 import { JerseyBack } from "./jersey-back";
 import { formatMoney } from "@/lib/format";
 import type { KitListing } from "@/lib/types";
@@ -33,8 +34,14 @@ export function KitPeg({ listing, index = 0 }: { listing: KitListing; index?: nu
   );
 }
 
-export function PegWall({ listings }: { listings: KitListing[] }) {
-  if (listings.length === 0) return null;
+export function PegWall({ listings, empty }: { listings: KitListing[]; empty?: string }) {
+  if (listings.length === 0) {
+    return empty ? (
+      <p className="border border-dashed border-[var(--chalk)]/18 bg-black/20 px-5 py-12 text-center text-[var(--chalk)]/55">
+        {empty}
+      </p>
+    ) : null;
+  }
 
   return (
     <div className="peg-wall grid grid-cols-2 gap-px bg-[var(--chalk)]/15 sm:grid-cols-3 lg:grid-cols-5">

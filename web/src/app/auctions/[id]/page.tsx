@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Countdown, StatusPill } from "@/components/auctions";
+import { LotTicket } from "@/components/auctions";
 import { JerseyBack } from "@/components/pitch";
 import { getAuction } from "@/lib/api";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 
 export default async function AuctionDetailPage({
   params,
@@ -59,44 +59,8 @@ export default async function AuctionDetailPage({
           </div>
         </div>
 
-        <aside className="ticket reveal delay-2 p-6 md:p-8">
-          <div className="mb-6 flex items-center justify-between">
-            <StatusPill status={auction.status} />
-            <Countdown endsAt={auction.auctionEnd} className="text-2xl" />
-          </div>
-
-          {item.imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={item.imageUrl} alt="" className="mb-6 aspect-[3/4] w-full object-cover" />
-          ) : null}
-
-          <div className="space-y-4 border-t border-dashed border-[var(--chalk)]/25 pt-6">
-            <TicketLine label="Reserve" value={formatMoney(auction.reservePrice)} />
-            <TicketLine
-              label="Scoreline"
-              value={auction.currentHighBid ? formatMoney(auction.currentHighBid) : "No shot yet"}
-            />
-            {auction.winner ? <TicketLine label="Man of the match" value={auction.winner} /> : null}
-            {auction.soldAmount ? <TicketLine label="Final" value={formatMoney(auction.soldAmount)} /> : null}
-            <TicketLine label="Final whistle" value={formatDate(auction.auctionEnd)} />
-          </div>
-
-          <p className="mt-8 font-[family-name:var(--font-teko)] text-lg tracking-[0.12em] text-[var(--muted-foreground)]">
-            Bidding comes with the next half. Tonight you scout, sub on, and hunt.
-          </p>
-        </aside>
+        <LotTicket auction={auction} />
       </div>
-    </div>
-  );
-}
-
-function TicketLine({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-baseline justify-between gap-4">
-      <span className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] text-[var(--muted-foreground)] uppercase">
-        {label}
-      </span>
-      <span className="text-right font-[family-name:var(--font-teko)] text-2xl text-[var(--line)]">{value}</span>
     </div>
   );
 }

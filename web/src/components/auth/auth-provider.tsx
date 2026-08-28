@@ -26,6 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logout: () => {
         clearSession();
         queryClient.setQueryData(queryKeys.auth.me(), null);
+        void queryClient.removeQueries({ queryKey: queryKeys.auctions.sheet() });
       },
     }),
     [queryClient, session.data, session.isFetched],

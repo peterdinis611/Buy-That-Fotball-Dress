@@ -2,7 +2,7 @@ namespace SearchService.DTOs;
 
 public class PagedResult<T>
 {
-    public IReadOnlyList<T> Results { get; init; } = [];
+    public List<T> Results { get; init; } = [];
     public int Page { get; init; }
     public int PageSize { get; init; }
     public long TotalCount { get; init; }

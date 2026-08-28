@@ -161,3 +161,7 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Microsoft.IdentityModel.Tokens.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Pipelines.Sockets.Unofficial.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/StackExchange.Redis.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Caching.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/bin/Debug/net10.0/Caching.pdb

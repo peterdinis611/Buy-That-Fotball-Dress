@@ -1,10 +1,11 @@
+using Caching;
 using Microsoft.EntityFrameworkCore;
 using SearchService.DTOs;
 using SearchService.Models;
 
 namespace SearchService.Data;
 
-public sealed class ItemRepository(SearchDbContext db) : IItemRepository
+public sealed class ItemRepository(SearchDbContext db, IPitchCache cache) : IItemRepository
 {
     public async Task UpsertAsync(Item item, CancellationToken cancellationToken)
     {
@@ -20,6 +21,7 @@ public sealed class ItemRepository(SearchDbContext db) : IItemRepository
         }
 
         await db.SaveChangesAsync(cancellationToken);
+        await cache.BumpAsync(CacheStamps.Search, cancellationToken);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
@@ -30,9 +32,23 @@ public sealed class ItemRepository(SearchDbContext db) : IItemRepository
 
         db.Items.Remove(item);
         await db.SaveChangesAsync(cancellationToken);
+        await cache.BumpAsync(CacheStamps.Search, cancellationToken);
     }
 
     public async Task<PagedResult<Item>> SearchAsync(SearchQuery query, CancellationToken cancellationToken)
+    {
+        var stamp = await cache.StampAsync(CacheStamps.Search, cancellationToken);
+        return await cache.GetOrCreateAsync(
+            CacheKeys.Search(stamp, Fingerprint(query)),
+            cancel => QueryAsync(query, cancel),
+            CacheKeys.CatalogTtl,
+            cancellationToken);
+    }
+
+    public Task<long> CountAsync(CancellationToken cancellationToken) =>
+        db.Items.LongCountAsync(cancellationToken);
+
+    private async Task<PagedResult<Item>> QueryAsync(SearchQuery query, CancellationToken cancellationToken)
     {
         var items = db.Items.AsNoTracking().AsQueryable();
 
@@ -101,6 +117,17 @@ public sealed class ItemRepository(SearchDbContext db) : IItemRepository
         };
     }
 
-    public Task<long> CountAsync(CancellationToken cancellationToken) =>
-        db.Items.LongCountAsync(cancellationToken);
+    private static string Fingerprint(SearchQuery query) => string.Join(
+        ':',
+        CacheKeys.Norm(query.Club),
+        CacheKeys.Norm(query.PlayerName),
+        CacheKeys.Norm(query.Status),
+        CacheKeys.Norm(query.Size),
+        CacheKeys.Norm(query.KitType),
+        CacheKeys.Norm(query.Condition),
+        CacheKeys.Norm(query.Season),
+        query.MinPrice?.ToString() ?? "*",
+        query.MaxPrice?.ToString() ?? "*",
+        query.Page,
+        query.PageSize);
 }

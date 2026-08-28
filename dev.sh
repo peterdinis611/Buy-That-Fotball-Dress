@@ -83,10 +83,12 @@ trap cleanup EXIT INT TERM
 
 ensure_docker
 
-echo "Starting RabbitMQ…"
+echo "Starting RabbitMQ and Redis…"
 docker compose up -d
 echo "Waiting for RabbitMQ on :5672…"
 wait_for "RabbitMQ" 60 bash -c 'nc -z 127.0.0.1 5672'
+echo "Waiting for Redis on :6379…"
+wait_for "Redis" 30 bash -c 'nc -z 127.0.0.1 6379'
 
 for port in 5025 5026 5027 5028; do
   stop_port "$port"
@@ -126,6 +128,7 @@ Kit Vault is up. Ctrl+C stops everything.
   Auction  http://localhost:5025
   Search   http://localhost:5026
   Identity http://localhost:5028
+  Redis    localhost:6379
   RabbitMQ http://localhost:15672  (guest/guest)
 
 EOF

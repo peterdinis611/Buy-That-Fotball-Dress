@@ -1,7 +1,16 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createAuction, getAuction, getAuctions, login, register, searchItems } from "@/lib/api";
+import {
+  createAuction,
+  getAuction,
+  getAuctions,
+  getPlayerSheet,
+  login,
+  placeBid,
+  register,
+  searchItems,
+} from "@/lib/api";
 import { persistSession } from "@/lib/auth";
 import type { Auction, SearchQuery } from "@/lib/types";
 import { queryKeys } from "./keys";
@@ -72,6 +81,29 @@ export function useCreateAuctionMutation() {
 
   return useMutation({
     mutationFn: createAuction,
+    onSuccess: (auction) => {
+      queryClient.setQueryData(queryKeys.auctions.detail(auction.id), auction);
+      void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.all });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.sheet() });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.search.all });
+    },
+  });
+}
+
+export function usePlayerSheetQuery(enabled: boolean) {
+  return useQuery({
+    queryKey: queryKeys.auctions.sheet(),
+    queryFn: getPlayerSheet,
+    enabled,
+    retry: false,
+  });
+}
+
+export function usePlaceBidMutation(auctionId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (amount: number) => placeBid(auctionId, amount),
     onSuccess: (auction) => {
       queryClient.setQueryData(queryKeys.auctions.detail(auction.id), auction);
       void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.all });

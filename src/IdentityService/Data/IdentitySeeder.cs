@@ -29,14 +29,12 @@ public static class IdentitySeeder
     {
         await context.Database.MigrateAsync(cancellationToken);
 
-        if (await userManager.Users.AnyAsync(cancellationToken))
-        {
-            logger.LogInformation("Identity database already contains users, skipping seed.");
-            return;
-        }
-
+        var added = 0;
         foreach (var (username, email, displayName) in Squad)
         {
+            if (await userManager.FindByNameAsync(username) is not null)
+                continue;
+
             var user = new ApplicationUser
             {
                 UserName = username,
@@ -54,8 +52,16 @@ public static class IdentitySeeder
                     string.Join("; ", created.Errors.Select(e => e.Description)));
                 continue;
             }
+
+            added++;
         }
 
-        logger.LogInformation("Seeded {Count} identity users. Dev password is PitchSide!1", Squad.Length);
+        if (added == 0)
+        {
+            logger.LogInformation("Identity squad is already on the sheet.");
+            return;
+        }
+
+        logger.LogInformation("Seeded {Count} identity users. Dev password is PitchSide!1", added);
     }
 }

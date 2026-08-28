@@ -1,4 +1,4 @@
-import type { Auction, CreateAuctionPayload } from "@/lib/types";
+import type { Auction, CreateAuctionPayload, PlayerSheet } from "@/lib/types";
 import { apiBase, authHeaders, readError } from "./client";
 
 export async function getAuctions(params?: { club?: string; status?: string }) {
@@ -36,6 +36,35 @@ export async function createAuction(payload: CreateAuctionPayload) {
     method: "POST",
     headers: authHeaders(true),
     body: JSON.stringify(payload),
+  });
+
+  if (response.status === 401) throw new Error("Kick off first.");
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
+
+  return (await response.json()) as Auction;
+}
+
+export async function getPlayerSheet() {
+  const response = await fetch(`${apiBase()}/api/auctions/mine`, {
+    cache: "no-store",
+    headers: authHeaders(),
+  });
+
+  if (response.status === 401) throw new Error("Kick off first.");
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
+
+  return (await response.json()) as PlayerSheet;
+}
+
+export async function placeBid(id: string, amount: number) {
+  const response = await fetch(`${apiBase()}/api/auctions/${id}/bids`, {
+    method: "POST",
+    headers: authHeaders(true),
+    body: JSON.stringify({ amount }),
   });
 
   if (response.status === 401) throw new Error("Kick off first.");

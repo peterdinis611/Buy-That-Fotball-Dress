@@ -160,3 +160,7 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/obj/Debug/net10.0/IdentityService.pdb
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/obj/Debug/net10.0/IdentityService.genruntimeconfig.cache
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/obj/Debug/net10.0/ref/IdentityService.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/Pipelines.Sockets.Unofficial.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/StackExchange.Redis.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/Caching.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/Caching.pdb

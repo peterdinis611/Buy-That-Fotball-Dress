@@ -19,6 +19,7 @@ export type Auction = {
   reservePrice: number;
   seller: string;
   winner?: string;
+  highBidder?: string;
   soldAmount?: number;
   currentHighBid?: number;
   createdAt: string;
@@ -59,11 +60,18 @@ export type PagedResult<T> = {
   totalPages: number;
 };
 
+export type PlayerSheet = {
+  listed: Auction[];
+  chasing: Auction[];
+  won: Auction[];
+};
+
 export type KitListing = {
   id: string;
   reservePrice: number;
   seller: string;
   winner?: string;
+  highBidder?: string;
   soldAmount?: number;
   currentHighBid?: number;
   auctionEnd: string;
@@ -117,6 +125,7 @@ export function fromAuction(auction: Auction): KitListing {
     reservePrice: auction.reservePrice,
     seller: auction.seller,
     winner: auction.winner,
+    highBidder: auction.highBidder,
     soldAmount: auction.soldAmount,
     currentHighBid: auction.currentHighBid,
     auctionEnd: auction.auctionEnd,

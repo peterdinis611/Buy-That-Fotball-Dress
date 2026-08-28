@@ -12,7 +12,7 @@ export default function LoginPage() {
           Kick off.
         </h1>
         <p className="reveal delay-2 mt-4 max-w-sm text-lg text-[var(--chalk)]/75">
-          Seeded squad names use PitchSide!1 — kitvault, campnou.store, anfield.kits.
+          Seeded squad names use PitchSide!1 — kitvault sees hanging, chasing, and lifted shirts.
         </p>
       </div>
       <Suspense>

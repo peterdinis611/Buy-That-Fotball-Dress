@@ -26,11 +26,17 @@ export function AuthNav() {
     );
   }
 
+  const name = user.displayName || user.username;
+
   return (
     <div className="flex items-center gap-3">
-      <span className="hidden max-w-[16ch] truncate font-[family-name:var(--font-teko)] text-xl tracking-[0.12em] text-[var(--line)] md:inline">
-        {user.displayName || user.username}
-      </span>
+      <Link
+        href="/profile"
+        className="hidden max-w-[16ch] truncate font-[family-name:var(--font-teko)] text-xl tracking-[0.12em] text-[var(--line)] nav-line md:inline"
+        title="Open your dressing room"
+      >
+        {name}
+      </Link>
       <button
         type="button"
         onClick={logout}
@@ -42,5 +48,47 @@ export function AuthNav() {
         <span>Sub on</span>
       </Link>
     </div>
+  );
+}
+
+export function MobileAuthLinks() {
+  const { user, ready } = useAuth();
+
+  if (!ready) return null;
+
+  if (!user) {
+    return (
+      <>
+        <Link
+          href="/login"
+          className="shrink-0 font-[family-name:var(--font-teko)] text-lg tracking-[0.14em] text-[var(--chalk)] uppercase"
+        >
+          Kick off
+        </Link>
+        <Link
+          href="/sell"
+          className="shrink-0 font-[family-name:var(--font-teko)] text-lg tracking-[0.14em] text-[var(--chalk)] uppercase"
+        >
+          Sub on
+        </Link>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Link
+        href="/profile"
+        className="shrink-0 font-[family-name:var(--font-teko)] text-lg tracking-[0.14em] text-[var(--line)] uppercase"
+      >
+        Sheet
+      </Link>
+      <Link
+        href="/sell"
+        className="shrink-0 font-[family-name:var(--font-teko)] text-lg tracking-[0.14em] text-[var(--chalk)] uppercase"
+      >
+        Sub on
+      </Link>
+    </>
   );
 }

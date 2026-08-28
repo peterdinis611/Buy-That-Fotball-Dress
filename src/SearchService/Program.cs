@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Caching;
 using FluentValidation;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ builder.Services.AddDbContext<SearchDbContext>(opt =>
 });
 
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddPitchCache(builder.Configuration);
 
 builder.Services.AddHttpClient("AuctionService", client =>
 {

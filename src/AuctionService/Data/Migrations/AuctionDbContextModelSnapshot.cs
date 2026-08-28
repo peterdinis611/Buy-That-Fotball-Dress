@@ -32,6 +32,9 @@ namespace AuctionService.Data.Migrations
                     b.Property<int?>("CurrentHighBid")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("HighBidder")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("ReservePrice")
                         .HasColumnType("INTEGER");
 
@@ -54,6 +57,34 @@ namespace AuctionService.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Auctions");
+                });
+
+            modelBuilder.Entity("AuctionService.Entities.Bid", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("AuctionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Bidder")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Bidder");
+
+                    b.HasIndex("AuctionId", "Amount");
+
+                    b.ToTable("Bids");
                 });
 
             modelBuilder.Entity("AuctionService.Entities.Item", b =>
@@ -112,6 +143,17 @@ namespace AuctionService.Data.Migrations
                     b.ToTable("Item");
                 });
 
+            modelBuilder.Entity("AuctionService.Entities.Bid", b =>
+                {
+                    b.HasOne("AuctionService.Entities.Auction", "Auction")
+                        .WithMany("Bids")
+                        .HasForeignKey("AuctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+                });
+
             modelBuilder.Entity("AuctionService.Entities.Item", b =>
                 {
                     b.HasOne("AuctionService.Entities.Auction", "Auction")
@@ -125,6 +167,8 @@ namespace AuctionService.Data.Migrations
 
             modelBuilder.Entity("AuctionService.Entities.Auction", b =>
                 {
+                    b.Navigation("Bids");
+
                     b.Navigation("Item")
                         .IsRequired();
                 });

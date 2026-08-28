@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MatchClock } from "./match-clock";
-import { AuthNav } from "@/components/auth";
+import { AuthNav, MobileAuthLinks } from "@/components/auth";
 
 const links = [
   { href: "/auctions", label: "Squad" },
@@ -54,7 +54,7 @@ export function SiteHeader() {
       </div>
 
       <nav className="flex gap-6 overflow-x-auto border-b border-[var(--border)] bg-black/50 px-5 py-2 md:hidden">
-        {[...links, { href: "/login", label: "Kick off" }, { href: "/sell", label: "Sub on" }].map((link) => (
+        {links.map((link) => (
           <Link
             key={link.href}
             href={link.href}
@@ -63,6 +63,7 @@ export function SiteHeader() {
             {link.label}
           </Link>
         ))}
+        <MobileAuthLinks />
       </nav>
     </header>
   );

@@ -10,6 +10,7 @@ export const queryKeys = {
     list: (params?: { club?: string; status?: string }) =>
       [...queryKeys.auctions.all, "list", params ?? {}] as const,
     detail: (id: string) => [...queryKeys.auctions.all, "detail", id] as const,
+    sheet: () => [...queryKeys.auctions.all, "sheet"] as const,
   },
   search: {
     all: ["search"] as const,

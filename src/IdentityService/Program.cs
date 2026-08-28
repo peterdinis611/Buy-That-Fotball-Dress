@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using Caching;
 using FluentValidation;
 using IdentityService.Data;
 using IdentityService.Entities;
@@ -42,6 +43,7 @@ builder.Services
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IIdentityService, IdentityAppService>();
+builder.Services.AddPitchCache(builder.Configuration);
 
 var jwt = builder.Configuration.GetSection("Jwt");
 var signingKey = jwt["Key"] ?? throw new InvalidOperationException("Jwt:Key is missing.");

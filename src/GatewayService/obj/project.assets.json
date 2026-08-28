@@ -103,7 +103,7 @@
     ]
   },
   "packageFolders": {
-    "/Users/peterdinis/.nuget/packages/": {}
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget": {}
   },
   "project": {
     "version": "1.0.0",
@@ -111,7 +111,7 @@
       "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/GatewayService.csproj",
       "projectName": "GatewayService",
       "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/GatewayService.csproj",
-      "packagesPath": "/Users/peterdinis/.nuget/packages/",
+      "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget",
       "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [

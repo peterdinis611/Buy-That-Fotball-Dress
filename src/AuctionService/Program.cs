@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using AuctionService.Data;
 using AuctionService.Services;
+using Caching;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<AuctionDbContext>(opt =>
 });
 
 builder.Services.AddScoped<IAuctionsService, AuctionsService>();
+builder.Services.AddPitchCache(builder.Configuration);
 
 var jwt = builder.Configuration.GetSection("Jwt");
 var signingKey = jwt["Key"] ?? throw new InvalidOperationException("Jwt:Key is missing.");

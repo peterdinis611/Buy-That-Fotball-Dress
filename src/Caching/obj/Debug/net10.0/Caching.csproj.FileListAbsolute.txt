@@ -1,0 +1,13 @@
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/bin/Debug/net10.0/Caching.deps.json
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/bin/Debug/net10.0/Caching.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/bin/Debug/net10.0/Caching.pdb
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/Caching.csproj.AssemblyReference.cache
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/Caching.GeneratedMSBuildEditorConfig.editorconfig
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/Caching.AssemblyInfoInputs.cache
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/Caching.AssemblyInfo.cs
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/Caching.csproj.CoreCompileInputs.cache
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/Caching.sourcelink.json
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/Caching.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/refint/Caching.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/Caching.pdb
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/ref/Caching.dll

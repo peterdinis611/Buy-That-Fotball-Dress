@@ -84,3 +84,15 @@ export function toCreateAuctionPayload(fields: SellFields): CreateAuctionPayload
 }
 
 export { sizes, kits, conditions };
+
+export const bidFieldsSchema = v.object({
+  amount: v.pipe(
+    v.string(),
+    v.trim(),
+    v.nonEmpty("Put a number on the shot."),
+    v.check((value) => /^\d+$/.test(value), "Whole euros only."),
+    v.check((value) => Number(value) > 0, "A shot has to be more than nothing."),
+  ),
+});
+
+export type BidFields = v.InferOutput<typeof bidFieldsSchema>;
