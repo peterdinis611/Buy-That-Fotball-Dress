@@ -14,6 +14,10 @@ public class AuctionDbContext(DbContextOptions<AuctionDbContext> options) : DbCo
         modelBuilder.Entity<Auction>()
             .HasOne(x => x.Item)
             .WithOne(x => x.Auction)
-            .HasForeignKey<Item>(x => x.AuctionId);
+            .HasForeignKey<Item>(x => x.AuctionId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Item>()
+            .HasIndex(x => x.Club);
     }
 }

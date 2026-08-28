@@ -1,6 +1,47 @@
 @AuctionService_HostAddress = http://localhost:5025
 
-GET {{AuctionService_HostAddress}}/weatherforecast/
+### List all auctions
+GET {{AuctionService_HostAddress}}/api/auctions
 Accept: application/json
 
-###
+### List live auctions for Barcelona
+GET {{AuctionService_HostAddress}}/api/auctions?club=Barcelona&status=Live
+Accept: application/json
+
+### Get auction by id
+GET {{AuctionService_HostAddress}}/api/auctions/c3a1f4d2-8b6e-4c91-9f20-1a7b5e3d8c44
+Accept: application/json
+
+### Create auction
+POST {{AuctionService_HostAddress}}/api/auctions
+Content-Type: application/json
+
+{
+  "reservePrice": 140,
+  "seller": "kitvault",
+  "auctionEnd": "2026-09-15T18:00:00Z",
+  "item": {
+    "club": "Arsenal",
+    "playerName": "Bukayo Saka",
+    "playerNumber": 7,
+    "season": "2024/25",
+    "size": "M",
+    "color": "Red",
+    "kitType": "Home",
+    "condition": "New",
+    "league": "Premier League",
+    "imageUrl": "https://placehold.co/600x800/ef0107/ffffff?text=Saka+7"
+  }
+}
+
+### Update auction
+PUT {{AuctionService_HostAddress}}/api/auctions/c3a1f4d2-8b6e-4c91-9f20-1a7b5e3d8c44
+Content-Type: application/json
+
+{
+  "reservePrice": 275,
+  "size": "XL"
+}
+
+### Delete auction
+DELETE {{AuctionService_HostAddress}}/api/auctions/5e7a2c14-8f39-41b6-ad50-2c9d6e1b8077
