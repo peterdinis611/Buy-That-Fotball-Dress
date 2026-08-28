@@ -19,7 +19,7 @@ export default async function AuctionDetailPage({
 
   return (
     <div className="relative overflow-hidden">
-      <div className="pointer-events-none absolute left-[-6%] top-10 font-[family-name:var(--font-shoulders)] text-[48vw] leading-none text-[color-mix(in_oklab,var(--flood)_6%,transparent)] select-none">
+      <div className="pointer-events-none absolute left-[-6%] top-10 font-[family-name:var(--font-teko)] text-[48vw] leading-none text-[color-mix(in_oklab,var(--chalk)_8%,transparent)] select-none">
         {number}
       </div>
 
@@ -27,16 +27,16 @@ export default async function AuctionDetailPage({
         <div className="reveal">
           <Link
             href="/auctions"
-            className="font-[family-name:var(--font-plex)] text-[10px] tracking-[0.3em] text-[var(--line)] uppercase"
+            className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.3em] text-[var(--line)] uppercase"
           >
-            ← Back to the board
+            ← Back to the squad
           </Link>
-          <p className="mt-8 font-[family-name:var(--font-plex)] text-[11px] tracking-[0.34em] text-[var(--line)] uppercase">
+          <p className="mt-8 font-[family-name:var(--font-teko)] text-[11px] tracking-[0.34em] text-[var(--line)] uppercase">
             {item.club} · {item.season}
           </p>
-          <h1 className="mt-3 text-6xl leading-[0.86] text-[var(--flood)] md:text-8xl">{item.playerName}</h1>
-          <p className="mt-6 max-w-md text-lg italic text-[var(--flood)]/70">
-            {item.kitType} kit in {item.color}. {item.condition}. Pegged by {auction.seller}.
+          <h1 className="mt-3 text-7xl leading-[0.86] text-[var(--chalk)] md:text-8xl">{item.playerName}</h1>
+          <p className="mt-6 max-w-md text-lg text-[var(--chalk)]/75">
+            {item.kitType} kit in {item.color}. {item.condition}. Worn out by {auction.seller}.
           </p>
 
           <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-5 border-t border-[var(--border)] pt-8 text-sm">
@@ -47,16 +47,16 @@ export default async function AuctionDetailPage({
               ["Listed", formatDate(auction.createdAt)],
             ].map(([label, value]) => (
               <div key={label}>
-                <dt className="font-[family-name:var(--font-plex)] text-[10px] tracking-[0.28em] text-[var(--muted-foreground)] uppercase">
+                <dt className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.28em] text-[var(--muted-foreground)] uppercase">
                   {label}
                 </dt>
-                <dd className="mt-1 text-[var(--flood)]">{value}</dd>
+                <dd className="mt-1 text-[var(--chalk)]">{value}</dd>
               </div>
             ))}
           </dl>
         </div>
 
-        <aside className="reveal delay-2 relative border border-[var(--line)] bg-[var(--card)] p-6 md:-rotate-1 md:p-8">
+        <aside className="reveal delay-2 relative border-4 border-[var(--chalk)] bg-black p-6 md:p-8">
           <div className="mb-6 flex items-center justify-between">
             <StatusPill status={auction.status} />
             <Countdown endsAt={auction.auctionEnd} className="text-sm" />
@@ -70,16 +70,16 @@ export default async function AuctionDetailPage({
           <div className="space-y-4 border-t border-dashed border-[var(--border)] pt-6">
             <TicketLine label="Reserve" value={formatMoney(auction.reservePrice)} />
             <TicketLine
-              label="High paddle"
-              value={auction.currentHighBid ? formatMoney(auction.currentHighBid) : "Quiet room"}
+              label="Top bid"
+              value={auction.currentHighBid ? formatMoney(auction.currentHighBid) : "No shot yet"}
             />
             {auction.winner ? <TicketLine label="Winner" value={auction.winner} /> : null}
-            {auction.soldAmount ? <TicketLine label="Hammer" value={formatMoney(auction.soldAmount)} /> : null}
-            <TicketLine label="Closes" value={formatDate(auction.auctionEnd)} />
+            {auction.soldAmount ? <TicketLine label="Final" value={formatMoney(auction.soldAmount)} /> : null}
+            <TicketLine label="Whistle" value={formatDate(auction.auctionEnd)} />
           </div>
 
-          <p className="mt-8 font-[family-name:var(--font-plex)] text-[10px] leading-relaxed tracking-[0.14em] text-[var(--muted-foreground)] uppercase">
-            Paddles arrive with the bid service. Tonight you can look, hang, and hunt.
+          <p className="mt-8 font-[family-name:var(--font-teko)] text-lg tracking-[0.12em] text-[var(--muted-foreground)]">
+            Bidding comes with the next half. Tonight you scout, sub on, and hunt.
           </p>
         </aside>
       </div>
@@ -90,10 +90,10 @@ export default async function AuctionDetailPage({
 function TicketLine({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline justify-between gap-4">
-      <span className="font-[family-name:var(--font-plex)] text-[10px] tracking-[0.24em] text-[var(--muted-foreground)] uppercase">
+      <span className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.24em] text-[var(--muted-foreground)] uppercase">
         {label}
       </span>
-      <span className="text-right text-[var(--flood)]">{value}</span>
+      <span className="text-right text-[var(--chalk)]">{value}</span>
     </div>
   );
 }

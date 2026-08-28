@@ -1,41 +1,32 @@
 import type { Metadata } from "next";
-import { Archivo_Black, IBM_Plex_Mono, Literata } from "next/font/google";
+import { Barlow, Teko } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { PitchMarkings } from "@/components/pitch-markings";
 
-const display = Archivo_Black({
-  variable: "--font-shoulders",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const literata = Literata({
-  variable: "--font-literata",
+const teko = Teko({
+  variable: "--font-teko",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
 });
 
-const plex = IBM_Plex_Mono({
-  variable: "--font-plex",
+const barlow = Barlow({
+  variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   title: "KIT VAULT — shirts that saw grass",
-  description: "A floodlit archive for match-worn and rare football jerseys.",
+  description: "Night-match auctions for real football jerseys.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`dark ${display.variable} ${literata.variable} ${plex.variable} h-full`}
-    >
-      <body className="pitch-lines relative flex min-h-full flex-col">
-        <div className="floodlight" />
+    <html lang="en" className={`dark ${teko.variable} ${barlow.variable} h-full`}>
+      <body className="relative flex min-h-full flex-col">
+        <PitchMarkings />
         <div className="grain" />
         <SiteHeader />
         <main className="relative z-10 flex-1">{children}</main>

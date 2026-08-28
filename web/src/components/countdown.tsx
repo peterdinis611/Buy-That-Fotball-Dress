@@ -13,14 +13,14 @@ export function Countdown({ endsAt, className = "" }: { endsAt: string; classNam
 
   if (!now) {
     return (
-      <span className={`font-[family-name:var(--font-plex)] text-[var(--cardinal)] ${className}`}>
-        WHISTLE
+      <span className={`scoreboard font-[family-name:var(--font-teko)] text-[var(--cardinal)] ${className}`}>
+        FT
       </span>
     );
   }
 
   return (
-    <span className={`font-[family-name:var(--font-plex)] tabular-nums tracking-widest ${className}`}>
+    <span className={`scoreboard font-[family-name:var(--font-teko)] tabular-nums tracking-widest ${className}`}>
       {now.days > 0 ? `${now.days}d ` : ""}
       {pad(now.hours)}:{pad(now.minutes)}:{pad(now.seconds)}
     </span>

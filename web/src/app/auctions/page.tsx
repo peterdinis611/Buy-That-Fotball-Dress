@@ -9,18 +9,18 @@ export default async function AuctionsPage() {
   return (
     <div className="mx-auto max-w-[1400px] px-5 py-12 md:px-8 md:py-16">
       <div className="mb-10 max-w-xl">
-        <p className="reveal font-[family-name:var(--font-plex)] text-[10px] tracking-[0.34em] text-[var(--line)] uppercase">
-          Transfer board
+        <p className="reveal font-[family-name:var(--font-teko)] text-xl tracking-[0.22em] text-[var(--line)]">
+          Team sheet
         </p>
-        <h1 className="reveal delay-1 mt-2 text-6xl text-[var(--flood)] md:text-7xl">Every shirt on a peg.</h1>
-        <p className="reveal delay-2 mt-4 italic text-[var(--flood)]/70">
-          Live lots first. Finished nights stay in the archive as proof they existed.
+        <h1 className="reveal delay-1 mt-1 text-7xl text-[var(--chalk)]">The squad.</h1>
+        <p className="reveal delay-2 mt-3 max-w-xl text-[var(--chalk)]/75">
+          Live shirts first. Full-time lots stay as proof the match happened.
         </p>
       </div>
 
       {listings.length === 0 ? (
-        <p className="border border-dashed border-[var(--border)] px-6 py-16 text-center italic text-[var(--flood)]/60">
-          Nothing hanging. Wake the gateway.
+        <p className="border border-dashed border-[var(--chalk)]/40 px-6 py-16 text-center text-[var(--chalk)]/70">
+          Empty dressing room. The gateway is still in the tunnel.
         </p>
       ) : (
         <div className="flex flex-col gap-3">

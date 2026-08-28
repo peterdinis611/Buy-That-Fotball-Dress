@@ -25,16 +25,16 @@ export default async function SearchPage({
   return (
     <div className="mx-auto max-w-[1400px] px-5 py-12 md:px-8 md:py-16">
       <div className="mb-10 max-w-2xl">
-        <p className="reveal font-[family-name:var(--font-plex)] text-[10px] tracking-[0.34em] text-[var(--line)] uppercase">
-          Night archive
+        <p className="reveal font-[family-name:var(--font-teko)] text-xl tracking-[0.22em] text-[var(--line)]">
+          VAR check
         </p>
-        <h1 className="reveal delay-1 mt-2 text-6xl text-[var(--flood)] md:text-7xl">Hunt by club, number, night.</h1>
+        <h1 className="reveal delay-1 mt-1 text-6xl text-[var(--chalk)] md:text-7xl">Find the shirt.</h1>
       </div>
 
       <SearchFilters query={query} />
 
-      <p className="mb-4 font-[family-name:var(--font-plex)] text-[10px] tracking-[0.28em] text-[var(--muted-foreground)] uppercase">
-        {page.totalCount} shirts in the lights
+      <p className="mb-4 font-[family-name:var(--font-teko)] text-[10px] tracking-[0.28em] text-[var(--muted-foreground)] uppercase">
+        {page.totalCount} shirts on the grass
       </p>
 
       <div className="flex flex-col gap-3">

@@ -85,9 +85,9 @@ export function SellForm() {
       <Button
         type="submit"
         disabled={pending}
-        className="mt-8 h-11 w-full rounded-none border border-[var(--line)] bg-[var(--line)] font-[family-name:var(--font-plex)] text-xs tracking-[0.28em] text-[var(--pitch)] uppercase"
+        className="mt-8 h-11 w-full rounded-none border border-[var(--line)] bg-[var(--line)] font-[family-name:var(--font-teko)] text-xs tracking-[0.28em] text-[var(--pitch)] uppercase"
       >
-        {pending ? "Hanging…" : "Hang the shirt"}
+        {pending ? "Coming on…" : "Sub on"}
       </Button>
     </form>
   );
@@ -100,13 +100,13 @@ function Field({
 }: ComponentProps<typeof Input> & { label: string; name: string }) {
   return (
     <div className="grid gap-2">
-      <Label htmlFor={name} className="font-[family-name:var(--font-plex)] text-[10px] tracking-[0.22em] uppercase">
+      <Label htmlFor={name} className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.22em] uppercase">
         {label}
       </Label>
       <Input
         id={name}
         name={name}
-        className="h-11 rounded-none border-[var(--border)] bg-transparent font-[family-name:var(--font-plex)]"
+        className="h-11 rounded-none border-[var(--border)] bg-transparent font-[family-name:var(--font-teko)]"
         {...props}
       />
     </div>
@@ -124,14 +124,14 @@ function NativeSelect({
 }) {
   return (
     <div className="grid gap-2">
-      <Label htmlFor={name} className="font-[family-name:var(--font-plex)] text-[10px] tracking-[0.22em] uppercase">
+      <Label htmlFor={name} className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.22em] uppercase">
         {label}
       </Label>
       <select
         id={name}
         name={name}
         required
-        className="h-11 rounded-none border border-[var(--border)] bg-transparent px-2.5 font-[family-name:var(--font-plex)] text-sm"
+        className="h-11 rounded-none border border-[var(--border)] bg-transparent px-2.5 font-[family-name:var(--font-teko)] text-sm"
       >
         {options.map((option) => (
           <option key={option} value={option} className="bg-[var(--pitch)]">

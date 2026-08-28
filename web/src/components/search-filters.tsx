@@ -71,7 +71,7 @@ function Filter({
 }) {
   return (
     <div className="grid gap-2">
-      <Label className="font-[family-name:var(--font-plex)] text-[10px] tracking-[0.22em] uppercase">
+      <Label className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.22em] uppercase">
         {label}
       </Label>
       <Input
@@ -99,13 +99,13 @@ function NativeFilter({
 }) {
   return (
     <div className="grid gap-2">
-      <Label className="font-[family-name:var(--font-plex)] text-[10px] tracking-[0.22em] uppercase">
+      <Label className="font-[family-name:var(--font-teko)] text-[10px] tracking-[0.22em] uppercase">
         {label}
       </Label>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 rounded-none border border-[var(--border)] bg-transparent px-2 font-[family-name:var(--font-plex)] text-sm"
+        className="h-10 rounded-none border border-[var(--border)] bg-transparent px-2 font-[family-name:var(--font-teko)] text-sm"
       >
         {options.map((option) => (
           <option key={option || "any"} value={option} className="bg-[var(--pitch)]">

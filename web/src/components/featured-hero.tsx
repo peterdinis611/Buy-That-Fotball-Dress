@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Countdown } from "@/components/countdown";
+import { JerseyBack } from "@/components/jersey-back";
 import { formatMoney } from "@/lib/format";
 import type { KitListing } from "@/lib/types";
 
@@ -7,65 +8,55 @@ export function FeaturedHero({ listing }: { listing: KitListing }) {
   const number = listing.playerNumber?.toString().padStart(2, "0") ?? "00";
 
   return (
-    <section className="relative overflow-hidden border-b border-[var(--border)]">
-      <div className="pointer-events-none absolute -right-8 top-[-12%] font-[family-name:var(--font-shoulders)] text-[42vw] leading-none tracking-[-0.1em] text-[color-mix(in_oklab,var(--flood)_7%,transparent)] select-none">
-        {number}
-      </div>
-
-      <div className="mx-auto grid max-w-[1400px] items-end gap-10 px-5 py-16 md:grid-cols-[1.15fr_0.85fr] md:px-8 md:py-24">
+    <section className="relative overflow-hidden border-b-4 border-[var(--chalk)]">
+      <div className="mx-auto grid max-w-[1400px] items-center gap-10 px-5 py-12 md:grid-cols-[1.1fr_0.9fr] md:px-8 md:py-16">
         <div>
-          <p className="reveal font-[family-name:var(--font-plex)] text-[11px] tracking-[0.4em] text-[var(--line)] uppercase">
-            Tonight&apos;s floodlight lot
+          <p className="reveal font-[family-name:var(--font-teko)] text-xl tracking-[0.22em] text-[var(--line)]">
+            Kick-off lot
           </p>
-          <h1 className="reveal delay-1 mt-4 max-w-[12ch] text-6xl leading-[0.82] text-[var(--flood)] md:text-8xl">
+          <h1 className="reveal delay-1 mt-2 max-w-[14ch] text-7xl leading-[0.85] text-[var(--chalk)] md:text-8xl">
             {listing.playerName}
           </h1>
-          <p className="reveal delay-2 mt-6 max-w-md text-lg italic text-[var(--flood)]/75">
+          <p className="reveal delay-2 mt-5 max-w-md text-lg text-[var(--chalk)]/80">
             {listing.club} {listing.season} {listing.kitType.toLowerCase()} shirt. {listing.condition}. Size {listing.size}.
           </p>
 
           <div className="reveal delay-3 mt-8 flex flex-wrap items-end gap-8">
             <div>
-              <p className="font-[family-name:var(--font-plex)] text-[10px] tracking-[0.28em] text-[var(--muted-foreground)] uppercase">
-                Standing
+              <p className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] text-[var(--muted-foreground)]">
+                Scoreline
               </p>
-              <p className="font-[family-name:var(--font-shoulders)] text-5xl text-[var(--line)]">
+              <p className="font-[family-name:var(--font-teko)] text-6xl leading-none text-[var(--line)]">
                 {formatMoney(listing.currentHighBid ?? listing.reservePrice)}
               </p>
             </div>
             <div>
-              <p className="font-[family-name:var(--font-plex)] text-[10px] tracking-[0.28em] text-[var(--muted-foreground)] uppercase">
-                Whistle
+              <p className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] text-[var(--muted-foreground)]">
+                Until the whistle
               </p>
-              <Countdown endsAt={listing.auctionEnd} className="text-2xl text-[var(--flood)]" />
+              <Countdown endsAt={listing.auctionEnd} className="text-4xl text-[var(--chalk)]" />
             </div>
           </div>
 
           <Link
             href={`/auctions/${listing.id}`}
-            className="reveal delay-4 mt-10 inline-flex border border-[var(--line)] px-5 py-3 font-[family-name:var(--font-plex)] text-xs tracking-[0.28em] text-[var(--line)] uppercase transition-colors hover:bg-[var(--line)] hover:text-[var(--pitch)]"
+            className="reveal delay-4 mt-10 inline-flex bg-[var(--chalk)] px-5 py-3 font-[family-name:var(--font-teko)] text-2xl tracking-[0.14em] text-black uppercase hover:bg-[var(--line)]"
           >
-            Open the lot
+            Walk out
           </Link>
         </div>
 
-        <div className="reveal delay-3 relative aspect-[3/4] max-h-[540px] w-full justify-self-end overflow-hidden border border-[var(--line)]/40 bg-[var(--card)] md:rotate-2">
+        <div className="reveal delay-3 relative flex min-h-[360px] items-center justify-center">
+          <div className="absolute inset-8 rounded-full border border-[var(--chalk)]/40" />
+          <JerseyBack number={number} color={listing.color} className="!h-64 !w-52 [&_span]:text-[9rem]" />
           {listing.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={listing.imageUrl}
               alt={`${listing.club} ${listing.playerName}`}
-              className="h-full w-full object-cover opacity-90"
+              className="absolute right-0 top-8 hidden h-72 w-52 -rotate-6 border-4 border-[var(--chalk)] object-cover md:block"
             />
-          ) : (
-            <div className="flex h-full items-center justify-center font-[family-name:var(--font-shoulders)] text-[30vw] text-[var(--line)]/20 md:text-[12rem]">
-              {number}
-            </div>
-          )}
-          <div className="absolute inset-x-0 bottom-0 flex justify-between bg-[var(--pitch)]/80 px-4 py-3 font-[family-name:var(--font-plex)] text-[10px] tracking-[0.24em] text-[var(--flood)] uppercase">
-            <span>{listing.kitType}</span>
-            <span>{listing.color}</span>
-          </div>
+          ) : null}
         </div>
       </div>
     </section>

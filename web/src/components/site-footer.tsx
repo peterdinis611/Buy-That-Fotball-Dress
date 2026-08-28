@@ -1,12 +1,12 @@
 export function SiteFooter() {
   return (
-    <footer className="relative z-10 mt-24 border-t border-[var(--border)]">
-      <div className="mx-auto flex max-w-[1400px] flex-col gap-4 px-5 py-8 md:flex-row md:items-end md:justify-between md:px-8">
-        <p className="max-w-md text-sm italic text-[var(--flood)]/70">
-          No replicas. No training knockoffs. Only shirts that left the tunnel.
+    <footer className="relative z-10 mt-20 border-t-4 border-[var(--chalk)] bg-black">
+      <div className="mx-auto flex max-w-[1400px] flex-col gap-3 px-5 py-6 md:flex-row md:items-center md:justify-between md:px-8">
+        <p className="max-w-lg text-sm text-[var(--chalk)]/75">
+          No replicas. No training tops. If it never left the tunnel, it does not play.
         </p>
-        <p className="font-[family-name:var(--font-plex)] text-[10px] tracking-[0.3em] text-[var(--line)] uppercase">
-          Floodlit kit archive · 90+1
+        <p className="font-[family-name:var(--font-teko)] text-xl tracking-[0.2em] text-[var(--line)]">
+          FULL TIME · KIT VAULT
         </p>
       </div>
     </footer>
