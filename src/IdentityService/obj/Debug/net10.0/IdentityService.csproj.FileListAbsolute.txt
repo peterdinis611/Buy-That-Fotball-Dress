@@ -9,9 +9,6 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/FluentValidation.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/FluentValidation.DependencyInjectionExtensions.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/Humanizer.dll
-/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/MassTransit.dll
-/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/MassTransit.Abstractions.dll
-/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/MassTransit.RabbitMqTransport.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/Microsoft.AspNetCore.OpenApi.dll
@@ -39,7 +36,6 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/Microsoft.VisualStudio.SolutionPersistence.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/Mono.TextTemplating.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/Newtonsoft.Json.dll
-/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/RabbitMQ.Client.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/SQLitePCLRaw.batteries_v2.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/SQLitePCLRaw.core.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/bin/Debug/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll

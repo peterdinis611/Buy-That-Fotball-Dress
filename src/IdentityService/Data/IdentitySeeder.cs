@@ -1,6 +1,4 @@
-using Contracts;
 using IdentityService.Entities;
-using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +23,6 @@ public static class IdentitySeeder
     public static async Task SeedAsync(
         IdentityDataContext context,
         UserManager<ApplicationUser> userManager,
-        IPublishEndpoint publishEndpoint,
         ILogger logger,
         CancellationToken cancellationToken = default)
     {
@@ -55,21 +52,6 @@ public static class IdentitySeeder
                     username,
                     string.Join("; ", created.Errors.Select(e => e.Description)));
                 continue;
-            }
-
-            try
-            {
-                await publishEndpoint.Publish(new UserCreated
-                {
-                    Id = user.Id,
-                    Username = username,
-                    Email = email,
-                    DisplayName = displayName
-                }, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                logger.LogWarning(ex, "Seeded {Username} but could not publish UserCreated.", username);
             }
         }
 

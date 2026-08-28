@@ -1,6 +1,4 @@
-using IdentityService.Data;
 using IdentityService.Entities;
-using MassTransit;
 using Microsoft.AspNetCore.Identity;
 
 namespace IdentityService.Data;
@@ -14,11 +12,10 @@ public sealed class IdentitySeedHostedService(
         using var scope = services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IdentityDataContext>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        var publishEndpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
 
         try
         {
-            await IdentitySeeder.SeedAsync(context, userManager, publishEndpoint, logger, cancellationToken);
+            await IdentitySeeder.SeedAsync(context, userManager, logger, cancellationToken);
         }
         catch (Exception ex)
         {

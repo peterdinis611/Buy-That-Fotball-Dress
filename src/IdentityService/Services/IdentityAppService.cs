@@ -1,17 +1,14 @@
-using Contracts;
 using IdentityService.Common;
 using IdentityService.DTOs;
 using IdentityService.Entities;
 using IdentityService.Mapping;
-using MassTransit;
 using Microsoft.AspNetCore.Identity;
 
 namespace IdentityService.Services;
 
 public sealed class IdentityAppService(
     UserManager<ApplicationUser> userManager,
-    ITokenService tokenService,
-    IPublishEndpoint publishEndpoint) : IIdentityService
+    ITokenService tokenService) : IIdentityService
 {
     public async Task<Result<UserDto>> RegisterAsync(RegisterDto dto, CancellationToken cancellationToken)
     {
@@ -37,21 +34,6 @@ public sealed class IdentityAppService(
         {
             var error = string.Join(" ", created.Errors.Select(e => e.Description));
             return Result<UserDto>.BadRequest(error);
-        }
-
-        try
-        {
-            await publishEndpoint.Publish(new UserCreated
-            {
-                Id = user.Id,
-                Username = user.UserName!,
-                Email = user.Email!,
-                DisplayName = user.DisplayName
-            }, cancellationToken);
-        }
-        catch
-        {
-            // RabbitMQ is optional for register; the account is already created.
         }
 
         return Result<UserDto>.Success(user.ToDto(tokenService.CreateToken(user)));
