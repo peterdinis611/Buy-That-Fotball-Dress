@@ -9,7 +9,7 @@ export function ConcoursePulse({ live, listed }: ConcoursePulseProps) {
 
   return (
     <div className="border-b-4 border-[var(--ink)] bg-[var(--stud)]">
-      <p className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-6 gap-y-1 px-5 py-2.5 font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--tape)] uppercase md:px-8 md:text-xl">
+      <p className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-6 gap-y-1 px-5 py-2.5 font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[#eef6ea] uppercase md:px-8 md:text-xl">
         <span className="live-dot size-2 shrink-0 rounded-full bg-[var(--led)]" />
         <span>{liveLabel}</span>
         <span className="text-[var(--bib)]" aria-hidden>

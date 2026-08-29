@@ -13,14 +13,14 @@ import { fromAuction, isOpenLot, type Auction } from "@/lib/types";
 
 export function HomeView({ auctions }: { auctions: Auction[] }) {
   const { data = auctions } = useAuctionsQuery(auctions);
-  const listings = data.map(fromAuction).filter(isOpenLot);
-  const featured = listings[0];
-  const rest = listings.slice(1, 11);
+  const open = data.filter((row) => isOpenLot(fromAuction(row)));
+  const listings = open.map(fromAuction);
+  const rest = listings.slice(0, 11);
 
   return (
     <div>
-      {featured ? (
-        <FeaturedHero listing={featured} />
+      {open.length > 0 ? (
+        <FeaturedHero lots={open} />
       ) : (
         <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8">
           <p className="reveal font-[family-name:var(--font-display)] text-lg tracking-[0.2em] text-[var(--led)]">

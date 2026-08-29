@@ -3,6 +3,8 @@ export { useClock } from "./use-clock";
 export { useCountdown } from "./use-countdown";
 export { useLights } from "./use-lights";
 export { useLiveAuction } from "./use-live-auction";
+export { useSwipeCard } from "./use-swipe-card";
+export type { SwipeDir } from "./use-swipe-card";
 export { useLiveBoard } from "./use-live-board";
 export {
   useLoginMutation,
@@ -16,6 +18,6 @@ export {
   useUpdateAuctionMutation,
   useDeleteAuctionMutation,
   useWatchMutation,
-  useWatchLotMutation,
+  useHangLotMutation,
   useSearchQuery,
 } from "./queries";

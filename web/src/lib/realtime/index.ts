@@ -7,3 +7,4 @@ export {
   peekAuction,
 } from "./cache";
 export type { LiveAuctionDeleted, LiveAuctionUpdated } from "./cache";
+export { pushBoardEvent, markBoardRead, useBoardLog } from "./board-log";

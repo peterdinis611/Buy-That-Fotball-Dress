@@ -458,6 +458,8 @@
 }
 
 .peg-wall > a {
+  min-width: 0;
+  overflow: hidden;
   animation: board-slam 0.65s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   animation-delay: calc(var(--peg, 0) * 55ms);
 }
@@ -589,6 +591,665 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.06em;
   text-shadow: 0 0 18px rgb(227 28 35 / 0.55);
+}
+
+.lot-rail:focus {
+  outline: none;
+}
+
+.lot-rail:focus-visible {
+  outline: 3px solid var(--bib);
+  outline-offset: -3px;
+}
+
+.lot-deck {
+  position: relative;
+  width: min(100%, 17.5rem);
+  height: 23rem;
+  margin-inline: auto;
+}
+
+.lot-card {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+  transform: rotate(3deg);
+  transform-origin: 50% 80%;
+  filter: drop-shadow(0 22px 28px rgb(0 0 0 / 0.35));
+}
+
+.lot-card-dragging {
+  cursor: grabbing;
+  z-index: 8;
+}
+
+.lot-card-peek {
+  pointer-events: none;
+  cursor: default;
+  filter: drop-shadow(0 12px 16px rgb(0 0 0 / 0.22));
+}
+
+.lot-card-face {
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 1.15rem 1.2rem 1.3rem;
+  border: 5px solid #f4f1ea;
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.18);
+}
+
+.lot-card-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image: repeating-linear-gradient(
+    -18deg,
+    transparent 0 10px,
+    rgb(0 0 0 / 0.25) 10px 11px
+  );
+}
+
+.lot-card-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+}
+
+.lot-card-stripe {
+  position: absolute;
+  top: 38%;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  height: 12%;
+  opacity: 0.82;
+}
+
+.lot-card-club {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.88;
+}
+
+.lot-card-number {
+  position: relative;
+  z-index: 1;
+  margin-top: -0.15em;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 7.4rem;
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+}
+
+.lot-card-player {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.35rem;
+  max-width: 12ch;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.7rem;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.rail-fan {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 16.5rem;
+  padding: 1.25rem 0.25rem 0.5rem;
+  overflow-x: auto;
+}
+
+.rail-fan-card {
+  position: relative;
+  z-index: var(--z, 1);
+  flex: 0 0 8.6rem;
+  width: 8.6rem;
+  height: 12.2rem;
+  margin-left: -2.8rem;
+  overflow: hidden;
+  cursor: pointer;
+  transform: rotate(calc(var(--tilt, 0) * 1deg));
+  transform-origin: 50% 110%;
+  filter: drop-shadow(0 14px 16px rgb(0 0 0 / 0.3));
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rail-fan-card:first-child {
+  margin-left: 0;
+}
+
+.rail-fan-card:hover,
+.rail-fan-card:focus-visible {
+  z-index: 30;
+  transform: translateY(-16px) rotate(0deg);
+}
+
+.rail-fan-card .lot-card-face {
+  border-width: 4px;
+  padding: 0.7rem 0.75rem 0.8rem;
+}
+
+.rail-fan-card .lot-card-club {
+  font-size: 0.85rem;
+}
+
+.rail-fan-card .lot-card-number {
+  font-size: 4.1rem;
+}
+
+.rail-fan-card .lot-card-player {
+  font-size: 1.15rem;
+}
+
+.rail-putback {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bib);
+  padding: 0.5rem 0.4rem;
+  box-shadow: inset 0 0 0 2px var(--bib);
+}
+
+.rail-putback:hover {
+  background: var(--bib);
+  color: var(--stud);
+}
+
+.rail-back-list {
+  display: grid;
+  gap: 2px;
+  background: color-mix(in oklab, var(--ink) 14%, transparent);
+}
+
+.rail-back-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 0.8rem;
+  padding: 0.7rem 0.85rem;
+  background: var(--tape);
+}
+
+.rail-back-btn {
+  min-height: 2.4rem;
+  padding: 0.2rem 0.7rem;
+  background: var(--bib);
+  color: var(--stud);
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.12), 0 4px 0 #c49c00;
+}
+
+.rail-back-btn:active {
+  transform: translateY(3px);
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.12), 0 1px 0 #c49c00;
+}
+
+.rail-back-btn-ink {
+  background: var(--ink);
+  color: var(--tape);
+  box-shadow: none;
+}
+
+.lot-stamp {
+  position: absolute;
+  z-index: 6;
+  pointer-events: none;
+  padding: 0.12em 0.38em 0.05em;
+  border: 4px solid;
+  background: #141414;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.lot-stamp-watch {
+  top: 1.1rem;
+  left: 0.85rem;
+  color: var(--bib);
+  border-color: var(--bib);
+  transform: rotate(-14deg);
+}
+
+.lot-stamp-pass {
+  top: 1.1rem;
+  right: 0.85rem;
+  color: var(--led);
+  border-color: var(--led);
+  transform: rotate(12deg);
+}
+
+.lot-card-exit-right {
+  animation: lot-fly-right 0.32s cubic-bezier(0.2, 0.85, 0.25, 1) forwards;
+}
+
+.lot-card-exit-left {
+  animation: lot-fly-left 0.32s cubic-bezier(0.2, 0.85, 0.25, 1) forwards;
+}
+
+@keyframes lot-fly-right {
+  to {
+    transform: translateX(130vw) rotate(22deg);
+    opacity: 0;
+  }
+}
+
+@keyframes lot-fly-left {
+  to {
+    transform: translateX(-130vw) rotate(-22deg);
+    opacity: 0;
+  }
+}
+
+.lot-pass-btn,
+.lot-watch-btn {
+  flex: 1;
+  min-height: 2.7rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.lot-pass-btn {
+  background: #141414;
+  color: var(--led);
+  box-shadow: inset 0 0 0 2px var(--led);
+}
+
+.lot-watch-btn {
+  background: var(--bib);
+  color: var(--stud);
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.12), 0 6px 0 #c49c00;
+}
+
+.lot-watch-btn:active {
+  transform: translateY(4px);
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.12), 0 2px 0 #c49c00;
+}
+
+.lot-hint {
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.12);
+}
+
+.board-desk-trigger {
+  position: relative;
+  display: flex;
+  min-width: 3.7rem;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.12rem 0.5rem 0.18rem;
+  background: var(--bib);
+  color: var(--stud);
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.14), 0 5px 0 #c49c00;
+  line-height: 1;
+}
+
+.board-desk-trigger:active {
+  transform: translateY(3px);
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.14), 0 2px 0 #c49c00;
+}
+
+.board-desk-kicker {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.board-desk-count {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #c8102e;
+}
+
+.board-desk-pip {
+  position: absolute;
+  top: -0.35rem;
+  right: -0.35rem;
+  min-width: 1.15rem;
+  padding: 0.05rem 0.28rem 0;
+  background: var(--led);
+  color: #fff;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.board-desk-panel {
+  position: absolute;
+  top: calc(100% + 0.65rem);
+  right: 0;
+  z-index: 40;
+  width: min(calc(100vw - 1.25rem), 28rem);
+  animation: board-drop 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  box-shadow: 0 28px 60px rgb(0 0 0 / 0.45);
+}
+
+.board-desk-body {
+  max-height: min(68vh, 32rem);
+  overflow: auto;
+  padding: 0.7rem 0 0.2rem;
+}
+
+.board-desk-label {
+  padding: 0.35rem 1.1rem 0.45rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #c4c4ba;
+}
+
+.board-desk-row {
+  display: grid;
+  grid-template-columns: 0.55rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.78rem 1.1rem;
+  border-top: 1px solid #2a2a2a;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.board-desk-row:hover {
+  background: #1a1a1a;
+  box-shadow: inset 3px 0 0 var(--bib);
+}
+
+.board-desk-item {
+  border-top: 1px solid #2a2a2a;
+}
+
+.board-desk-item .board-desk-row {
+  border-top: 0;
+  grid-template-columns: 0.55rem minmax(0, 1fr) auto 2.85rem;
+  padding-right: 0.85rem;
+}
+
+.board-desk-item:hover,
+.board-desk-item[data-open="true"] {
+  background: #1a1a1a;
+  box-shadow: inset 3px 0 0 var(--bib);
+}
+
+.board-desk-item .board-desk-row:hover {
+  background: transparent;
+  box-shadow: none;
+}
+
+.board-desk-go {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  min-width: 2.85rem;
+  padding: 0.15rem 0.2rem;
+  background: var(--bib);
+  color: var(--stud);
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.12);
+}
+
+.board-desk-go[aria-expanded="true"] {
+  background: #0b0b0b;
+  color: var(--bib);
+  box-shadow: inset 0 0 0 2px var(--bib);
+}
+
+.board-desk-go-dead {
+  background: #0b0b0b;
+  color: #8a8a82;
+  box-shadow: inset 0 0 0 1px #333;
+}
+
+.board-desk-slip {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0 1.1rem 0.95rem 2.45rem;
+}
+
+.board-desk-slip-label {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c4c4ba;
+}
+
+.board-desk-slip-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.4rem;
+}
+
+.board-desk-input {
+  height: 2.65rem;
+  border: 0;
+  background: #0b0b0b;
+  color: #f3f1ec;
+  padding: 0 0.7rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  outline: none;
+  box-shadow: inset 0 0 0 1px #333;
+  caret-color: var(--bib);
+}
+
+.board-desk-input:focus {
+  box-shadow: inset 3px 0 0 var(--bib), inset 0 0 0 1px #333;
+}
+
+.board-desk-place {
+  min-width: 4.6rem;
+  background: var(--bib);
+  color: var(--stud);
+  padding: 0 0.85rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.board-desk-place:disabled {
+  opacity: 0.45;
+}
+
+.board-desk-slip-err {
+  color: var(--led);
+  font-size: 0.88rem;
+  line-height: 1.3;
+}
+
+.board-desk-slip-ok {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bib);
+}
+
+a.board-desk-player:hover {
+  color: var(--bib);
+}
+
+.board-desk-tape {
+  grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+}
+
+.board-desk-lamp {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--led);
+  box-shadow: 0 0 10px rgb(255 58 50 / 0.7);
+  animation: live-beat 1.8s ease-out infinite;
+}
+
+.board-desk-player {
+  display: block;
+  overflow: hidden;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 0.92;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #f3f1ec;
+}
+
+.board-desk-player-sm {
+  font-size: 1.35rem;
+}
+
+.board-desk-club {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.28rem;
+  overflow: hidden;
+  font-size: 0.92rem;
+  line-height: 1.2;
+  color: #d0d0c6;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-desk-chip {
+  flex-shrink: 0;
+  padding: 0.05rem 0.35rem 0;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bib);
+  box-shadow: inset 0 0 0 1px var(--bib);
+}
+
+.board-desk-chip[data-kind="yours"] {
+  color: #f3f1ec;
+  box-shadow: inset 0 0 0 1px #f3f1ec;
+}
+
+.board-desk-stats {
+  min-width: 7.1rem;
+  padding: 0.4rem 0.55rem 0.35rem;
+  background: #0b0b0b;
+  box-shadow: inset 0 0 0 1px #333;
+  text-align: right;
+}
+
+.board-desk-bid {
+  display: block;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  line-height: 0.9;
+  color: #fff4f2;
+  text-shadow: 0 0 14px rgb(255 58 50 / 0.85);
+}
+
+.board-desk-clock {
+  display: block;
+  margin-top: 0.28rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--bib) !important;
+  text-shadow: none;
+}
+
+.board-desk-mark {
+  flex-shrink: 0;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8a8a82;
+}
+
+.board-desk-mark[data-kind="live"],
+.board-desk-mark[data-kind="bid"],
+.board-desk-mark[data-kind="outbid"] {
+  color: var(--led);
+}
+
+.board-desk-mark[data-kind="peg"],
+.board-desk-mark[data-kind="in"],
+.board-desk-mark[data-kind="listed"] {
+  color: var(--bib);
+}
+
+.board-desk-mark[data-kind="yours"],
+.board-desk-mark[data-kind="ended"] {
+  color: #eef6ea;
+}
+
+.board-desk-ago {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bib);
+}
+
+.board-desk-more {
+  padding: 0.55rem 1.1rem 0.35rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c4c4ba;
+}
+
+.board-desk-foot {
+  display: block;
+  padding: 0.75rem 1.1rem 0.9rem;
+  border-top: 1px solid #2a2a2a;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bib);
+}
+
+.board-desk-foot:hover {
+  background: #1a1a1a;
 }
 
 .hoarding {
@@ -819,11 +1480,20 @@ a:hover .brand-mark {
   .banner-cta,
   .nav-line::after,
   .ref-slip,
-  .brand-mark {
+  .brand-mark,
+  .lot-card-exit-left,
+  .lot-card-exit-right,
+  .board-desk-panel,
+  .board-desk-row {
     animation: none;
     transition: none;
     transform: none;
     opacity: 1;
+  }
+
+  .lot-card-exit-left,
+  .lot-card-exit-right {
+    opacity: 0;
   }
 
   .locker-faq summary + p {

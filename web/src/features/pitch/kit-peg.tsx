@@ -13,16 +13,18 @@ export function KitPeg({ listing, index = 0 }: { listing: KitListing; index?: nu
   return (
     <Link
       href={`/auctions/${listing.id}`}
-      className="kit-hover group relative flex flex-col items-center bg-[var(--tape)] px-4 pb-5 pt-7"
+      className="kit-hover group relative flex min-w-0 flex-col items-center overflow-hidden bg-[var(--tape)] px-3 pb-5 pt-7 sm:px-4"
       style={{ "--peg": index, "--hang": hang } as CSSProperties}
     >
       <span className="absolute top-2 size-2.5 rounded-full bg-[#c9a227] shadow-[0_6px_0_#6b5412]" />
-      <JerseyBack number={number} color={listing.color} className="peg-sway h-28 w-24" />
-      <p className="mt-4 font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--led)]">
+      <JerseyBack number={number} color={listing.color} className="peg-sway h-28 w-24 shrink-0" />
+      <p className="mt-4 w-full truncate text-center font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--led)]">
         {listing.club}
       </p>
-      <h3 className="text-center text-3xl leading-none text-[var(--ink)]">{listing.playerName}</h3>
-      <p className="mt-1 text-center text-xs text-[var(--ink)]/60">
+      <h3 className="w-full truncate px-0.5 text-center text-2xl leading-none text-[var(--ink)] lg:text-3xl">
+        {listing.playerName}
+      </h3>
+      <p className="mt-1 w-full truncate text-center text-xs text-[var(--ink)]/60">
         {listing.season} · {listing.kitType} · {listing.size}
       </p>
       <div className="mt-3">

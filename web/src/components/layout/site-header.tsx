@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MatchClock } from "./match-clock";
 import { LightsSwitch } from "./lights-switch";
 import { AuthNav, MobileAuthLinks } from "@/features/auth";
+import { BoardDrop } from "@/features/pitch/board-drop";
 
 const links = [
   { href: "/auctions", label: "Live lots" },
@@ -53,7 +54,10 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          <AuthNav />
+          <div className="flex items-center gap-3 md:gap-4">
+            <BoardDrop />
+            <AuthNav />
+          </div>
         </div>
       </div>
 

@@ -125,7 +125,7 @@ export function useDeleteAuctionMutation() {
   });
 }
 
-export function useWatchLotMutation() {
+export function useHangLotMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -136,10 +136,8 @@ export function useWatchLotMutation() {
       queryClient.setQueryData(queryKeys.auctions.sheet(), (current: PlayerSheet | undefined) => {
         if (!current) return current;
         const watching = current.watching ?? [];
-        return {
-          ...current,
-          watching: watching.some((row) => row.id === auction.id) ? watching : [auction, ...watching],
-        };
+        if (watching.some((row) => row.id === auction.id)) return current;
+        return { ...current, watching: [auction, ...watching] };
       });
       return { previous };
     },

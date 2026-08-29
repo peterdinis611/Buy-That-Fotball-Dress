@@ -10,3 +10,4 @@ export { PitchFaq } from "./pitch-faq";
 export { TunnelCta } from "./tunnel-cta";
 export { StatusScreen } from "./status-screen";
 export { BoardToaster, pushBoardToast } from "./board-toast";
+export { BoardDrop } from "./board-drop";
