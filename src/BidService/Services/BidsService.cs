@@ -56,12 +56,13 @@ public sealed class BidsService(
             || lot.AuctionEnd.ToUniversalTime() <= DateTime.UtcNow)
             return Result<BidDto>.Conflict("This lot is no longer taking bids.");
 
-        var high = await db.Bids
+        var highFromBids = await db.Bids
             .Where(x => x.AuctionId == auctionId)
             .Select(x => (int?)x.Amount)
             .MaxAsync(cancellationToken);
 
-        var floor = high is int current && current > 0 ? current + 1 : lot.ReservePrice;
+        var current = Math.Max(highFromBids ?? 0, lot.CurrentHighBid ?? 0);
+        var floor = current > 0 ? current + 1 : lot.ReservePrice;
         if (amount < floor)
             return Result<BidDto>.BadRequest($"The next bid must be at least {floor}.");
 
@@ -75,6 +76,8 @@ public sealed class BidsService(
         };
 
         db.Bids.Add(bid);
+        if (lot.CurrentHighBid is not int high || amount > high)
+            lot.CurrentHighBid = amount;
         await db.SaveChangesAsync(cancellationToken);
         await publishEndpoint.Publish(bid.ToBidPlaced(), cancellationToken);
         await cache.RemoveAsync(CacheKeys.Bids(auctionId), cancellationToken);

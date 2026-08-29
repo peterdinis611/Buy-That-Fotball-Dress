@@ -26,6 +26,9 @@ namespace BidService.Data.Migrations
                     b.Property<DateTime>("AuctionEnd")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("CurrentHighBid")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ReservePrice")
                         .HasColumnType("INTEGER");
 

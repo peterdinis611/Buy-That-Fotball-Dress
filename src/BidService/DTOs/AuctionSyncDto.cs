@@ -7,4 +7,5 @@ public class AuctionSyncDto
     public string Seller { get; set; } = string.Empty;
     public DateTime AuctionEnd { get; set; }
     public string Status { get; set; } = string.Empty;
+    public int? CurrentHighBid { get; set; }
 }

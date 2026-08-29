@@ -21,6 +21,7 @@ public class AuctionCreatedConsumer(BidDbContext db, ILogger<AuctionCreatedConsu
             existing.ReservePrice = lot.ReservePrice;
             existing.AuctionEnd = lot.AuctionEnd;
             existing.Status = lot.Status;
+            existing.CurrentHighBid = lot.CurrentHighBid;
         }
 
         await db.SaveChangesAsync(context.CancellationToken);

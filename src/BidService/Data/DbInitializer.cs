@@ -99,7 +99,8 @@ public static class DbInitializer
 
         foreach (var (auctionId, bidder, amount) in SeedShots)
         {
-            if (!await context.Lots.AnyAsync(x => x.Id == auctionId, cancellationToken))
+            var lot = await context.Lots.FirstOrDefaultAsync(x => x.Id == auctionId, cancellationToken);
+            if (lot is null)
                 continue;
 
             context.Bids.Add(new Bid
@@ -110,6 +111,10 @@ public static class DbInitializer
                 Amount = amount,
                 CreatedAt = now.AddHours(-4)
             });
+
+            if (lot.CurrentHighBid is not int high || amount > high)
+                lot.CurrentHighBid = amount;
+
             seeded++;
         }
 

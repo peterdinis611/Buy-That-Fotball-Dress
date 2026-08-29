@@ -11,3 +11,6 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/refint/Caching.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/Caching.pdb
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/Debug/net10.0/ref/Caching.dll
+/tmp/kv-bid-check/Caching.deps.json
+/tmp/kv-bid-check/Caching.dll
+/tmp/kv-bid-check/Caching.pdb

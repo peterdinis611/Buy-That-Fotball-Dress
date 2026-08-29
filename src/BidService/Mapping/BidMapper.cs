@@ -30,7 +30,8 @@ public static class BidMapper
         Seller = message.Seller,
         ReservePrice = message.ReservePrice,
         AuctionEnd = message.AuctionEnd,
-        Status = message.Status
+        Status = message.Status,
+        CurrentHighBid = message.CurrentHighBid
     };
 
     public static AuctionLot ToLot(this AuctionUpdated message) => new()
@@ -39,7 +40,8 @@ public static class BidMapper
         Seller = message.Seller,
         ReservePrice = message.ReservePrice,
         AuctionEnd = message.AuctionEnd,
-        Status = message.Status
+        Status = message.Status,
+        CurrentHighBid = message.CurrentHighBid
     };
 
     public static void Apply(this AuctionLot lot, AuctionUpdated message)
@@ -48,6 +50,7 @@ public static class BidMapper
         lot.ReservePrice = message.ReservePrice;
         lot.AuctionEnd = message.AuctionEnd;
         lot.Status = message.Status;
+        lot.CurrentHighBid = message.CurrentHighBid;
     }
 
     public static AuctionLot ToLot(this AuctionSyncDto dto) => new()
@@ -56,6 +59,7 @@ public static class BidMapper
         Seller = dto.Seller,
         ReservePrice = dto.ReservePrice,
         AuctionEnd = dto.AuctionEnd,
-        Status = dto.Status
+        Status = dto.Status,
+        CurrentHighBid = dto.CurrentHighBid
     };
 }

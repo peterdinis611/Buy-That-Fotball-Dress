@@ -19,7 +19,8 @@ namespace BidService.Data.Migrations
                     Seller = table.Column<string>(type: "TEXT", nullable: false),
                     ReservePrice = table.Column<int>(type: "INTEGER", nullable: false),
                     AuctionEnd = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Status = table.Column<string>(type: "TEXT", nullable: false)
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
+                    CurrentHighBid = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
