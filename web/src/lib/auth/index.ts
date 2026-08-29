@@ -1,1 +1,1 @@
-export { clearSession, getStoredUser, getToken, persistSession } from "./session";
+export { clearSession, getToken, setClientAccessToken } from "./session";

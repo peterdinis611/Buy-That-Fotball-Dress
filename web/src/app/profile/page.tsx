@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ProfileGate } from "@/components/profile";
+import { ProfileGate } from "@/features/profile";
 import { noIndex } from "@/lib/seo";
 
 export const metadata: Metadata = {

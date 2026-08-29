@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { LotTicket } from "@/components/auctions";
-import { JerseyBack } from "@/components/pitch";
+import { LotTicket } from "@/features/auctions";
+import { JerseyBack } from "@/features/pitch";
 import { JsonLd } from "@/components/seo";
 import { getAuction } from "@/lib/api";
 import { formatDate } from "@/lib/format";

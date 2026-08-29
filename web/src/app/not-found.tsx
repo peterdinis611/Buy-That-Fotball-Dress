@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { StatusScreen } from "@/components/pitch";
+import { StatusScreen } from "@/features/pitch";
 
 export const metadata: Metadata = {
   title: "Shirt not found",

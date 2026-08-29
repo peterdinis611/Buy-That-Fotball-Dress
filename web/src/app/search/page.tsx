@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SearchView } from "@/components/auctions/search-view";
+import { SearchView } from "@/features/auctions/search-view";
 import { searchItems } from "@/lib/api";
 import { parseSearchQuery } from "@/lib/validation";
 

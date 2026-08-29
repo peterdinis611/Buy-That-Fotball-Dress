@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MatchClock } from "./match-clock";
-import { AuthNav, MobileAuthLinks } from "@/components/auth";
+import { AuthNav, MobileAuthLinks } from "@/features/auth";
 
 const links = [
   { href: "/auctions", label: "Live lots" },

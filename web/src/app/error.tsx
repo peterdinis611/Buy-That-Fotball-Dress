@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { StatusScreen } from "@/components/pitch";
+import { StatusScreen } from "@/features/pitch";
 
 export default function Error({
   reset,

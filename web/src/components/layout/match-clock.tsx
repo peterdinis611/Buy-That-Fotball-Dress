@@ -1,15 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useClock } from "@/hooks";
 import { pad } from "@/lib/format";
 
 export function MatchClock() {
-  const [now, setNow] = useState(() => new Date());
-
-  useEffect(() => {
-    const id = window.setInterval(() => setNow(new Date()), 1000);
-    return () => window.clearInterval(id);
-  }, []);
+  const now = useClock();
 
   return (
     <span className="scoreboard font-[family-name:var(--font-display)] text-xl leading-none text-[var(--bib)]">

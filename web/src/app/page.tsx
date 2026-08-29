@@ -1,4 +1,4 @@
-import { HomeView } from "@/components/pitch/home-view";
+import { HomeView } from "@/features/pitch/home-view";
 import { JsonLd } from "@/components/seo";
 import { getAuctions } from "@/lib/api";
 import { itemListJsonLd } from "@/lib/seo";

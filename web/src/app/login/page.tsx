@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { LoginForm } from "@/components/auth";
+import { LoginForm } from "@/features/auth";
 import { noIndex } from "@/lib/seo";
 
 export const metadata: Metadata = {

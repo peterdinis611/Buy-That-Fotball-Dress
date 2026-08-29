@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SellGate } from "@/components/sell";
+import { SellGate } from "@/features/sell";
 import { noIndex } from "@/lib/seo";
 
 export const metadata: Metadata = {

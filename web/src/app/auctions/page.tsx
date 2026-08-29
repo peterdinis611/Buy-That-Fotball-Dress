@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SquadView } from "@/components/auctions/squad-view";
+import { SquadView } from "@/features/auctions/squad-view";
 import { JsonLd } from "@/components/seo";
 import { getAuctions } from "@/lib/api";
 import { SITE_DESCRIPTION, itemListJsonLd } from "@/lib/seo";

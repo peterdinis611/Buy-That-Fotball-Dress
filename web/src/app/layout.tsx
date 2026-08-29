@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Karla, Saira_Extra_Condensed } from "next/font/google";
 import "./globals.css";
 import { SiteHeader, SiteFooter, Floodlights } from "@/components/layout";
-import { Providers } from "@/components/providers";
+import { Providers } from "@/providers";
 import { JsonLd } from "@/components/seo";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, siteUrl, websiteJsonLd } from "@/lib/seo";
 

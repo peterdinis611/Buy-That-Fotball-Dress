@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { RegisterForm } from "@/components/auth";
+import { RegisterForm } from "@/features/auth";
 import { noIndex } from "@/lib/seo";
 
 export const metadata: Metadata = {
