@@ -12,6 +12,12 @@ public class BidDbContext(DbContextOptions<BidDbContext> options) : DbContext(op
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<AuctionLot>()
+            .HasMany(x => x.Bids)
+            .WithOne(x => x.Lot)
+            .HasForeignKey(x => x.AuctionId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<Bid>()
             .HasIndex(x => x.Bidder);
 

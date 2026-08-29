@@ -12,6 +12,7 @@ namespace BidService.Services;
 public sealed class BidsService(
     BidDbContext db,
     IPublishEndpoint publishEndpoint,
+    IHttpClientFactory httpClientFactory,
     IPitchCache cache) : IBidsService
 {
     public async Task<IReadOnlyList<BidDto>> GetForAuctionAsync(Guid auctionId, CancellationToken cancellationToken)
@@ -42,7 +43,9 @@ public sealed class BidsService(
         if (amount <= 0)
             return Result<BidDto>.BadRequest("A bid has to be more than nothing.");
 
-        var lot = await db.Lots.FirstOrDefaultAsync(x => x.Id == auctionId, cancellationToken);
+        var lot = await db.Lots.FirstOrDefaultAsync(x => x.Id == auctionId, cancellationToken)
+            ?? await TryHydrateLotAsync(auctionId, cancellationToken);
+
         if (lot is null)
             return Result<BidDto>.NotFound("That shirt is not listed.");
 
@@ -77,5 +80,32 @@ public sealed class BidsService(
         await cache.RemoveAsync(CacheKeys.Bids(auctionId), cancellationToken);
 
         return Result<BidDto>.Success(bid.ToDto());
+    }
+
+    private async Task<AuctionLot?> TryHydrateLotAsync(Guid auctionId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var client = httpClientFactory.CreateClient("AuctionService");
+            var auction = await client.GetFromJsonAsync<AuctionSyncDto>(
+                $"/api/auctions/{auctionId}",
+                cancellationToken);
+
+            if (auction is null)
+                return null;
+
+            var existing = await db.Lots.FirstOrDefaultAsync(x => x.Id == auctionId, cancellationToken);
+            if (existing is not null)
+                return existing;
+
+            var lot = auction.ToLot();
+            db.Lots.Add(lot);
+            await db.SaveChangesAsync(cancellationToken);
+            return lot;
+        }
+        catch
+        {
+            return null;
+        }
     }
 }

@@ -1,5 +1,5 @@
-using BidService.Data;
 using BidService.DTOs;
+using BidService.Entities;
 using BidService.Mapping;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,33 +39,48 @@ public static class DbInitializer
             return;
         }
 
-        try
-        {
-            var client = httpClientFactory.CreateClient("AuctionService");
-            var auctions = await client.GetFromJsonAsync<List<AuctionSyncDto>>(
-                "/api/auctions",
-                cancellationToken);
+        List<AuctionSyncDto>? auctions = null;
 
-            if (auctions is null || auctions.Count == 0)
+        for (var attempt = 1; attempt <= 8; attempt++)
+        {
+            try
             {
-                logger.LogInformation("AuctionService returned no lots to track.");
+                var client = httpClientFactory.CreateClient("AuctionService");
+                auctions = await client.GetFromJsonAsync<List<AuctionSyncDto>>(
+                    "/api/auctions",
+                    cancellationToken);
+                break;
+            }
+            catch (Exception ex) when (attempt < 8)
+            {
+                logger.LogInformation(
+                    ex,
+                    "AuctionService not ready for lot sync (attempt {Attempt}). Retrying…",
+                    attempt);
+                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning(ex, "Could not sync lots from AuctionService. RabbitMQ events will fill them.");
                 return;
             }
-
-            foreach (var auction in auctions)
-            {
-                if (await context.Lots.AnyAsync(x => x.Id == auction.Id, cancellationToken))
-                    continue;
-                context.Lots.Add(auction.ToLot());
-            }
-
-            await context.SaveChangesAsync(cancellationToken);
-            logger.LogInformation("Tracked {Count} lots from AuctionService.", auctions.Count);
         }
-        catch (Exception ex)
+
+        if (auctions is null || auctions.Count == 0)
         {
-            logger.LogWarning(ex, "Could not sync lots from AuctionService. RabbitMQ events will fill them.");
+            logger.LogInformation("AuctionService returned no lots to track.");
+            return;
         }
+
+        foreach (var auction in auctions)
+        {
+            if (await context.Lots.AnyAsync(x => x.Id == auction.Id, cancellationToken))
+                continue;
+            context.Lots.Add(auction.ToLot());
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
+        logger.LogInformation("Tracked {Count} lots from AuctionService.", auctions.Count);
     }
 
     private static async Task SeedBidsIfEmptyAsync(
@@ -87,7 +102,7 @@ public static class DbInitializer
             if (!await context.Lots.AnyAsync(x => x.Id == auctionId, cancellationToken))
                 continue;
 
-            context.Bids.Add(new Entities.Bid
+            context.Bids.Add(new Bid
             {
                 Id = Guid.NewGuid(),
                 AuctionId = auctionId,

@@ -59,32 +59,19 @@ namespace AuctionService.Data.Migrations
                     b.ToTable("Auctions");
                 });
 
-            modelBuilder.Entity("AuctionService.Entities.Bid", b =>
+            modelBuilder.Entity("AuctionService.Entities.AuctionBidder", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("INTEGER");
-
                     b.Property<Guid>("AuctionId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Bidder")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
+                    b.HasKey("AuctionId", "Bidder");
 
                     b.HasIndex("Bidder");
 
-                    b.HasIndex("AuctionId", "Amount");
-
-                    b.ToTable("Bids");
+                    b.ToTable("AuctionBidders");
                 });
 
             modelBuilder.Entity("AuctionService.Entities.Item", b =>
@@ -143,10 +130,10 @@ namespace AuctionService.Data.Migrations
                     b.ToTable("Item");
                 });
 
-            modelBuilder.Entity("AuctionService.Entities.Bid", b =>
+            modelBuilder.Entity("AuctionService.Entities.AuctionBidder", b =>
                 {
                     b.HasOne("AuctionService.Entities.Auction", "Auction")
-                        .WithMany("Bids")
+                        .WithMany("Bidders")
                         .HasForeignKey("AuctionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -167,7 +154,7 @@ namespace AuctionService.Data.Migrations
 
             modelBuilder.Entity("AuctionService.Entities.Auction", b =>
                 {
-                    b.Navigation("Bids");
+                    b.Navigation("Bidders");
 
                     b.Navigation("Item")
                         .IsRequired();

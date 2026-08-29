@@ -22,7 +22,13 @@ public class BidPlacedConsumer(
             .FirstOrDefaultAsync(x => x.Id == message.AuctionId, context.CancellationToken);
 
         if (auction is null)
-            throw new InvalidOperationException($"Auction '{message.AuctionId}' was not found for bid {message.Id}.");
+        {
+            logger.LogWarning(
+                "Auction {AuctionId} was not found for bid {BidId}, skipping.",
+                message.AuctionId,
+                message.Id);
+            return;
+        }
 
         var isNewHigh = auction.CurrentHighBid is not int high || message.Amount > high;
         if (isNewHigh)

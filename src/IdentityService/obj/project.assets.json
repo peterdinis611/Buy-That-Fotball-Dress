@@ -2985,7 +2985,7 @@
     ]
   },
   "packageFolders": {
-    "/Users/peterdinis/.nuget/packages/": {}
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/20d7fabf0e1349f9a5bf5df8c5dd7e50/nuget": {}
   },
   "project": {
     "version": "1.0.0",
@@ -2993,7 +2993,7 @@
       "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/IdentityService.csproj",
       "projectName": "IdentityService",
       "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/IdentityService.csproj",
-      "packagesPath": "/Users/peterdinis/.nuget/packages/",
+      "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/20d7fabf0e1349f9a5bf5df8c5dd7e50/nuget",
       "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [

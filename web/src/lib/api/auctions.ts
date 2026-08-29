@@ -72,5 +72,5 @@ export async function placeBid(id: string, amount: number) {
     throw new Error(await readError(response));
   }
 
-  return (await response.json()) as Auction;
+  return (await response.json()) as Bid;
 }
