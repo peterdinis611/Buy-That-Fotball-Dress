@@ -2,17 +2,13 @@
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider, useSession } from "next-auth/react";
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { setClientAccessToken } from "@/lib/auth";
 import { getQueryClient } from "@/lib/query/client";
 
 function AccessTokenBridge() {
   const { data } = useSession();
-
-  useEffect(() => {
-    setClientAccessToken(data?.accessToken ?? null);
-  }, [data?.accessToken]);
-
+  setClientAccessToken(data?.accessToken ?? null);
   return null;
 }
 

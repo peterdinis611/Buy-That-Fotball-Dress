@@ -1,6 +1,6 @@
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { login } from "@/lib/api";
+import { login } from "@/lib/api/auth";
 
 class InvalidCredentials extends CredentialsSignin {
   code = "invalid_credentials";
@@ -53,6 +53,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.accessToken = user.accessToken;
         token.username = user.username;
         token.displayName = user.displayName;
+        token.email = user.email;
       }
       return token;
     },
@@ -61,6 +62,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.id = token.sub ?? "";
       session.user.username = token.username ?? "";
       session.user.displayName = token.displayName ?? session.user.name ?? "";
+      session.user.email = token.email ?? "";
       return session;
     },
   },

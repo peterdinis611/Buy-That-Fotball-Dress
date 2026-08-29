@@ -9,6 +9,18 @@ import { Button } from "@/components/ui/button";
 import { useLoginMutation } from "@/hooks";
 import { loginSchema } from "@/lib/validation";
 
+function nextPath(raw: string | null) {
+  if (!raw) return "/";
+  if (raw.startsWith("/")) return raw;
+  try {
+    const url = new URL(raw);
+    if (url.origin === window.location.origin) return `${url.pathname}${url.search}`;
+  } catch {
+    return "/";
+  }
+  return "/";
+}
+
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -28,7 +40,7 @@ export function LoginForm() {
       setBanner(null);
       try {
         await login.mutateAsync(value);
-        router.push(searchParams.get("next") || searchParams.get("callbackUrl") || "/");
+        router.push(nextPath(searchParams.get("next") || searchParams.get("callbackUrl")));
         router.refresh();
       } catch (err) {
         setBanner(err instanceof Error ? err.message : "Sign in failed. Check the name and password.");
