@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SearchView } from "@/features/auctions/search-view";
 import { searchItems } from "@/lib/api";
-import { parseSearchQuery } from "@/lib/validation";
+import { parseSearchQuery, toCatalogQuery } from "@/lib/validation";
 
 type SearchPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -9,11 +9,11 @@ type SearchPageProps = {
 
 export async function generateMetadata({ searchParams }: SearchPageProps): Promise<Metadata> {
   const query = parseSearchQuery(await searchParams);
-  const parts = [query.playerName, query.club].filter(Boolean);
+  const parts = [query.q].filter(Boolean);
   const title = parts.length ? `Find ${parts.join(" ")}` : "Find a shirt";
   const description = parts.length
     ? `Match-worn shirts matching ${parts.join(" · ")}.`
-    : "Search live auctions by club, player, league, price, or kit.";
+    : "Search live auctions by player, club, league, price, or kit.";
 
   return {
     title,
@@ -29,6 +29,6 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const query = parseSearchQuery(await searchParams);
-  const initial = await searchItems(query);
+  const initial = await searchItems(toCatalogQuery(query));
   return <SearchView query={query} initial={initial} />;
 }

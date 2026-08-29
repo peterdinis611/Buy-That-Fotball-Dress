@@ -3,7 +3,9 @@
 import { SearchFilters } from "./search-filters";
 import { PegWall } from "@/features/pitch";
 import { useSearchQuery } from "@/hooks";
+import { fuseListings } from "@/lib/search/fuse";
 import { fromSearchItem, isOpenLot, type PagedResult, type SearchItem, type SearchQuery } from "@/lib/types";
+import { toCatalogQuery } from "@/lib/validation";
 
 export function SearchView({
   query,
@@ -12,8 +14,9 @@ export function SearchView({
   query: SearchQuery;
   initial: PagedResult<SearchItem>;
 }) {
-  const { data = initial } = useSearchQuery(query, initial);
-  const listings = data.results.map(fromSearchItem).filter(isOpenLot);
+  const catalog = toCatalogQuery(query);
+  const { data = initial } = useSearchQuery(catalog, initial);
+  const listings = fuseListings(data.results.map(fromSearchItem).filter(isOpenLot), query.q);
 
   return (
     <div className="mx-auto max-w-[1400px] px-5 py-12 md:px-8 md:py-16">

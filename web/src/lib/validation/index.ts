@@ -11,5 +11,5 @@ export {
   bidFieldsSchema,
   type BidFields,
 } from "./auction";
-export { parseSearchQuery, searchQuerySchema } from "./search";
+export { parseSearchQuery, toCatalogQuery, searchQuerySchema } from "./search";
 export { parseForm, fieldErrors, formValues } from "./form";

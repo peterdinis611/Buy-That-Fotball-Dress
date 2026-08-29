@@ -98,6 +98,7 @@ export type KitListing = {
 };
 
 export type SearchQuery = {
+  q?: string;
   club?: string;
   playerName?: string;
   status?: string;

@@ -16,5 +16,6 @@ export {
   useUpdateAuctionMutation,
   useDeleteAuctionMutation,
   useWatchMutation,
+  useWatchLotMutation,
   useSearchQuery,
 } from "./queries";

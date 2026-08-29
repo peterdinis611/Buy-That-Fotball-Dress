@@ -125,6 +125,33 @@ export function useDeleteAuctionMutation() {
   });
 }
 
+export function useWatchLotMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (auction: Auction) => watchAuction(auction.id),
+    onMutate: async (auction) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.auctions.sheet() });
+      const previous = queryClient.getQueryData<PlayerSheet>(queryKeys.auctions.sheet());
+      queryClient.setQueryData(queryKeys.auctions.sheet(), (current: PlayerSheet | undefined) => {
+        if (!current) return current;
+        const watching = current.watching ?? [];
+        return {
+          ...current,
+          watching: watching.some((row) => row.id === auction.id) ? watching : [auction, ...watching],
+        };
+      });
+      return { previous };
+    },
+    onError: (_error, _auction, context) => {
+      if (context?.previous) queryClient.setQueryData(queryKeys.auctions.sheet(), context.previous);
+    },
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.sheet() });
+    },
+  });
+}
+
 export function useWatchMutation(auction: Auction) {
   const queryClient = useQueryClient();
 

@@ -45,21 +45,13 @@ const sorts = [
 export function SearchFilters({ query }: { query: SearchQuery }) {
   const router = useRouter();
   const active = Boolean(
-    query.club ||
-      query.playerName ||
-      query.size ||
-      query.kitType ||
-      query.league ||
-      query.sort ||
-      query.minPrice ||
-      query.maxPrice,
+    query.q || query.size || query.kitType || query.league || query.sort || query.minPrice || query.maxPrice,
   );
 
   function update(name: string, value: string) {
     const params = new URLSearchParams();
     const next = {
-      club: query.club ?? "",
-      playerName: query.playerName ?? "",
+      q: query.q ?? "",
       size: query.size ?? "",
       kitType: query.kitType ?? "",
       league: query.league ?? "",
@@ -95,16 +87,11 @@ export function SearchFilters({ query }: { query: SearchQuery }) {
 
         <div className="grid gap-px bg-[#2a2a2a] md:grid-cols-4">
           <BoardInput
-            label="Club"
-            value={query.club ?? ""}
-            placeholder="Arsenal"
-            onChange={(value) => update("club", value)}
-          />
-          <BoardInput
-            label="Player"
-            value={query.playerName ?? ""}
-            placeholder="Saka"
-            onChange={(value) => update("playerName", value)}
+            label="Find"
+            value={query.q ?? ""}
+            placeholder="Saka, Barca, 2002"
+            className="md:col-span-2"
+            onChange={(value) => update("q", value)}
           />
           <BoardSelect
             label="Size"
@@ -156,15 +143,17 @@ function BoardInput({
   placeholder,
   onChange,
   inputMode,
+  className = "",
 }: {
   label: string;
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
   inputMode?: "numeric";
+  className?: string;
 }) {
   return (
-    <label className={`board-bay ${value ? "board-bay-lit" : ""}`}>
+    <label className={`board-bay ${value ? "board-bay-lit" : ""} ${className}`}>
       <span className="board-bay-label">{label}</span>
       <input
         key={value}

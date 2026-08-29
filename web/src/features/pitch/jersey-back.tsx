@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-function kitColors(color: string) {
+export function kitColors(color: string) {
   const value = color.toLowerCase();
 
   if (value.includes("yellow")) return { fill: "#ffdf00", number: "#0b1d12", stripe: "#0b1d12" };

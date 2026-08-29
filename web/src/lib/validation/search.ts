@@ -12,6 +12,7 @@ const kits = ["Home", "Away", "Third", "Goalkeeper", "Special"] as const;
 const sorts = ["EndingSoon", "Newest", "PriceAsc", "PriceDesc"] as const;
 
 export const searchQuerySchema = v.object({
+  q: v.optional(v.pipe(v.string(), v.trim(), v.maxLength(100))),
   club: v.optional(v.pipe(v.string(), v.trim(), v.maxLength(100))),
   playerName: v.optional(v.pipe(v.string(), v.trim(), v.maxLength(100))),
   status: v.optional(v.picklist(statuses)),
@@ -40,9 +41,12 @@ export function parseSearchQuery(
   params: Record<string, string | string[] | undefined>,
 ): SearchQuery {
   const sort = pick(first(params.sort), sorts);
+  const q =
+    first(params.q) ||
+    [first(params.club), first(params.playerName)].filter(Boolean).join(" ") ||
+    undefined;
   const raw = {
-    club: first(params.club),
-    playerName: first(params.playerName),
+    q,
     status: "Live",
     size: pick(first(params.size), sizes),
     kitType: pick(first(params.kitType), kits),
@@ -51,10 +55,24 @@ export function parseSearchQuery(
     minPrice: money(first(params.minPrice)),
     maxPrice: money(first(params.maxPrice)),
     page: 1,
-    pageSize: 20,
+    pageSize: 50,
   };
 
   const result = v.safeParse(searchQuerySchema, raw);
   if (result.success) return { ...result.output, status: "Live" };
-  return { page: 1, pageSize: 20, status: "Live" };
+  return { page: 1, pageSize: 50, status: "Live" };
+}
+
+export function toCatalogQuery(query: SearchQuery): SearchQuery {
+  return {
+    status: "Live",
+    size: query.size,
+    kitType: query.kitType,
+    league: query.league,
+    sort: query.sort,
+    minPrice: query.minPrice,
+    maxPrice: query.maxPrice,
+    page: 1,
+    pageSize: 50,
+  };
 }
