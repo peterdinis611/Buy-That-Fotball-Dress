@@ -1,4 +1,4 @@
-namespace AuctionService.DTOs;
+namespace BidService.DTOs;
 
 public class PlaceBidDto
 {

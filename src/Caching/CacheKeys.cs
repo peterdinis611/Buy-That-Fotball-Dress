@@ -17,6 +17,8 @@ public static class CacheKeys
     public static string Sheet(long stamp, string username) =>
         $"kv:sheet:{stamp}:{username.Trim().ToLowerInvariant()}";
 
+    public static string Bids(Guid auctionId) => $"kv:bids:{auctionId:N}";
+
     public static string Search(long stamp, string fingerprint) => $"kv:search:{stamp}:{fingerprint}";
 
     public static string User(string id) => $"kv:user:{id}";

@@ -64,54 +64,6 @@ public sealed class AuctionsService(
         return Result<PlayerSheetDto>.Success(sheet);
     }
 
-    public async Task<Result<AuctionDto>> PlaceBidAsync(
-        Guid id,
-        string bidder,
-        int amount,
-        CancellationToken cancellationToken)
-    {
-        if (amount <= 0)
-            return Result<AuctionDto>.BadRequest("A shot has to be more than nothing.");
-
-        var auction = await db.Auctions
-            .Include(x => x.Item)
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-
-        if (auction is null)
-            return Result<AuctionDto>.NotFound($"Auction '{id}' was not found.");
-
-        if (string.Equals(auction.Seller, bidder, StringComparison.OrdinalIgnoreCase))
-            return Result<AuctionDto>.Forbidden("You cannot shoot at your own shirt.");
-
-        if (auction.Status is not Status.Live || auction.AuctionEnd.ToUniversalTime() <= DateTime.UtcNow)
-            return Result<AuctionDto>.Conflict("This lot is no longer on the pitch.");
-
-        var floor = auction.CurrentHighBid is int high && high > 0
-            ? high + 1
-            : auction.ReservePrice;
-
-        if (amount < floor)
-            return Result<AuctionDto>.BadRequest($"The next shot must be at least {floor}.");
-
-        db.Bids.Add(new Bid
-        {
-            Id = Guid.NewGuid(),
-            AuctionId = auction.Id,
-            Bidder = bidder,
-            Amount = amount,
-            CreatedAt = DateTime.UtcNow
-        });
-        auction.CurrentHighBid = amount;
-        auction.HighBidder = bidder;
-        auction.UpdatedAt = DateTime.UtcNow;
-
-        await db.SaveChangesAsync(cancellationToken);
-        await publishEndpoint.Publish(auction.ToAuctionUpdated(), cancellationToken);
-        await InvalidateLotAsync(auction.Id, cancellationToken);
-
-        return Result<AuctionDto>.Success(auction.ToDto());
-    }
-
     public async Task<Result<AuctionDto>> CreateAsync(
         CreateAuctionDto dto,
         string seller,
@@ -231,7 +183,7 @@ public sealed class AuctionsService(
             .OrderByDescending(x => x.AuctionEnd)
             .ToListAsync(cancellationToken);
 
-        var chasingIds = await db.Bids
+        var chasingIds = await db.AuctionBidders
             .AsNoTracking()
             .Where(x => x.Bidder.ToLower() == name)
             .Select(x => x.AuctionId)

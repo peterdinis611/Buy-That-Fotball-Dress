@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createAuction, getAuction, getAuctions, getPlayerSheet, placeBid } from "@/lib/api";
 import { queryKeys } from "@/lib/query";
-import type { Auction } from "@/lib/types";
+import type { Auction, Bid } from "@/lib/types";
 
 export function useAuctionsQuery(initialData?: Auction[]) {
   return useQuery({
@@ -50,10 +50,15 @@ export function usePlaceBidMutation(auctionId: string) {
 
   return useMutation({
     mutationFn: (amount: number) => placeBid(auctionId, amount),
-    onSuccess: (auction) => {
-      queryClient.setQueryData(queryKeys.auctions.detail(auction.id), auction);
+    onSuccess: (bid: Bid) => {
+      queryClient.setQueryData(queryKeys.auctions.detail(auctionId), (current: Auction | undefined) =>
+        current
+          ? { ...current, currentHighBid: bid.amount, highBidder: bid.bidder }
+          : current,
+      );
       void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.all });
       void queryClient.invalidateQueries({ queryKey: queryKeys.search.all });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.sheet() });
     },
   });
 }

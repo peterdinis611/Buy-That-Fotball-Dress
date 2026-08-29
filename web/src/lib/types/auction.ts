@@ -29,6 +29,14 @@ export type Auction = {
   item: AuctionItem;
 };
 
+export type Bid = {
+  id: string;
+  auctionId: string;
+  bidder: string;
+  amount: number;
+  createdAt: string;
+};
+
 export type SearchItem = {
   id: string;
   reservePrice: number;

@@ -1,4 +1,4 @@
-import type { Auction, CreateAuctionPayload, PlayerSheet } from "@/lib/types";
+import type { Auction, Bid, CreateAuctionPayload, PlayerSheet } from "@/lib/types";
 import { apiBase, authHeaders, readError } from "./client";
 
 export async function getAuctions(params?: { club?: string; status?: string }) {

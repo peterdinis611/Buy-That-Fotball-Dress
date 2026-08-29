@@ -18,7 +18,7 @@ public static class DbInitializer
         if (await context.Auctions.AnyAsync(cancellationToken))
         {
             logger.LogInformation("Database already contains auctions, skipping auction seed.");
-            await SeedBidsIfEmptyAsync(context, logger, cancellationToken);
+            await SeedBiddersIfEmptyAsync(context, logger, cancellationToken);
             return;
         }
 
@@ -224,17 +224,17 @@ public static class DbInitializer
             await publishEndpoint.Publish(auction.ToAuctionCreated(), cancellationToken);
 
         logger.LogInformation("Seeded {Count} auctions.", auctions.Count);
-        await SeedBidsIfEmptyAsync(context, logger, cancellationToken);
+        await SeedBiddersIfEmptyAsync(context, logger, cancellationToken);
     }
 
-    private static async Task SeedBidsIfEmptyAsync(
+    private static async Task SeedBiddersIfEmptyAsync(
         AuctionDbContext context,
         ILogger logger,
         CancellationToken cancellationToken)
     {
-        if (await context.Bids.AnyAsync(cancellationToken))
+        if (await context.AuctionBidders.AnyAsync(cancellationToken))
         {
-            logger.LogInformation("Database already contains bids, skipping bid seed.");
+            logger.LogInformation("Database already contains bidders, skipping bidder seed.");
             return;
         }
 
@@ -255,14 +255,17 @@ public static class DbInitializer
             if (auction is null)
                 continue;
 
-            context.Bids.Add(new Bid
+            var exists = await context.AuctionBidders.AnyAsync(
+                x => x.AuctionId == auctionId && x.Bidder == bidder,
+                cancellationToken);
+            if (!exists)
             {
-                Id = Guid.NewGuid(),
-                AuctionId = auctionId,
-                Bidder = bidder,
-                Amount = amount,
-                CreatedAt = now.AddHours(-4)
-            });
+                context.AuctionBidders.Add(new AuctionBidder
+                {
+                    AuctionId = auctionId,
+                    Bidder = bidder
+                });
+            }
 
             auction.CurrentHighBid = amount;
             auction.HighBidder = bidder;
@@ -280,6 +283,6 @@ public static class DbInitializer
             return;
 
         await context.SaveChangesAsync(cancellationToken);
-        logger.LogInformation("Seeded {Count} bids onto the dressing-room sheet.", seeded);
+        logger.LogInformation("Seeded {Count} bidders onto the dressing-room sheet.", seeded);
     }
 }

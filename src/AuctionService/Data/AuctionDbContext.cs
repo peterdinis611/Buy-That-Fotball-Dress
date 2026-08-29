@@ -6,7 +6,7 @@ namespace AuctionService.Data;
 public class AuctionDbContext(DbContextOptions<AuctionDbContext> options) : DbContext(options)
 {
     public DbSet<Auction> Auctions { get; set; }
-    public DbSet<Bid> Bids { get; set; }
+    public DbSet<AuctionBidder> AuctionBidders { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -18,8 +18,11 @@ public class AuctionDbContext(DbContextOptions<AuctionDbContext> options) : DbCo
             .HasForeignKey<Item>(x => x.AuctionId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        modelBuilder.Entity<AuctionBidder>()
+            .HasKey(x => new { x.AuctionId, x.Bidder });
+
         modelBuilder.Entity<Auction>()
-            .HasMany(x => x.Bids)
+            .HasMany(x => x.Bidders)
             .WithOne(x => x.Auction)
             .HasForeignKey(x => x.AuctionId)
             .OnDelete(DeleteBehavior.Cascade);
@@ -27,10 +30,7 @@ public class AuctionDbContext(DbContextOptions<AuctionDbContext> options) : DbCo
         modelBuilder.Entity<Item>()
             .HasIndex(x => x.Club);
 
-        modelBuilder.Entity<Bid>()
+        modelBuilder.Entity<AuctionBidder>()
             .HasIndex(x => x.Bidder);
-
-        modelBuilder.Entity<Bid>()
-            .HasIndex(x => new { x.AuctionId, x.Amount });
     }
 }

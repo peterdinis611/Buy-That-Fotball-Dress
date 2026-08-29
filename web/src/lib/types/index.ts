@@ -9,5 +9,6 @@ export type {
   SearchItem,
   SearchQuery,
 } from "./auction";
+export type { Bid } from "./auction";
 export { fromAuction, fromSearchItem } from "./auction";
 export type { AuthUser, RegisterPayload } from "./auth";

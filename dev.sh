@@ -90,7 +90,7 @@ wait_for "RabbitMQ" 60 bash -c 'nc -z 127.0.0.1 5672'
 echo "Waiting for Redis on :6379…"
 wait_for "Redis" 30 bash -c 'nc -z 127.0.0.1 6379'
 
-for port in 5025 5026 5027 5028; do
+for port in 5025 5026 5027 5028 5029; do
   stop_port "$port"
 done
 if [[ "$WITH_WEB" == "1" ]]; then
@@ -112,6 +112,7 @@ start_dotnet "AuctionService  :5025" "src/AuctionService/AuctionService.csproj"
 start_dotnet "SearchService   :5026" "src/SearchService/SearchService.csproj"
 start_dotnet "GatewayService  :5027" "src/GatewayService/GatewayService.csproj"
 start_dotnet "IdentityService :5028" "src/IdentityService/IdentityService.csproj"
+start_dotnet "BidService      :5029" "src/BidService/BidService.csproj"
 
 if [[ "$WITH_WEB" == "1" ]]; then
   echo "→ web             :3000"
@@ -128,6 +129,7 @@ Kit Vault is up. Ctrl+C stops everything.
   Auction  http://localhost:5025
   Search   http://localhost:5026
   Identity http://localhost:5028
+  Bids     http://localhost:5029
   Redis    localhost:6379
   RabbitMQ http://localhost:15672  (guest/guest)
 

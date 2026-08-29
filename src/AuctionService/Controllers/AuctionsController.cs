@@ -72,27 +72,6 @@ public class AuctionsController(IAuctionsService auctionsService) : ControllerBa
     }
 
     [Authorize]
-    [HttpPost("{id:guid}/bids")]
-    [ProducesResponseType(typeof(AuctionDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<AuctionDto>> PlaceBid(
-        Guid id,
-        PlaceBidDto dto,
-        CancellationToken cancellationToken)
-    {
-        var bidder = CurrentUsername();
-        if (bidder is null)
-            return Unauthorized();
-
-        var result = await auctionsService.PlaceBidAsync(id, bidder, dto.Amount, cancellationToken);
-        return ToActionResult(result);
-    }
-
-    [Authorize]
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(AuctionDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

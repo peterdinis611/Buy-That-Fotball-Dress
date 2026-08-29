@@ -49,6 +49,9 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumersFromNamespaceContaining<AuctionService.Consumers.BidPlacedConsumer>();
+    x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("auction", false));
+
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(builder.Configuration["RabbitMq:Host"] ?? "localhost", "/", h =>
@@ -57,6 +60,7 @@ builder.Services.AddMassTransit(x =>
             h.Password(builder.Configuration["RabbitMq:Password"] ?? "guest");
         });
 
+        cfg.UseMessageRetry(r => r.Interval(5, TimeSpan.FromSeconds(5)));
         cfg.ConfigureEndpoints(context);
     });
 });
