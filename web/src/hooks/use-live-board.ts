@@ -8,7 +8,7 @@ import {
   applyLiveAuctionUpdated,
   applyLiveBid,
   getHub,
-  stopHub,
+  peekHub,
   type LiveAuctionDeleted,
   type LiveAuctionUpdated,
 } from "@/lib/realtime";
@@ -18,36 +18,26 @@ export function useLiveBoard() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    let cancelled = false;
+    const onBid = (bid: Bid) => applyLiveBid(queryClient, bid);
+    const onUpdated = (update: LiveAuctionUpdated) => applyLiveAuctionUpdated(queryClient, update);
+    const onCreated = () => applyLiveAuctionCreated(queryClient);
+    const onDeleted = (removed: LiveAuctionDeleted) => applyLiveAuctionDeleted(queryClient, removed);
 
     void getHub()
       .then((hub) => {
-        if (cancelled) return;
-
-        hub.on("BidPlaced", (bid: Bid) => applyLiveBid(queryClient, bid));
-        hub.on("AuctionUpdated", (update: LiveAuctionUpdated) =>
-          applyLiveAuctionUpdated(queryClient, update),
-        );
-        hub.on("AuctionCreated", () => applyLiveAuctionCreated(queryClient));
-        hub.on("AuctionDeleted", (removed: LiveAuctionDeleted) =>
-          applyLiveAuctionDeleted(queryClient, removed),
-        );
+        hub.on("BidPlaced", onBid);
+        hub.on("AuctionUpdated", onUpdated);
+        hub.on("AuctionCreated", onCreated);
+        hub.on("AuctionDeleted", onDeleted);
       })
-      .catch((error: unknown) => {
-        console.warn("Live board is offline.", error);
-      });
+      .catch(() => undefined);
 
     return () => {
-      cancelled = true;
-      void getHub()
-        .then((hub) => {
-          hub.off("BidPlaced");
-          hub.off("AuctionUpdated");
-          hub.off("AuctionCreated");
-          hub.off("AuctionDeleted");
-        })
-        .catch(() => undefined);
-      void stopHub();
+      const hub = peekHub();
+      hub?.off("BidPlaced", onBid);
+      hub?.off("AuctionUpdated", onUpdated);
+      hub?.off("AuctionCreated", onCreated);
+      hub?.off("AuctionDeleted", onDeleted);
     };
   }, [queryClient]);
 }

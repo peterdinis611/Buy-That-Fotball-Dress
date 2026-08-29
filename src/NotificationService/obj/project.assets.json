@@ -239,7 +239,7 @@
     ]
   },
   "packageFolders": {
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/20d7fabf0e1349f9a5bf5df8c5dd7e50/nuget": {}
+    "/Users/peterdinis/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -247,7 +247,7 @@
       "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/NotificationService/NotificationService.csproj",
       "projectName": "NotificationService",
       "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/NotificationService/NotificationService.csproj",
-      "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/20d7fabf0e1349f9a5bf5df8c5dd7e50/nuget",
+      "packagesPath": "/Users/peterdinis/.nuget/packages/",
       "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/NotificationService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
@@ -733,10 +733,14 @@
   },
   "logs": [
     {
-      "code": "NU1900",
+      "code": "NU1903",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
+      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "libraryId": "Microsoft.OpenApi",
+      "targetGraphs": [
+        "net10.0"
+      ]
     }
   ]
 }

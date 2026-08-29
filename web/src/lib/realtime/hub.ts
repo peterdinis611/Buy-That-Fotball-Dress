@@ -1,4 +1,10 @@
-import { HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel } from "@microsoft/signalr";
+import {
+  HubConnection,
+  HubConnectionBuilder,
+  HubConnectionState,
+  HttpTransportType,
+  LogLevel,
+} from "@microsoft/signalr";
 
 const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL ?? "http://localhost:5030/hubs/notifications";
 
@@ -9,12 +15,19 @@ export function hubUrl() {
   return HUB_URL;
 }
 
+export function peekHub() {
+  return connection;
+}
+
 export function getHub(): Promise<HubConnection> {
   if (connection?.state === HubConnectionState.Connected) return Promise.resolve(connection);
   if (start) return start;
 
   const hub = new HubConnectionBuilder()
-    .withUrl(HUB_URL)
+    .withUrl(HUB_URL, {
+      skipNegotiation: true,
+      transport: HttpTransportType.WebSockets,
+    })
     .withAutomaticReconnect()
     .configureLogging(LogLevel.Warning)
     .build();
@@ -37,11 +50,4 @@ export function getHub(): Promise<HubConnection> {
   });
 
   return start;
-}
-
-export async function stopHub() {
-  const hub = connection;
-  connection = null;
-  start = null;
-  if (hub) await hub.stop();
 }

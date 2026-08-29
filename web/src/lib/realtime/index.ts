@@ -1,4 +1,4 @@
-export { getHub, hubUrl, stopHub } from "./hub";
+export { getHub, hubUrl, peekHub } from "./hub";
 export {
   applyLiveAuctionCreated,
   applyLiveAuctionDeleted,
