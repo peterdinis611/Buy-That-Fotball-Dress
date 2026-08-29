@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import { FormBanner, TextField, bindStringField } from "@/components/forms/field";
 import { Button } from "@/components/ui/button";
-import { useAuctionQuery, useAuth, usePlaceBidMutation } from "@/hooks";
+import { useAuctionQuery, useAuth, useLiveAuction, usePlaceBidMutation } from "@/hooks";
 import { formatDate, formatMoney } from "@/lib/format";
 import { Countdown } from "./countdown";
 import { StatusPill } from "./status-pill";
@@ -25,6 +25,7 @@ export function LotTicket({ auction: initial }: { auction: Auction }) {
   const { data } = useAuctionQuery(initial.id, initial);
   const lot = data ?? initial;
   const { item } = lot;
+  useLiveAuction(lot.id);
 
   return (
     <aside className="sub-board board-slam overflow-hidden">

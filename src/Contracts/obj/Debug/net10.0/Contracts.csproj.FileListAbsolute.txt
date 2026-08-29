@@ -13,3 +13,6 @@
 /tmp/kv-bid-check/Contracts.deps.json
 /tmp/kv-bid-check/Contracts.dll
 /tmp/kv-bid-check/Contracts.pdb
+/tmp/kv-notify-check/Contracts.deps.json
+/tmp/kv-notify-check/Contracts.dll
+/tmp/kv-notify-check/Contracts.pdb

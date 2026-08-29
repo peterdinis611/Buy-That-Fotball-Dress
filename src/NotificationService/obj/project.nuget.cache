@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "wjzUEwXtOg0=",
+  "success": true,
+  "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/NotificationService/NotificationService.csproj",
+  "expectedPackageFiles": [
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/20d7fabf0e1349f9a5bf5df8c5dd7e50/nuget/masstransit/8.3.6/masstransit.8.3.6.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/20d7fabf0e1349f9a5bf5df8c5dd7e50/nuget/masstransit.abstractions/8.3.6/masstransit.abstractions.8.3.6.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/20d7fabf0e1349f9a5bf5df8c5dd7e50/nuget/masstransit.rabbitmq/8.3.6/masstransit.rabbitmq.8.3.6.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/20d7fabf0e1349f9a5bf5df8c5dd7e50/nuget/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/20d7fabf0e1349f9a5bf5df8c5dd7e50/nuget/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/20d7fabf0e1349f9a5bf5df8c5dd7e50/nuget/rabbitmq.client/7.0.0/rabbitmq.client.7.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json.",
+      "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/NotificationService/NotificationService.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/NotificationService/NotificationService.csproj",
+      "targetGraphs": []
+    }
+  ]
+}

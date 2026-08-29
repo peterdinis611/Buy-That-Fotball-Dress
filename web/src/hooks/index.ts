@@ -1,6 +1,8 @@
 export { useAuth } from "./use-auth";
 export { useClock } from "./use-clock";
 export { useCountdown } from "./use-countdown";
+export { useLiveAuction } from "./use-live-auction";
+export { useLiveBoard } from "./use-live-board";
 export {
   useLoginMutation,
   useRegisterMutation,
