@@ -9,6 +9,8 @@ public class SearchQuery
     public string? KitType { get; set; }
     public string? Condition { get; set; }
     public string? Season { get; set; }
+    public string? League { get; set; }
+    public string? Sort { get; set; }
     public int? MinPrice { get; set; }
     public int? MaxPrice { get; set; }
     public int Page { get; set; } = 1;

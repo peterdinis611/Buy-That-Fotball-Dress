@@ -9,6 +9,7 @@ function first(value: string | string[] | undefined) {
 const statuses = ["Live", "Finished", "ReserveNotMet"] as const;
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"] as const;
 const kits = ["Home", "Away", "Third", "Goalkeeper", "Special"] as const;
+const sorts = ["EndingSoon", "Newest", "PriceAsc", "PriceDesc"] as const;
 
 export const searchQuerySchema = v.object({
   club: v.optional(v.pipe(v.string(), v.trim(), v.maxLength(100))),
@@ -16,28 +17,44 @@ export const searchQuerySchema = v.object({
   status: v.optional(v.picklist(statuses)),
   size: v.optional(v.picklist(sizes)),
   kitType: v.optional(v.picklist(kits)),
+  league: v.optional(v.pipe(v.string(), v.trim(), v.maxLength(50))),
+  sort: v.optional(v.picklist(sorts)),
+  minPrice: v.optional(v.pipe(v.number(), v.minValue(0))),
+  maxPrice: v.optional(v.pipe(v.number(), v.minValue(0))),
   page: v.optional(v.pipe(v.number(), v.minValue(1)), 1),
   pageSize: v.optional(v.pipe(v.number(), v.minValue(1), v.maxValue(50)), 20),
 });
 
 function pick<T extends string>(value: string | undefined, allowed: readonly T[]): T | undefined {
-  return allowed.includes(value as T) ? (value as T) : undefined;
+  if (!value) return undefined;
+  const match = allowed.find((entry) => entry.toLowerCase() === value.toLowerCase());
+  return match;
+}
+
+function money(value: string | undefined) {
+  if (!value || !/^\d+$/.test(value)) return undefined;
+  return Number(value);
 }
 
 export function parseSearchQuery(
   params: Record<string, string | string[] | undefined>,
 ): SearchQuery {
+  const sort = pick(first(params.sort), sorts);
   const raw = {
     club: first(params.club),
     playerName: first(params.playerName),
     status: "Live",
     size: pick(first(params.size), sizes),
     kitType: pick(first(params.kitType), kits),
+    league: first(params.league),
+    sort: sort && sort !== "EndingSoon" ? sort : undefined,
+    minPrice: money(first(params.minPrice)),
+    maxPrice: money(first(params.maxPrice)),
     page: 1,
     pageSize: 20,
   };
 
   const result = v.safeParse(searchQuerySchema, raw);
-  if (result.success) return result.output;
+  if (result.success) return { ...result.output, status: "Live" };
   return { page: 1, pageSize: 20, status: "Live" };
 }

@@ -94,16 +94,23 @@ public sealed class ItemRepository(SearchDbContext db, IPitchCache cache) : IIte
             items = items.Where(x => x.Season == season);
         }
 
+        if (!string.IsNullOrWhiteSpace(query.League))
+        {
+            var league = query.League.Trim().ToLower();
+            items = items.Where(x => x.League != null && x.League.ToLower().Contains(league));
+        }
+
         if (query.MinPrice is not null)
-            items = items.Where(x => x.ReservePrice >= query.MinPrice);
+            items = items.Where(x => (x.CurrentHighBid ?? x.ReservePrice) >= query.MinPrice);
 
         if (query.MaxPrice is not null)
-            items = items.Where(x => x.ReservePrice <= query.MaxPrice);
+            items = items.Where(x => (x.CurrentHighBid ?? x.ReservePrice) <= query.MaxPrice);
 
         var totalCount = await items.LongCountAsync(cancellationToken);
 
-        var results = await items
-            .OrderBy(x => x.AuctionEnd)
+        var sorted = Sort(items, query.Sort);
+
+        var results = await sorted
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize)
             .ToListAsync(cancellationToken);
@@ -117,6 +124,17 @@ public sealed class ItemRepository(SearchDbContext db, IPitchCache cache) : IIte
         };
     }
 
+    private static IOrderedQueryable<Item> Sort(IQueryable<Item> items, string? sort)
+    {
+        return sort?.Trim().ToLowerInvariant() switch
+        {
+            "newest" => items.OrderByDescending(x => x.CreatedAt),
+            "priceasc" => items.OrderBy(x => x.CurrentHighBid ?? x.ReservePrice).ThenBy(x => x.AuctionEnd),
+            "pricedesc" => items.OrderByDescending(x => x.CurrentHighBid ?? x.ReservePrice).ThenBy(x => x.AuctionEnd),
+            _ => items.OrderBy(x => x.AuctionEnd),
+        };
+    }
+
     private static string Fingerprint(SearchQuery query) => string.Join(
         ':',
         CacheKeys.Norm(query.Club),
@@ -126,6 +144,8 @@ public sealed class ItemRepository(SearchDbContext db, IPitchCache cache) : IIte
         CacheKeys.Norm(query.KitType),
         CacheKeys.Norm(query.Condition),
         CacheKeys.Norm(query.Season),
+        CacheKeys.Norm(query.League),
+        CacheKeys.Norm(query.Sort),
         query.MinPrice?.ToString() ?? "*",
         query.MaxPrice?.ToString() ?? "*",
         query.Page,

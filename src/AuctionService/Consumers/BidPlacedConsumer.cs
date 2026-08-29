@@ -30,6 +30,16 @@ public class BidPlacedConsumer(
             return;
         }
 
+        if (auction.Status is not Status.Live)
+        {
+            logger.LogInformation(
+                "Ignoring bid {BidId} on {Status} auction {AuctionId}.",
+                message.Id,
+                auction.Status,
+                message.AuctionId);
+            return;
+        }
+
         var isNewHigh = auction.CurrentHighBid is not int high || message.Amount > high;
         if (isNewHigh)
         {

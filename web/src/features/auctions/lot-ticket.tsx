@@ -1,15 +1,26 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import { FormBanner, TextField, bindStringField } from "@/components/forms/field";
 import { Button } from "@/components/ui/button";
-import { useAuctionQuery, useAuth, useLiveAuction, usePlaceBidMutation } from "@/hooks";
+import {
+  useAuctionQuery,
+  useAuth,
+  useCountdown,
+  useDeleteAuctionMutation,
+  useLiveAuction,
+  usePlaceBidMutation,
+  usePlayerSheetQuery,
+  useWatchMutation,
+} from "@/hooks";
 import { formatDate, formatMoney } from "@/lib/format";
+import { BidTape } from "./bid-tape";
 import { Countdown } from "./countdown";
 import { StatusPill } from "./status-pill";
-import type { Auction } from "@/lib/types";
+import type { Auction, Bid } from "@/lib/types";
 import { bidFieldsSchema } from "@/lib/validation";
 
 function sameName(left?: string | null, right?: string | null) {
@@ -21,18 +32,21 @@ function nextFloor(auction: Auction) {
   return auction.reservePrice;
 }
 
-export function LotTicket({ auction: initial }: { auction: Auction }) {
+export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?: Bid[] }) {
   const { data } = useAuctionQuery(initial.id, initial);
   const lot = data ?? initial;
   const { item } = lot;
   useLiveAuction(lot.id);
+  const remaining = useCountdown(lot.auctionEnd);
+  const live = lot.status === "Live" && Boolean(remaining);
+  const boardStatus = lot.status === "Live" && !remaining ? "Finished" : lot.status;
 
   return (
     <aside className="sub-board board-slam overflow-hidden">
       <div className="sub-board-bib px-5 py-2 text-center text-lg">Bid board</div>
       <div className="p-6 md:p-8">
       <div className="mb-6 flex items-center justify-between">
-        <StatusPill status={lot.status} />
+        <StatusPill status={boardStatus} />
         <Countdown endsAt={lot.auctionEnd} className="led-num text-2xl" />
       </div>
 
@@ -54,46 +68,46 @@ export function LotTicket({ auction: initial }: { auction: Auction }) {
         <TicketLine label="Auction ends" value={formatDate(lot.auctionEnd)} />
       </div>
 
-      <BidPanel auction={lot} />
+      <BidPanel auction={lot} live={live} />
+      <BidTape auctionId={lot.id} initial={bids} />
       </div>
     </aside>
   );
 }
 
-function BidPanel({ auction }: { auction: Auction }) {
+function BidPanel({ auction, live }: { auction: Auction; live: boolean }) {
   const { user, ready } = useAuth();
-  const live = auction.status === "Live" && new Date(auction.auctionEnd).getTime() > Date.now();
   const ownShirt = sameName(user?.username, auction.seller);
   const leading = sameName(user?.username, auction.highBidder);
+  const sheet = usePlayerSheetQuery(Boolean(user));
+  const watching = (sheet.data?.watching ?? []).some((row) => row.id === auction.id);
+  const chasing = (sheet.data?.chasing ?? []).some((row) => row.id === auction.id);
 
   if (!ready) {
     return <p className="mt-8 text-sm text-[var(--chalk)]/70">Checking your account…</p>;
   }
 
+  if (ownShirt) {
+    return <SellerDesk auction={auction} live={live} />;
+  }
+
   if (!live) {
     return (
-      <p className="mt-8 text-[var(--muted-foreground)]">
-        This auction has ended. You cannot place a new bid.
-      </p>
+      <div className="mt-8">
+        <p className="text-[var(--muted-foreground)]">This auction has ended. You cannot place a new bid.</p>
+        {user && watching ? <WatchToggle auction={auction} watching /> : null}
+      </div>
     );
   }
 
   if (!user) {
     return (
       <div className="mt-8">
-        <p className="text-[var(--muted-foreground)]">Sign in to place a bid on this shirt.</p>
+        <p className="text-[var(--muted-foreground)]">Sign in to bid, or to keep this lot on your peg.</p>
         <Link href={`/login?next=/auctions/${auction.id}`} className="banner-cta mt-4 text-2xl">
-          Sign in to bid
+          Sign in
         </Link>
       </div>
-    );
-  }
-
-  if (ownShirt) {
-    return (
-      <p className="mt-8 text-[var(--bib)]">
-        This is your listing. You cannot bid on your own shirt.
-      </p>
     );
   }
 
@@ -105,6 +119,89 @@ function BidPanel({ auction }: { auction: Auction }) {
         </p>
       ) : null}
       <BidForm key={`${auction.id}-${auction.currentHighBid ?? 0}`} auction={auction} />
+      {chasing || sheet.isLoading ? null : <WatchToggle auction={auction} watching={watching} />}
+    </div>
+  );
+}
+
+function WatchToggle({ auction, watching }: { auction: Auction; watching: boolean }) {
+  const watch = useWatchMutation(auction);
+
+  return (
+    <button
+      type="button"
+      disabled={watch.isPending}
+      onClick={() => watch.mutate(!watching)}
+      className="mt-5 font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--bib)] uppercase underline-offset-4 hover:underline disabled:opacity-60"
+    >
+      {watch.isPending ? "Updating…" : watching ? "Watching · drop it" : "Watch this lot"}
+    </button>
+  );
+}
+
+function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
+  const router = useRouter();
+  const takeDown = useDeleteAuctionMutation();
+  const [confirm, setConfirm] = useState(false);
+  const [banner, setBanner] = useState<string | null>(null);
+
+  async function remove() {
+    setBanner(null);
+    try {
+      await takeDown.mutateAsync(auction.id);
+      router.push("/profile");
+      router.refresh();
+    } catch (err) {
+      setBanner(err instanceof Error ? err.message : "Could not take this shirt down.");
+      setConfirm(false);
+    }
+  }
+
+  return (
+    <div className="mt-8">
+      <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.08em] text-[var(--bib)]">
+        This is your listing.
+      </p>
+      {live ? (
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link
+            href={`/auctions/${auction.id}/edit`}
+            className="inline-flex h-11 items-center bg-[var(--bib)] px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--stud)] uppercase"
+          >
+            Edit listing
+          </Link>
+          {confirm ? (
+            <button
+              type="button"
+              disabled={takeDown.isPending}
+              onClick={() => void remove()}
+              className="inline-flex h-11 items-center bg-[var(--led)] px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-white uppercase"
+            >
+              {takeDown.isPending ? "Taking down…" : "Take it down"}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setConfirm(true)}
+              className="inline-flex h-11 items-center border border-white/25 px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--chalk)] uppercase"
+            >
+              Take down
+            </button>
+          )}
+        </div>
+      ) : (
+        <p className="mt-3 text-[var(--muted-foreground)]">The clock has run out. This lot stays on your sheet.</p>
+      )}
+      {confirm && live ? (
+        <button
+          type="button"
+          onClick={() => setConfirm(false)}
+          className="mt-3 text-sm text-[var(--muted-foreground)] underline-offset-4 hover:underline"
+        >
+          Keep it on the rail
+        </button>
+      ) : null}
+      <FormBanner message={banner} />
     </div>
   );
 }

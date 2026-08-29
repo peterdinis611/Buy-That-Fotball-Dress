@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import type { CreateAuctionPayload } from "@/lib/types";
+import type { Auction, CreateAuctionPayload, UpdateAuctionPayload } from "@/lib/types";
 
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"] as const;
 const kits = ["Home", "Away", "Third", "Goalkeeper", "Special"] as const;
@@ -80,6 +80,42 @@ export function toCreateAuctionPayload(fields: SellFields): CreateAuctionPayload
       league: fields.league || undefined,
       imageUrl: fields.imageUrl || undefined,
     },
+  };
+}
+
+export function toUpdateAuctionPayload(fields: SellFields): UpdateAuctionPayload {
+  return {
+    reservePrice: Number(fields.reservePrice),
+    auctionEnd: new Date(fields.auctionEnd).toISOString(),
+    club: fields.club,
+    playerName: fields.playerName,
+    playerNumber: fields.playerNumber === "" ? undefined : Number(fields.playerNumber),
+    season: fields.season,
+    size: fields.size,
+    color: fields.color,
+    kitType: fields.kitType,
+    condition: fields.condition,
+    league: fields.league || undefined,
+    imageUrl: fields.imageUrl || undefined,
+  };
+}
+
+export function toSellFields(auction: Auction): SellFields {
+  const date = new Date(auction.auctionEnd);
+  const offset = date.getTime() - date.getTimezoneOffset() * 60_000;
+  return {
+    club: auction.item.club,
+    playerName: auction.item.playerName,
+    playerNumber: auction.item.playerNumber == null ? "" : String(auction.item.playerNumber),
+    season: auction.item.season,
+    color: auction.item.color,
+    size: auction.item.size as SellFields["size"],
+    kitType: auction.item.kitType as SellFields["kitType"],
+    condition: auction.item.condition as SellFields["condition"],
+    reservePrice: String(auction.reservePrice),
+    league: auction.item.league ?? "",
+    auctionEnd: new Date(offset).toISOString().slice(0, 16),
+    imageUrl: auction.item.imageUrl ?? "",
   };
 }
 

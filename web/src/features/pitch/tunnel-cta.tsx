@@ -8,7 +8,7 @@ export function TunnelCta() {
       <div className="pointer-events-none absolute inset-y-0 left-0 w-8 tunnel-hatch md:w-14" aria-hidden />
       <div className="pointer-events-none absolute inset-y-0 right-0 w-8 tunnel-hatch md:w-14" aria-hidden />
 
-      <div className="relative mx-auto grid max-w-[1400px] items-center gap-10 px-5 py-16 md:grid-cols-[1.15fr_0.85fr] md:px-8 md:py-24">
+      <div className="relative mx-auto grid max-w-[1400px] items-center gap-10 px-12 py-16 md:grid-cols-[1.15fr_0.85fr] md:px-24 md:py-24">
         <div>
           <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.22em] text-[var(--bib)]">
             Got a shirt at home?

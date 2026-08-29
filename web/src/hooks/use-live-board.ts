@@ -1,24 +1,50 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { pushBoardToast } from "@/features/pitch/board-toast";
+import { formatMoney } from "@/lib/format";
 import {
   applyLiveAuctionCreated,
   applyLiveAuctionDeleted,
   applyLiveAuctionUpdated,
   applyLiveBid,
   getHub,
+  peekAuction,
   peekHub,
   type LiveAuctionDeleted,
   type LiveAuctionUpdated,
 } from "@/lib/realtime";
 import type { Bid } from "@/lib/types";
 
+function sameName(left?: string | null, right?: string | null) {
+  return Boolean(left && right && left.toLowerCase() === right.toLowerCase());
+}
+
 export function useLiveBoard() {
   const queryClient = useQueryClient();
+  const { data } = useSession();
+  const username = data?.user?.username;
 
   useEffect(() => {
-    const onBid = (bid: Bid) => applyLiveBid(queryClient, bid);
+    const onBid = (bid: Bid) => {
+      const lot = peekAuction(queryClient, bid.auctionId);
+      const wasLeading = sameName(username, lot?.highBidder);
+      const outbid = wasLeading && !sameName(username, bid.bidder);
+
+      applyLiveBid(queryClient, bid);
+
+      if (outbid) {
+        pushBoardToast({
+          id: bid.id,
+          eyebrow: "Outbid",
+          title: lot?.item.playerName ?? "This shirt",
+          detail: `${bid.bidder} went ${formatMoney(bid.amount)}`,
+          href: `/auctions/${bid.auctionId}`,
+        });
+      }
+    };
     const onUpdated = (update: LiveAuctionUpdated) => applyLiveAuctionUpdated(queryClient, update);
     const onCreated = () => applyLiveAuctionCreated(queryClient);
     const onDeleted = (removed: LiveAuctionDeleted) => applyLiveAuctionDeleted(queryClient, removed);
@@ -39,5 +65,5 @@ export function useLiveBoard() {
       hub?.off("AuctionCreated", onCreated);
       hub?.off("AuctionDeleted", onDeleted);
     };
-  }, [queryClient]);
+  }, [queryClient, username]);
 }

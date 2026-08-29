@@ -5,6 +5,7 @@ import { SiteHeader, SiteFooter, Floodlights } from "@/components/layout";
 import { Providers } from "@/providers";
 import { JsonLd } from "@/components/seo";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, siteUrl, websiteJsonLd } from "@/lib/seo";
+import { lightsBootScript } from "@/lib/theme";
 
 const display = Saira_Extra_Condensed({
   variable: "--font-display",
@@ -19,8 +20,11 @@ const karla = Karla({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#cfd3ce",
-  colorScheme: "light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#cfd3ce" },
+    { media: "(prefers-color-scheme: dark)", color: "#121812" },
+  ],
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
 };
@@ -81,7 +85,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${karla.variable} h-full`}>
+    <html lang="en" suppressHydrationWarning className={`${display.variable} ${karla.variable} h-full`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: lightsBootScript }} />
+      </head>
       <body className="relative flex min-h-full flex-col">
         <JsonLd data={websiteJsonLd()} />
         <Floodlights />

@@ -2,6 +2,8 @@ export { loginSchema, registerSchema, type LoginInput, type RegisterInput } from
 export {
   sellFieldsSchema,
   toCreateAuctionPayload,
+  toUpdateAuctionPayload,
+  toSellFields,
   sizes,
   kits,
   conditions,

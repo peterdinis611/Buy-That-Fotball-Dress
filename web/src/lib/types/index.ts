@@ -4,6 +4,7 @@ export type {
   AuctionStatus,
   Bid,
   CreateAuctionPayload,
+  UpdateAuctionPayload,
   KitListing,
   PagedResult,
   PlayerSheet,

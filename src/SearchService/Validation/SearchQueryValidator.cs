@@ -44,6 +44,15 @@ public class SearchQueryValidator : AbstractValidator<SearchQuery>
             .When(x => !string.IsNullOrWhiteSpace(x.Season))
             .WithMessage("Season must look like 2024 or 2024/25.");
 
+        RuleFor(x => x.League)
+            .MaximumLength(JerseyRules.MaxLeagueLength)
+            .When(x => !string.IsNullOrWhiteSpace(x.League));
+
+        RuleFor(x => x.Sort)
+            .Must(sort => JerseyRules.Sorts.Contains(sort!, StringComparer.OrdinalIgnoreCase))
+            .When(x => !string.IsNullOrWhiteSpace(x.Sort))
+            .WithMessage($"Sort must be one of: {string.Join(", ", JerseyRules.Sorts)}.");
+
         RuleFor(x => x.MinPrice)
             .GreaterThanOrEqualTo(0)
             .When(x => x.MinPrice is not null);

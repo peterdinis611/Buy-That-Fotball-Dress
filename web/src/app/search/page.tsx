@@ -13,7 +13,7 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
   const title = parts.length ? `Find ${parts.join(" ")}` : "Find a shirt";
   const description = parts.length
     ? `Match-worn shirts matching ${parts.join(" · ")}.`
-    : "Search live auctions by club, player, size, or kit.";
+    : "Search live auctions by club, player, league, price, or kit.";
 
   return {
     title,

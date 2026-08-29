@@ -66,6 +66,7 @@ builder.Services.AddMassTransit(x =>
 });
 
 builder.Services.AddHostedService<AuctionSeedHostedService>();
+builder.Services.AddHostedService<AuctionCloseHostedService>();
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 

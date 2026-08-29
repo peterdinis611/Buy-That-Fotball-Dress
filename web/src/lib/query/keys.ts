@@ -16,4 +16,8 @@ export const queryKeys = {
     all: ["search"] as const,
     items: (query: SearchQuery) => [...queryKeys.search.all, "items", query] as const,
   },
+  bids: {
+    all: ["bids"] as const,
+    list: (auctionId: string) => [...queryKeys.bids.all, "list", auctionId] as const,
+  },
 };

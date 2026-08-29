@@ -5,7 +5,7 @@ import type { CSSProperties } from "react";
 import { LotTicket } from "@/features/auctions";
 import { JerseyBack } from "@/features/pitch";
 import { JsonLd } from "@/components/seo";
-import { getAuction } from "@/lib/api";
+import { getAuction, getBids } from "@/lib/api";
 import { formatDate } from "@/lib/format";
 import { auctionDescription, auctionJsonLd, auctionTitle } from "@/lib/seo";
 
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: AuctionParams): Promise<Metad
 
 export default async function AuctionDetailPage({ params }: AuctionParams) {
   const { id } = await params;
-  const auction = await getAuction(id);
+  const [auction, bids] = await Promise.all([getAuction(id), getBids(id)]);
   if (!auction) notFound();
 
   const { item } = auction;
@@ -103,7 +103,7 @@ export default async function AuctionDetailPage({ params }: AuctionParams) {
           </div>
         </div>
 
-        <LotTicket auction={auction} />
+        <LotTicket auction={auction} bids={bids} />
       </div>
     </div>
   );

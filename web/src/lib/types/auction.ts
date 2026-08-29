@@ -72,6 +72,7 @@ export type PlayerSheet = {
   listed: Auction[];
   chasing: Auction[];
   won: Auction[];
+  watching: Auction[];
 };
 
 export type KitListing = {
@@ -104,6 +105,8 @@ export type SearchQuery = {
   kitType?: string;
   condition?: string;
   season?: string;
+  league?: string;
+  sort?: string;
   minPrice?: number;
   maxPrice?: number;
   page?: number;
@@ -125,6 +128,21 @@ export type CreateAuctionPayload = {
     league?: string;
     imageUrl?: string;
   };
+};
+
+export type UpdateAuctionPayload = {
+  reservePrice?: number;
+  auctionEnd?: string;
+  club?: string;
+  playerName?: string;
+  playerNumber?: number;
+  season?: string;
+  size?: string;
+  color?: string;
+  kitType?: string;
+  condition?: string;
+  league?: string;
+  imageUrl?: string;
 };
 
 export function fromAuction(auction: Auction): KitListing {

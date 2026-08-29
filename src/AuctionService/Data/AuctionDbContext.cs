@@ -7,6 +7,7 @@ public class AuctionDbContext(DbContextOptions<AuctionDbContext> options) : DbCo
 {
     public DbSet<Auction> Auctions { get; set; }
     public DbSet<AuctionBidder> AuctionBidders { get; set; }
+    public DbSet<AuctionWatcher> AuctionWatchers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,5 +33,17 @@ public class AuctionDbContext(DbContextOptions<AuctionDbContext> options) : DbCo
 
         modelBuilder.Entity<AuctionBidder>()
             .HasIndex(x => x.Bidder);
+
+        modelBuilder.Entity<AuctionWatcher>()
+            .HasKey(x => new { x.AuctionId, x.Watcher });
+
+        modelBuilder.Entity<Auction>()
+            .HasMany(x => x.Watchers)
+            .WithOne(x => x.Auction)
+            .HasForeignKey(x => x.AuctionId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<AuctionWatcher>()
+            .HasIndex(x => x.Watcher);
     }
 }

@@ -113,6 +113,43 @@ public class AuctionsController(IAuctionsService auctionsService) : ControllerBa
         return NoContent();
     }
 
+    [Authorize]
+    [HttpPost("{id:guid}/watch")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Watch(Guid id, CancellationToken cancellationToken)
+    {
+        var watcher = CurrentUsername();
+        if (watcher is null)
+            return Unauthorized();
+
+        var result = await auctionsService.WatchAsync(id, watcher, cancellationToken);
+        if (!result.IsSuccess)
+            return Problem(title: result.Error, statusCode: result.StatusCode);
+
+        return NoContent();
+    }
+
+    [Authorize]
+    [HttpDelete("{id:guid}/watch")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Unwatch(Guid id, CancellationToken cancellationToken)
+    {
+        var watcher = CurrentUsername();
+        if (watcher is null)
+            return Unauthorized();
+
+        var result = await auctionsService.UnwatchAsync(id, watcher, cancellationToken);
+        if (!result.IsSuccess)
+            return Problem(title: result.Error, statusCode: result.StatusCode);
+
+        return NoContent();
+    }
+
     private string? CurrentUsername() =>
         User.Identity?.Name
         ?? User.FindFirstValue("unique_name")

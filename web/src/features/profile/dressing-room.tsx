@@ -17,6 +17,7 @@ export function DressingRoom({ user }: { user: AuthUser }) {
   const listed = (sheet.data?.listed ?? []).map(fromAuction);
   const chasing = (sheet.data?.chasing ?? []).map(fromAuction);
   const won = (sheet.data?.won ?? []).map(fromAuction);
+  const watching = (sheet.data?.watching ?? []).map(fromAuction);
 
   return (
     <div className="relative overflow-hidden">
@@ -32,7 +33,7 @@ export function DressingRoom({ user }: { user: AuthUser }) {
             </p>
             <h1 className="mt-2 text-6xl leading-[0.86] text-[var(--ink)] md:text-8xl">Profile.</h1>
             <p className="mt-4 max-w-sm text-lg text-[var(--ink)]/75">
-              Shirts you listed, auctions you bid in, and lots you won.
+              Shirts you listed, lots you are watching, auctions you bid in, and shirts you won.
             </p>
           </div>
 
@@ -57,7 +58,8 @@ export function DressingRoom({ user }: { user: AuthUser }) {
           </div>
         </div>
 
-        <dl className="reveal delay-3 mt-12 grid grid-cols-3 gap-px bg-[var(--ink)]/15">
+        <dl className="reveal delay-3 mt-12 grid grid-cols-2 gap-px bg-[var(--ink)]/15 md:grid-cols-4">
+          <Stat label="Watching" value={watching.length} />
           <Stat label="For sale" value={listed.length} />
           <Stat label="Your bids" value={chasing.length} />
           <Stat label="Won" value={won.length} />
@@ -69,6 +71,13 @@ export function DressingRoom({ user }: { user: AuthUser }) {
           </p>
         ) : null}
 
+        <Rack
+          title="Watching"
+          kicker="Lots on your peg"
+          listings={watching}
+          empty="Watch a live lot to hang it here before you bid."
+          loading={sheet.isLoading}
+        />
         <Rack
           title="For sale"
           kicker="Shirts you listed"

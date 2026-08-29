@@ -1,9 +1,20 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createAuction, getAuction, getAuctions, getPlayerSheet, placeBid } from "@/lib/api";
+import {
+  createAuction,
+  deleteAuction,
+  getAuction,
+  getAuctions,
+  getBids,
+  getPlayerSheet,
+  placeBid,
+  unwatchAuction,
+  updateAuction,
+  watchAuction,
+} from "@/lib/api";
 import { queryKeys } from "@/lib/query";
-import type { Auction, Bid } from "@/lib/types";
+import type { Auction, Bid, PlayerSheet, UpdateAuctionPayload } from "@/lib/types";
 
 export function useAuctionsQuery(initialData?: Auction[]) {
   return useQuery({
@@ -56,8 +67,90 @@ export function usePlaceBidMutation(auctionId: string) {
           ? { ...current, currentHighBid: bid.amount, highBidder: bid.bidder }
           : current,
       );
+      queryClient.setQueryData(queryKeys.bids.list(auctionId), (current: Bid[] | undefined) =>
+        mergeBid(current, bid),
+      );
       void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.all });
       void queryClient.invalidateQueries({ queryKey: queryKeys.search.all });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.sheet() });
+    },
+  });
+}
+
+export function useBidsQuery(auctionId: string, initialData?: Bid[]) {
+  return useQuery({
+    queryKey: queryKeys.bids.list(auctionId),
+    queryFn: () => getBids(auctionId),
+    initialData,
+    enabled: Boolean(auctionId),
+  });
+}
+
+function mergeBid(current: Bid[] | undefined, bid: Bid) {
+  if (!current) return [bid];
+  if (current.some((row) => row.id === bid.id)) return current;
+  return [...current, bid].sort((left, right) => {
+    if (right.amount !== left.amount) return right.amount - left.amount;
+    return new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime();
+  });
+}
+
+function bumpCaches(queryClient: ReturnType<typeof useQueryClient>) {
+  void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.all });
+  void queryClient.invalidateQueries({ queryKey: queryKeys.search.all });
+  void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.sheet() });
+}
+
+export function useUpdateAuctionMutation(auctionId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: UpdateAuctionPayload) => updateAuction(auctionId, payload),
+    onSuccess: (auction) => {
+      queryClient.setQueryData(queryKeys.auctions.detail(auction.id), auction);
+      bumpCaches(queryClient);
+    },
+  });
+}
+
+export function useDeleteAuctionMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteAuction,
+    onSuccess: (_void, id) => {
+      queryClient.removeQueries({ queryKey: queryKeys.auctions.detail(id) });
+      bumpCaches(queryClient);
+    },
+  });
+}
+
+export function useWatchMutation(auction: Auction) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (next: boolean) => (next ? watchAuction(auction.id) : unwatchAuction(auction.id)),
+    onMutate: async (next) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.auctions.sheet() });
+      const previous = queryClient.getQueryData<PlayerSheet>(queryKeys.auctions.sheet());
+      queryClient.setQueryData(queryKeys.auctions.sheet(), (current: PlayerSheet | undefined) => {
+        if (!current) return current;
+        const watching = current.watching ?? [];
+        return {
+          ...current,
+          watching: next
+            ? watching.some((row) => row.id === auction.id)
+              ? watching
+              : [auction, ...watching]
+            : watching.filter((row) => row.id !== auction.id),
+        };
+      });
+      return { previous };
+    },
+    onError: (_error, _next, context) => {
+      if (context?.previous) queryClient.setQueryData(queryKeys.auctions.sheet(), context.previous);
+    },
+    onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.sheet() });
     },
   });

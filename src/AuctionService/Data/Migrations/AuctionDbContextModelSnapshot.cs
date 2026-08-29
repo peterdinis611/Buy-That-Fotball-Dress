@@ -74,6 +74,21 @@ namespace AuctionService.Data.Migrations
                     b.ToTable("AuctionBidders");
                 });
 
+            modelBuilder.Entity("AuctionService.Entities.AuctionWatcher", b =>
+                {
+                    b.Property<Guid>("AuctionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Watcher")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("AuctionId", "Watcher");
+
+                    b.HasIndex("Watcher");
+
+                    b.ToTable("AuctionWatchers");
+                });
+
             modelBuilder.Entity("AuctionService.Entities.Item", b =>
                 {
                     b.Property<Guid>("Id")
@@ -141,6 +156,17 @@ namespace AuctionService.Data.Migrations
                     b.Navigation("Auction");
                 });
 
+            modelBuilder.Entity("AuctionService.Entities.AuctionWatcher", b =>
+                {
+                    b.HasOne("AuctionService.Entities.Auction", "Auction")
+                        .WithMany("Watchers")
+                        .HasForeignKey("AuctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+                });
+
             modelBuilder.Entity("AuctionService.Entities.Item", b =>
                 {
                     b.HasOne("AuctionService.Entities.Auction", "Auction")
@@ -155,6 +181,8 @@ namespace AuctionService.Data.Migrations
             modelBuilder.Entity("AuctionService.Entities.Auction", b =>
                 {
                     b.Navigation("Bidders");
+
+                    b.Navigation("Watchers");
 
                     b.Navigation("Item")
                         .IsRequired();

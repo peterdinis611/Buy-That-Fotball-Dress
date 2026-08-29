@@ -4,5 +4,6 @@ export {
   applyLiveAuctionDeleted,
   applyLiveAuctionUpdated,
   applyLiveBid,
+  peekAuction,
 } from "./cache";
 export type { LiveAuctionDeleted, LiveAuctionUpdated } from "./cache";

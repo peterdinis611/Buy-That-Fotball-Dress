@@ -15,4 +15,5 @@ public class Auction
     public Status Status { get; set; }
     public Item Item { get; set; } = null!;
     public List<AuctionBidder> Bidders { get; set; } = [];
+    public List<AuctionWatcher> Watchers { get; set; } = [];
 }

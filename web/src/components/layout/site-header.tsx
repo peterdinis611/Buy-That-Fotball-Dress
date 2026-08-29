@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MatchClock } from "./match-clock";
+import { LightsSwitch } from "./lights-switch";
 import { AuthNav, MobileAuthLinks } from "@/features/auth";
 
 const links = [
@@ -18,7 +19,10 @@ export function SiteHeader() {
           Live auctions
         </span>
         <span className="hidden tracking-[0.28em] sm:inline">MATCH-WORN SHIRTS</span>
-        <MatchClock />
+        <span className="flex items-center gap-3">
+          <MatchClock />
+          <LightsSwitch />
+        </span>
       </div>
 
       <div className="border-b-4 border-[var(--ink)] bg-[var(--tape)]">

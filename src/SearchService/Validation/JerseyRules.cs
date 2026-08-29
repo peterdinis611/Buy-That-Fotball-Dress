@@ -8,6 +8,7 @@ public static class JerseyRules
     public static readonly string[] KitTypes = ["Home", "Away", "Third", "Goalkeeper", "Special"];
     public static readonly string[] Conditions = ["New", "NewWithTags", "Used", "Vintage"];
     public static readonly string[] Statuses = ["Live", "Finished", "ReserveNotMet"];
+    public static readonly string[] Sorts = ["EndingSoon", "Newest", "PriceAsc", "PriceDesc"];
 
     public static readonly Regex SeasonPattern = new(@"^(19|20)\d{2}(/\d{2})?$", RegexOptions.Compiled);
     public static readonly Regex NamePattern = new(@"^[\p{L}0-9][\p{L}0-9 .'\-/]*$", RegexOptions.Compiled);

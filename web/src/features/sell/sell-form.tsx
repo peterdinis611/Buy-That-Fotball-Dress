@@ -5,8 +5,18 @@ import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import { FormBanner, SelectField, TextField, bindStringField } from "@/components/forms/field";
 import { Button } from "@/components/ui/button";
-import { useAuth, useCreateAuctionMutation } from "@/hooks";
-import { conditions, kits, sellFieldsSchema, sizes, toCreateAuctionPayload, type SellFields } from "@/lib/validation";
+import { useAuth, useCreateAuctionMutation, useUpdateAuctionMutation } from "@/hooks";
+import type { Auction } from "@/lib/types";
+import {
+  conditions,
+  kits,
+  sellFieldsSchema,
+  sizes,
+  toCreateAuctionPayload,
+  toSellFields,
+  toUpdateAuctionPayload,
+  type SellFields,
+} from "@/lib/validation";
 
 function defaultAuctionEnd() {
   const date = new Date();
@@ -15,27 +25,31 @@ function defaultAuctionEnd() {
   return new Date(offset).toISOString().slice(0, 16);
 }
 
-export function SellForm() {
+export function SellForm({ auction }: { auction?: Auction }) {
   const router = useRouter();
   const { user } = useAuth();
   const create = useCreateAuctionMutation();
+  const update = useUpdateAuctionMutation(auction?.id ?? "");
   const [banner, setBanner] = useState<string | null>(null);
+  const editing = Boolean(auction);
 
   const form = useForm({
-    defaultValues: {
-      club: "",
-      playerName: "",
-      playerNumber: "",
-      season: "",
-      color: "",
-      size: "M",
-      kitType: "Home",
-      condition: "Used",
-      reservePrice: "",
-      league: "",
-      auctionEnd: defaultAuctionEnd(),
-      imageUrl: "",
-    } as SellFields,
+    defaultValues: (auction
+      ? toSellFields(auction)
+      : {
+          club: "",
+          playerName: "",
+          playerNumber: "",
+          season: "",
+          color: "",
+          size: "M",
+          kitType: "Home",
+          condition: "Used",
+          reservePrice: "",
+          league: "",
+          auctionEnd: defaultAuctionEnd(),
+          imageUrl: "",
+        }) as SellFields,
     validators: {
       onChange: sellFieldsSchema,
       onSubmit: sellFieldsSchema,
@@ -43,14 +57,21 @@ export function SellForm() {
     onSubmit: async ({ value }) => {
       setBanner(null);
       try {
-        const auction = await create.mutateAsync(toCreateAuctionPayload(value));
-        router.push(`/auctions/${auction.id}`);
+        if (auction) {
+          const next = await update.mutateAsync(toUpdateAuctionPayload(value));
+          router.push(`/auctions/${next.id}`);
+        } else {
+          const listed = await create.mutateAsync(toCreateAuctionPayload(value));
+          router.push(`/auctions/${listed.id}`);
+        }
         router.refresh();
       } catch (err) {
-        setBanner(err instanceof Error ? err.message : "Could not list this shirt.");
+        setBanner(err instanceof Error ? err.message : "Could not save this shirt.");
       }
     },
   });
+
+  const pending = create.isPending || update.isPending;
 
   return (
     <form
@@ -64,7 +85,7 @@ export function SellForm() {
     >
       <div className="grid gap-5 md:grid-cols-2">
         <p className="md:col-span-2 font-[family-name:var(--font-display)] text-xl tracking-[0.12em] text-[var(--bib)]">
-          Listed as {user?.displayName || user?.username}
+          {editing ? "Edit listing" : `Listed as ${user?.displayName || user?.username}`}
         </p>
         <form.Field name="club">
           {(field) => <TextField field={bindStringField(field)} label="Club" placeholder="Arsenal" />}
@@ -112,10 +133,10 @@ export function SellForm() {
         {([canSubmit, isSubmitting]) => (
           <Button
             type="submit"
-            disabled={!canSubmit || isSubmitting || create.isPending}
+            disabled={!canSubmit || isSubmitting || pending}
             className="mt-8 h-11 w-full rounded-none border-0 bg-[var(--bib)] font-[family-name:var(--font-display)] text-2xl tracking-[0.08em] text-[var(--stud)] uppercase"
           >
-            {isSubmitting || create.isPending ? "Listing…" : "List this shirt"}
+            {isSubmitting || pending ? "Saving…" : editing ? "Save changes" : "List this shirt"}
           </Button>
         )}
       </form.Subscribe>

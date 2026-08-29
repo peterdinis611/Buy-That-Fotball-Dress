@@ -20,9 +20,40 @@ const kits = ["", "Home", "Away", "Third", "Goalkeeper", "Special"].map((value) 
   label: value || "Any",
 }));
 
+const leagues = [
+  "",
+  "Premier League",
+  "La Liga",
+  "Bundesliga",
+  "Serie A",
+  "Ligue 1",
+  "MLS",
+  "World Cup",
+  "Niké Liga",
+].map((value) => ({
+  value,
+  label: value || "Any",
+}));
+
+const sorts = [
+  { value: "", label: "Ending soon" },
+  { value: "Newest", label: "Newly listed" },
+  { value: "PriceAsc", label: "Price low" },
+  { value: "PriceDesc", label: "Price high" },
+];
+
 export function SearchFilters({ query }: { query: SearchQuery }) {
   const router = useRouter();
-  const active = Boolean(query.club || query.playerName || query.size || query.kitType);
+  const active = Boolean(
+    query.club ||
+      query.playerName ||
+      query.size ||
+      query.kitType ||
+      query.league ||
+      query.sort ||
+      query.minPrice ||
+      query.maxPrice,
+  );
 
   function update(name: string, value: string) {
     const params = new URLSearchParams();
@@ -31,6 +62,10 @@ export function SearchFilters({ query }: { query: SearchQuery }) {
       playerName: query.playerName ?? "",
       size: query.size ?? "",
       kitType: query.kitType ?? "",
+      league: query.league ?? "",
+      sort: query.sort ?? "",
+      minPrice: query.minPrice != null ? String(query.minPrice) : "",
+      maxPrice: query.maxPrice != null ? String(query.maxPrice) : "",
       [name]: value,
     };
 
@@ -83,6 +118,32 @@ export function SearchFilters({ query }: { query: SearchQuery }) {
             options={kits}
             onChange={(value) => update("kitType", value)}
           />
+          <BoardSelect
+            label="League"
+            value={query.league ?? ""}
+            options={leagues}
+            onChange={(value) => update("league", value)}
+          />
+          <BoardInput
+            label="Min €"
+            value={query.minPrice != null ? String(query.minPrice) : ""}
+            placeholder="100"
+            inputMode="numeric"
+            onChange={(value) => update("minPrice", value)}
+          />
+          <BoardInput
+            label="Max €"
+            value={query.maxPrice != null ? String(query.maxPrice) : ""}
+            placeholder="800"
+            inputMode="numeric"
+            onChange={(value) => update("maxPrice", value)}
+          />
+          <BoardSelect
+            label="Sort"
+            value={query.sort ?? ""}
+            options={sorts}
+            onChange={(value) => update("sort", value)}
+          />
         </div>
       </div>
     </form>
@@ -94,18 +155,22 @@ function BoardInput({
   value,
   placeholder,
   onChange,
+  inputMode,
 }: {
   label: string;
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
+  inputMode?: "numeric";
 }) {
   return (
     <label className={`board-bay ${value ? "board-bay-lit" : ""}`}>
       <span className="board-bay-label">{label}</span>
       <input
+        key={value}
         defaultValue={value}
         placeholder={placeholder}
+        inputMode={inputMode}
         onBlur={(event) => onChange(event.target.value.trim())}
         onKeyDown={(event) => {
           if (event.key === "Enter") onChange(event.currentTarget.value.trim());
@@ -155,14 +220,7 @@ function BoardSelect({
               value={option.value}
               className="rounded-none px-4 py-2.5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[#f3f1ec] uppercase focus:bg-[var(--bib)] focus:text-[var(--stud)] data-highlighted:bg-[var(--bib)] data-highlighted:text-[var(--stud)]"
             >
-              {option.value === "Live" ? (
-                <span className="inline-flex items-center gap-2">
-                  <span className="live-dot size-1.5 rounded-full bg-[var(--led)]" />
-                  {option.label}
-                </span>
-              ) : (
-                option.label
-              )}
+              {option.label}
             </SelectItem>
           ))}
         </SelectContent>

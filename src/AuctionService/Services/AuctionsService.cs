@@ -134,6 +134,94 @@ public sealed class AuctionsService(
         return Result.Success();
     }
 
+    public async Task<Result> WatchAsync(Guid id, string watcher, CancellationToken cancellationToken)
+    {
+        var auction = await db.Auctions.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (auction is null)
+            return Result.NotFound($"Auction '{id}' was not found.");
+
+        if (string.Equals(auction.Seller, watcher, StringComparison.OrdinalIgnoreCase))
+            return Result.Forbidden("You cannot watch your own listing.");
+
+        if (auction.Status is not Status.Live)
+            return Result.Conflict("Only live lots can be watched.");
+
+        var name = watcher.Trim();
+        var already = await db.AuctionWatchers.AnyAsync(
+            x => x.AuctionId == id && x.Watcher.ToLower() == name.ToLower(),
+            cancellationToken);
+
+        if (!already)
+        {
+            db.AuctionWatchers.Add(new AuctionWatcher { AuctionId = id, Watcher = name });
+            await db.SaveChangesAsync(cancellationToken);
+            await cache.BumpAsync(CacheStamps.Sheets, cancellationToken);
+        }
+
+        return Result.Success();
+    }
+
+    public async Task<Result> UnwatchAsync(Guid id, string watcher, CancellationToken cancellationToken)
+    {
+        var name = watcher.Trim().ToLower();
+        var row = await db.AuctionWatchers.FirstOrDefaultAsync(
+            x => x.AuctionId == id && x.Watcher.ToLower() == name,
+            cancellationToken);
+
+        if (row is not null)
+        {
+            db.AuctionWatchers.Remove(row);
+            await db.SaveChangesAsync(cancellationToken);
+            await cache.BumpAsync(CacheStamps.Sheets, cancellationToken);
+        }
+
+        return Result.Success();
+    }
+
+    public async Task<int> CloseExpiredAsync(CancellationToken cancellationToken)
+    {
+        var now = DateTime.UtcNow;
+        var expired = await db.Auctions
+            .Include(x => x.Item)
+            .Where(x => x.Status == Status.Live && x.AuctionEnd <= now)
+            .ToListAsync(cancellationToken);
+
+        foreach (var auction in expired)
+        {
+            CloseLot(auction, now);
+            await db.SaveChangesAsync(cancellationToken);
+            await publishEndpoint.Publish(auction.ToAuctionUpdated(), cancellationToken);
+            await cache.RemoveAsync(CacheKeys.Auction(auction.Id), cancellationToken);
+        }
+
+        if (expired.Count > 0)
+        {
+            await cache.BumpAsync(CacheStamps.Auctions, cancellationToken);
+            await cache.BumpAsync(CacheStamps.Sheets, cancellationToken);
+        }
+
+        return expired.Count;
+    }
+
+    private static void CloseLot(Auction auction, DateTime now)
+    {
+        auction.UpdatedAt = now;
+
+        if (auction.CurrentHighBid is int high
+            && high >= auction.ReservePrice
+            && !string.IsNullOrWhiteSpace(auction.HighBidder))
+        {
+            auction.Status = Status.Finished;
+            auction.Winner = auction.HighBidder;
+            auction.SoldAmount = high;
+            return;
+        }
+
+        auction.Status = Status.ReserveNotMet;
+        auction.Winner = null;
+        auction.SoldAmount = null;
+    }
+
     private async Task<List<AuctionDto>> LoadAllAsync(
         string? club,
         Status? status,
@@ -202,11 +290,33 @@ public sealed class AuctionsService(
                 .OrderBy(x => x.AuctionEnd)
                 .ToListAsync(cancellationToken);
 
+        var watchingIds = await db.AuctionWatchers
+            .AsNoTracking()
+            .Where(x => x.Watcher.ToLower() == name)
+            .Select(x => x.AuctionId)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+
+        var chasingIdSet = chasingIds.ToHashSet();
+
+        var watching = watchingIds.Count == 0
+            ? []
+            : await db.Auctions
+                .AsNoTracking()
+                .Include(x => x.Item)
+                .Where(x => watchingIds.Contains(x.Id)
+                    && !wonIds.Contains(x.Id)
+                    && !listedIds.Contains(x.Id)
+                    && !chasingIdSet.Contains(x.Id))
+                .OrderBy(x => x.AuctionEnd)
+                .ToListAsync(cancellationToken);
+
         return new PlayerSheetDto
         {
             Listed = listed.Select(x => x.ToDto()).ToList(),
             Chasing = chasing.Select(x => x.ToDto()).ToList(),
-            Won = won.Select(x => x.ToDto()).ToList()
+            Won = won.Select(x => x.ToDto()).ToList(),
+            Watching = watching.Select(x => x.ToDto()).ToList()
         };
     }
 
