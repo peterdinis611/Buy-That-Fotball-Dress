@@ -3,7 +3,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider, useSession } from "next-auth/react";
 import type { ReactNode } from "react";
-import { useLiveBoard } from "@/hooks";
+import { useLiveBoard } from "@/hooks/use-live-board";
 import { setClientAccessToken } from "@/lib/auth";
 import { getQueryClient } from "@/lib/query/client";
 

@@ -1,6 +1,6 @@
 import { HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel } from "@microsoft/signalr";
 
-const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL ?? "http://localhost:5027/hubs/notifications";
+const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL ?? "http://localhost:5030/hubs/notifications";
 
 let connection: HubConnection | null = null;
 let start: Promise<HubConnection> | null = null;

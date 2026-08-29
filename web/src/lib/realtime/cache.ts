@@ -32,7 +32,14 @@ function isSearchPage(value: unknown): value is PagedResult<SearchItem> {
 }
 
 function patchAuction(auction: Auction, patch: Partial<Auction>): Auction {
-  return { ...auction, ...patch };
+  const next = { ...auction };
+  (Object.keys(patch) as (keyof Auction)[]).forEach((key) => {
+    const value = patch[key];
+    if (value !== undefined) {
+      (next[key] as Auction[typeof key]) = value;
+    }
+  });
+  return next;
 }
 
 function patchSheet(sheet: PlayerSheet, id: string, patch: Partial<Auction>): PlayerSheet {
