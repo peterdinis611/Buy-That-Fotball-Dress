@@ -6,6 +6,7 @@ const links = [
   { href: "/auctions", label: "Live lots" },
   { href: "/search", label: "Find a shirt" },
   { href: "/#how-it-works", label: "How it works" },
+  { href: "/#faq", label: "Questions" },
 ];
 
 export function SiteHeader() {

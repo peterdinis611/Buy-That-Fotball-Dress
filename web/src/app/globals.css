@@ -394,6 +394,24 @@
   animation: tube-hum 5s ease-in-out infinite;
 }
 
+.tunnel-cta {
+  background:
+    radial-gradient(ellipse at 20% 0%, rgb(245 196 0 / 0.12), transparent 42%),
+    #161616;
+}
+
+.tunnel-hatch {
+  background: repeating-linear-gradient(-18deg, #f5c400 0 14px, #161616 14px 28px);
+}
+
+.locker-faq summary {
+  list-style: none;
+}
+
+.locker-faq summary::-webkit-details-marker {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .ticker-track,

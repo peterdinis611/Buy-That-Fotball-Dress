@@ -1,9 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { ConcoursePulse } from "./concourse-pulse";
 import { FeaturedHero } from "./featured-hero";
+import { HouseRules } from "./house-rules";
 import { HowItWorks } from "./how-it-works";
 import { PegWall } from "./kit-peg";
+import { PitchFaq } from "./pitch-faq";
+import { TunnelCta } from "./tunnel-cta";
 import { useAuctionsQuery } from "@/hooks";
 import { fromAuction, type Auction } from "@/lib/types";
 
@@ -35,6 +39,7 @@ export function HomeView({ auctions }: { auctions: Auction[] }) {
         </section>
       )}
 
+      <ConcoursePulse live={live.length} listed={listings.length} />
       <HowItWorks />
 
       {rest.length > 0 ? (
@@ -57,6 +62,10 @@ export function HomeView({ auctions }: { auctions: Auction[] }) {
           <PegWall listings={rest} />
         </section>
       ) : null}
+
+      <HouseRules />
+      <PitchFaq />
+      <TunnelCta />
     </div>
   );
 }

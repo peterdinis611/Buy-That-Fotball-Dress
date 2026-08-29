@@ -4,4 +4,8 @@ export { JerseyBack } from "./jersey-back";
 export { FeaturedHero } from "./featured-hero";
 export { HomeView } from "./home-view";
 export { HowItWorks } from "./how-it-works";
+export { ConcoursePulse } from "./concourse-pulse";
+export { HouseRules } from "./house-rules";
+export { PitchFaq } from "./pitch-faq";
+export { TunnelCta } from "./tunnel-cta";
 export { StatusScreen } from "./status-screen";

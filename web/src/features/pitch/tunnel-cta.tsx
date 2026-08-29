@@ -1,0 +1,42 @@
+import Link from "next/link";
+import { JerseyBack } from "./jersey-back";
+
+export function TunnelCta() {
+  return (
+    <section id="list-a-shirt" className="tunnel-cta relative overflow-hidden border-b-4 border-[var(--ink)]">
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-8 tunnel-hatch md:w-14" aria-hidden />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 tunnel-hatch md:w-14" aria-hidden />
+
+      <div className="relative mx-auto grid max-w-[1400px] items-center gap-10 px-5 py-16 md:grid-cols-[1.15fr_0.85fr] md:px-8 md:py-24">
+        <div>
+          <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.22em] text-[var(--bib)]">
+            Got a shirt at home?
+          </p>
+          <h2 className="mt-2 max-w-[14ch] text-6xl leading-[0.86] text-[var(--tape)] md:text-8xl">
+            Hang it on the rail. Let people bid.
+          </h2>
+          <p className="mt-5 max-w-md text-lg text-[var(--tape)]/75">
+            Set a starting price and an end time. Buyers bid up from there. Match-worn only.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Link href="/sell" className="banner-cta text-2xl">
+              Sell a shirt
+            </Link>
+            <Link
+              href="/auctions"
+              className="nav-line font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--tape)] uppercase"
+            >
+              Browse live lots
+            </Link>
+          </div>
+        </div>
+
+        <div className="relative hidden min-h-[220px] md:block">
+          <JerseyBack number="07" color="red" className="absolute right-8 top-0 h-52 w-40 -rotate-12" />
+          <JerseyBack number="10" color="blue" className="absolute right-28 top-10 h-56 w-44 rotate-6" />
+          <JerseyBack number="09" color="yellow" className="absolute right-0 top-16 h-48 w-36 -rotate-3" />
+        </div>
+      </div>
+    </section>
+  );
+}
