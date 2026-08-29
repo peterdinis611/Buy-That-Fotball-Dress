@@ -24,10 +24,10 @@ export function HomeView({ auctions }: { auctions: Auction[] }) {
         <FeaturedHero listing={featured} />
       ) : (
         <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8">
-          <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.2em] text-[var(--led)]">
+          <p className="reveal font-[family-name:var(--font-display)] text-lg tracking-[0.2em] text-[var(--led)]">
             No live lots
           </p>
-          <h1 className="mt-2 max-w-[14ch] text-6xl leading-[0.86] text-[var(--ink)] md:text-8xl">
+          <h1 className="reveal delay-1 mt-2 max-w-[14ch] text-6xl leading-[0.86] text-[var(--ink)] md:text-8xl">
             No shirts listed yet.
           </h1>
           <p className="mt-4 max-w-md text-lg text-[var(--ink)]/75">
@@ -43,7 +43,7 @@ export function HomeView({ auctions }: { auctions: Auction[] }) {
       <HowItWorks />
 
       {rest.length > 0 ? (
-        <section className="mx-auto max-w-[1400px] px-5 py-14 md:px-8">
+        <section className="view-in mx-auto max-w-[1400px] px-5 py-14 md:px-8">
           <div className="mb-8 flex items-end justify-between gap-4">
             <div>
               <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.2em] text-[var(--led)]">

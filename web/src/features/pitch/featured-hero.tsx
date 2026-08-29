@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { Countdown } from "@/features/auctions";
 import { JerseyBack } from "./jersey-back";
 import { formatMoney } from "@/lib/format";
@@ -11,7 +12,7 @@ export function FeaturedHero({ listing }: { listing: KitListing }) {
 
   return (
     <section className="relative overflow-hidden border-b-4 border-[var(--ink)]">
-      <div className="pointer-events-none absolute -right-4 top-0 font-[family-name:var(--font-display)] text-[34vw] leading-none text-[color-mix(in_oklab,var(--ink)_8%,transparent)] select-none">
+      <div className="pointer-events-none ghost-num absolute -right-4 top-0 font-[family-name:var(--font-display)] text-[34vw] leading-none text-[color-mix(in_oklab,var(--ink)_8%,transparent)] select-none">
         {number}
       </div>
 
@@ -31,7 +32,12 @@ export function FeaturedHero({ listing }: { listing: KitListing }) {
           </p>
 
           <div className="reveal delay-3 relative mt-8 flex min-h-[280px] items-end justify-center md:justify-start">
-            <JerseyBack number={number} color={listing.color} className="relative z-10 h-64 w-52 -rotate-6 md:h-72 md:w-56" />
+            <JerseyBack
+              number={number}
+              color={listing.color}
+              className="peg-sway relative z-10 h-64 w-52 md:h-72 md:w-56"
+              style={{ "--hang": "-6deg" } as CSSProperties}
+            />
             {listing.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -43,7 +49,7 @@ export function FeaturedHero({ listing }: { listing: KitListing }) {
           </div>
         </div>
 
-        <aside className="sub-board reveal delay-2 overflow-hidden">
+        <aside className="sub-board board-slam overflow-hidden">
           <div className="sub-board-bib px-5 py-2 text-center text-lg">Live lot</div>
           <div className="p-6 md:p-7">
             <div className="mb-5 flex items-center justify-between gap-3">
@@ -53,7 +59,9 @@ export function FeaturedHero({ listing }: { listing: KitListing }) {
               <span className="text-sm text-[var(--muted-foreground)]">{listing.club}</span>
             </div>
             <p className="text-sm tracking-[0.16em] text-[var(--muted-foreground)] uppercase">Current bid</p>
-            <p className="led-num mt-1 text-6xl leading-none md:text-7xl">{formatMoney(bid)}</p>
+            <p key={bid} className="led-num bid-punch mt-1 text-6xl leading-none md:text-7xl">
+              {formatMoney(bid)}
+            </p>
             <p className="mt-6 text-sm tracking-[0.16em] text-[var(--muted-foreground)] uppercase">Time left</p>
             <Countdown endsAt={listing.auctionEnd} className="led-num mt-1 block text-5xl" />
             <Link href={`/auctions/${listing.id}`} className="banner-cta mt-8 w-full justify-center text-2xl">

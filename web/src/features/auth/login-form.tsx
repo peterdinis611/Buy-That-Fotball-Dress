@@ -51,7 +51,7 @@ export function LoginForm() {
   return (
     <form
       noValidate
-      className="ticket reveal delay-2 p-6 md:p-8"
+      className="ticket board-slam p-6 md:p-8"
       onSubmit={(event) => {
         event.preventDefault();
         event.stopPropagation();

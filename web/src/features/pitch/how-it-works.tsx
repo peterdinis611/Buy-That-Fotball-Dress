@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { JerseyBack } from "./jersey-back";
 
 const steps = [
@@ -26,16 +27,21 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="border-y-4 border-[var(--ink)] bg-[var(--tape)]">
       <div className="mx-auto max-w-[1400px] px-5 py-12 md:px-8 md:py-16">
-        <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.2em] text-[var(--led)]">
+        <p className="view-in font-[family-name:var(--font-display)] text-lg tracking-[0.2em] text-[var(--led)]">
           How an auction works
         </p>
-        <h2 className="mt-1 max-w-[18ch] text-5xl leading-[0.9] text-[var(--ink)] md:text-6xl">
+        <h2 className="view-in mt-1 max-w-[18ch] text-5xl leading-[0.9] text-[var(--ink)] md:text-6xl">
           Highest bid when the clock hits zero wins.
         </h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="stagger-in mt-10 grid gap-6 md:grid-cols-3">
           {steps.map((step) => (
             <article key={step.n} className="relative bg-[var(--ground)] px-5 pb-6 pt-8">
-              <JerseyBack number={step.n} color={step.color} className="absolute -top-7 right-4 h-16 w-14" />
+              <JerseyBack
+                number={step.n}
+                color={step.color}
+                className="peg-sway absolute -top-7 right-4 h-16 w-14"
+                style={{ "--hang": "-8deg" } as CSSProperties}
+              />
               <h3 className="pr-16 text-3xl text-[var(--ink)]">{step.title}</h3>
               <p className="mt-3 text-[var(--ink)]/75">{step.copy}</p>
             </article>

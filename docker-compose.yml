@@ -8,7 +8,7 @@ services:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 5s
       timeout: 5s
-      retries: 12
+      retries: 12 
 
   redis:
     image: redis:7.4-alpine

@@ -1,9 +1,10 @@
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { JerseyBack } from "./jersey-back";
 
 export function TunnelCta() {
   return (
-    <section id="list-a-shirt" className="tunnel-cta relative overflow-hidden border-b-4 border-[var(--ink)]">
+    <section id="list-a-shirt" className="tunnel-cta view-in relative overflow-hidden border-b-4 border-[var(--ink)]">
       <div className="pointer-events-none absolute inset-y-0 left-0 w-8 tunnel-hatch md:w-14" aria-hidden />
       <div className="pointer-events-none absolute inset-y-0 right-0 w-8 tunnel-hatch md:w-14" aria-hidden />
 
@@ -32,9 +33,24 @@ export function TunnelCta() {
         </div>
 
         <div className="relative hidden min-h-[220px] md:block">
-          <JerseyBack number="07" color="red" className="absolute right-8 top-0 h-52 w-40 -rotate-12" />
-          <JerseyBack number="10" color="blue" className="absolute right-28 top-10 h-56 w-44 rotate-6" />
-          <JerseyBack number="09" color="yellow" className="absolute right-0 top-16 h-48 w-36 -rotate-3" />
+          <JerseyBack
+            number="07"
+            color="red"
+            className="peg-sway absolute right-8 top-0 h-52 w-40"
+            style={{ "--hang": "-12deg" } as CSSProperties}
+          />
+          <JerseyBack
+            number="10"
+            color="blue"
+            className="peg-sway absolute right-28 top-10 h-56 w-44"
+            style={{ "--hang": "6deg", animationDuration: "5.2s" } as CSSProperties}
+          />
+          <JerseyBack
+            number="09"
+            color="yellow"
+            className="peg-sway absolute right-0 top-16 h-48 w-36"
+            style={{ "--hang": "-3deg", animationDuration: "3.8s" } as CSSProperties}
+          />
         </div>
       </div>
     </section>

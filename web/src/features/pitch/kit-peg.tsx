@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { Countdown } from "@/features/auctions/countdown";
 import { StatusPill } from "@/features/auctions/status-pill";
 import { JerseyBack } from "./jersey-back";
@@ -7,15 +8,16 @@ import type { KitListing } from "@/lib/types";
 
 export function KitPeg({ listing, index = 0 }: { listing: KitListing; index?: number }) {
   const number = listing.playerNumber?.toString().padStart(2, "0") ?? "00";
-  const tilt = index % 2 === 0 ? "-rotate-3" : "rotate-2";
+  const hang = index % 2 === 0 ? "-3deg" : "2deg";
 
   return (
     <Link
       href={`/auctions/${listing.id}`}
-      className={`kit-hover reveal delay-${Math.min(index + 1, 5)} group relative flex flex-col items-center bg-[var(--tape)] px-4 pb-5 pt-7`}
+      className="kit-hover group relative flex flex-col items-center bg-[var(--tape)] px-4 pb-5 pt-7"
+      style={{ "--peg": index, "--hang": hang } as CSSProperties}
     >
       <span className="absolute top-2 size-2.5 rounded-full bg-[#c9a227] shadow-[0_6px_0_#6b5412]" />
-      <JerseyBack number={number} color={listing.color} className={`h-28 w-24 transition-transform duration-500 ${tilt} group-hover:rotate-0`} />
+      <JerseyBack number={number} color={listing.color} className="peg-sway h-28 w-24" />
       <p className="mt-4 font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--led)]">
         {listing.club}
       </p>

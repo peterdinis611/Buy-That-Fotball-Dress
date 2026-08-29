@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { CSSProperties } from "react";
 import { LotTicket } from "@/features/auctions";
 import { JerseyBack } from "@/features/pitch";
 import { JsonLd } from "@/components/seo";
@@ -57,7 +58,7 @@ export default async function AuctionDetailPage({ params }: AuctionParams) {
   return (
     <div className="relative overflow-hidden">
       <JsonLd data={auctionJsonLd(auction)} />
-      <div className="pointer-events-none absolute left-[-4%] top-4 font-[family-name:var(--font-display)] text-[40vw] leading-none text-[color-mix(in_oklab,var(--ink)_8%,transparent)] select-none">
+      <div className="pointer-events-none ghost-num absolute left-[-4%] top-4 font-[family-name:var(--font-display)] text-[40vw] leading-none text-[color-mix(in_oklab,var(--ink)_8%,transparent)] select-none">
         {number}
       </div>
 
@@ -78,7 +79,12 @@ export default async function AuctionDetailPage({ params }: AuctionParams) {
           </p>
 
           <div className="mt-10 flex items-center gap-8">
-            <JerseyBack number={number} color={item.color} className="h-40 w-32" />
+            <JerseyBack
+              number={number}
+              color={item.color}
+              className="peg-sway h-40 w-32"
+              style={{ "--hang": "-5deg" } as CSSProperties}
+            />
             <dl className="grid grid-cols-2 gap-x-8 gap-y-5 text-sm">
               {[
                 ["Number", number],

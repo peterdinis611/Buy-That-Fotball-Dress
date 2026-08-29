@@ -3,6 +3,7 @@
 import { JerseyBack, PegWall } from "@/features/pitch";
 import { fromAuction, type AuthUser, type KitListing } from "@/lib/types";
 import { usePlayerSheetQuery } from "@/hooks";
+import type { CSSProperties } from "react";
 
 function squadNumber(name: string) {
   let n = 0;
@@ -19,7 +20,7 @@ export function DressingRoom({ user }: { user: AuthUser }) {
 
   return (
     <div className="relative overflow-hidden">
-      <div className="pointer-events-none absolute -left-6 top-0 font-[family-name:var(--font-display)] text-[42vw] leading-[0.72] text-[color-mix(in_oklab,var(--ink)_8%,transparent)] select-none md:text-[22vw]">
+      <div className="pointer-events-none ghost-num absolute -left-6 top-0 font-[family-name:var(--font-display)] text-[42vw] leading-[0.72] text-[color-mix(in_oklab,var(--ink)_8%,transparent)] select-none md:text-[22vw]">
         {number}
       </div>
 
@@ -36,7 +37,12 @@ export function DressingRoom({ user }: { user: AuthUser }) {
           </div>
 
           <div className="locker-bay reveal delay-2 flex items-end gap-6 md:justify-end">
-            <JerseyBack number={number} color="red" className="h-44 w-36 -rotate-6" />
+            <JerseyBack
+              number={number}
+              color="red"
+              className="peg-sway h-44 w-36"
+              style={{ "--hang": "-6deg" } as CSSProperties}
+            />
             <div className="locker-plate mb-4 min-w-[14rem] px-5 py-4">
               <p className="font-[family-name:var(--font-display)] text-sm tracking-[0.2em] text-[#3a2a10] uppercase">
                 Player

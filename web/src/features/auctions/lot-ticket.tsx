@@ -27,7 +27,7 @@ export function LotTicket({ auction: initial }: { auction: Auction }) {
   const { item } = lot;
 
   return (
-    <aside className="sub-board reveal delay-2 overflow-hidden">
+    <aside className="sub-board board-slam overflow-hidden">
       <div className="sub-board-bib px-5 py-2 text-center text-lg">Bid board</div>
       <div className="p-6 md:p-8">
       <div className="mb-6 flex items-center justify-between">
@@ -45,6 +45,7 @@ export function LotTicket({ auction: initial }: { auction: Auction }) {
         <TicketLine
           label="Current bid"
           value={lot.currentHighBid ? formatMoney(lot.currentHighBid) : "No bids yet"}
+          punch
         />
         {lot.highBidder ? <TicketLine label="Highest bidder" value={lot.highBidder} /> : null}
         {lot.winner ? <TicketLine label="Winner" value={lot.winner} /> : null}
@@ -166,13 +167,15 @@ function BidForm({ auction }: { auction: Auction }) {
   );
 }
 
-function TicketLine({ label, value }: { label: string; value: string }) {
+function TicketLine({ label, value, punch }: { label: string; value: string; punch?: boolean }) {
   return (
     <div className="flex items-baseline justify-between gap-4">
       <span className="font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
         {label}
       </span>
-      <span className="led-num text-right text-2xl">{value}</span>
+      <span key={punch ? value : undefined} className={`led-num text-right text-2xl ${punch ? "bid-punch" : ""}`}>
+        {value}
+      </span>
     </div>
   );
 }

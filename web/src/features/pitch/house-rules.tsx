@@ -29,7 +29,7 @@ export function HouseRules() {
   return (
     <section className="border-b-4 border-[var(--ink)]">
       <div className="mx-auto grid max-w-[1400px] items-start gap-12 px-5 py-14 md:grid-cols-[0.9fr_1.1fr] md:px-8 md:py-20">
-        <div className="md:sticky md:top-8">
+        <div className="view-in md:sticky md:top-8">
           <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.2em] text-[var(--led)]">
             House rules
           </p>
@@ -41,11 +41,11 @@ export function HouseRules() {
           </p>
         </div>
 
-        <ul className="grid gap-4">
+        <ul className="stagger-in grid gap-4">
           {rules.map((rule, index) => (
             <li
               key={rule.card}
-              className={`flex gap-4 bg-[var(--tape)] p-5 md:p-6 ${index === 1 ? "md:translate-x-8" : ""} ${index === 2 ? "md:-translate-x-4" : ""}`}
+              className={`ref-slip flex gap-4 bg-[var(--tape)] p-5 md:p-6 ${index === 1 ? "md:ml-8" : ""} ${index === 2 ? "md:-ml-4" : ""}`}
             >
               <span
                 className={`grid h-28 w-[4.5rem] shrink-0 place-items-center px-1 text-center font-[family-name:var(--font-display)] text-lg leading-[1.05] tracking-[0.06em] uppercase shadow-[4px_6px_0_#161616] ${toneClass[rule.tone]}`}

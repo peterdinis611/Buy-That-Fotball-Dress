@@ -27,7 +27,7 @@ const questions = [
 
 export function PitchFaq() {
   return (
-    <section id="faq" className="border-b-4 border-[var(--ink)] bg-[var(--tape)]">
+    <section id="faq" className="view-in border-b-4 border-[var(--ink)] bg-[var(--tape)]">
       <div className="mx-auto max-w-[1400px] px-5 py-14 md:px-8 md:py-20">
         <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.2em] text-[var(--led)]">
           Questions
@@ -45,7 +45,7 @@ export function PitchFaq() {
                   +
                 </span>
               </summary>
-              <p className="max-w-2xl pb-5 text-lg text-[var(--ink)]/75">{item.a}</p>
+              <p className="max-w-2xl text-lg text-[var(--ink)]/75">{item.a}</p>
             </details>
           ))}
         </div>

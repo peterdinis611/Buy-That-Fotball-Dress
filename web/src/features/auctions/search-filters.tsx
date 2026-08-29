@@ -29,7 +29,7 @@ export function SearchFilters({ query }: { query: SearchQuery }) {
 
   return (
     <form
-      className="reveal delay-2 mb-10 grid gap-4 bg-[var(--tape)] p-5 md:grid-cols-5"
+      className="board-slam mb-10 grid gap-4 bg-[var(--tape)] p-5 md:grid-cols-5"
       onSubmit={(event) => event.preventDefault()}
     >
       <Filter label="Club" value={query.club ?? ""} onChange={(value) => update("club", value)} />

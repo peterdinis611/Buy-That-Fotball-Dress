@@ -388,7 +388,7 @@
 }
 
 .peg-wall > a {
-  animation: board-slam 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: board-slam 0.65s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   animation-delay: calc(var(--peg, 0) * 55ms);
 }
 
@@ -665,12 +665,14 @@ a:hover .brand-mark {
   .banner-cta,
   .nav-line::after,
   .ref-slip,
-  .brand-mark,
-  .locker-faq summary + p {
+  .brand-mark {
     animation: none;
     transition: none;
     transform: none;
     opacity: 1;
-    max-height: none;
+  }
+
+  .locker-faq summary + p {
+    transition: none;
   }
 }

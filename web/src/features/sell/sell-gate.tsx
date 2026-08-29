@@ -13,7 +13,7 @@ export function SellGate() {
 
   if (!user) {
     return (
-      <div className="ticket p-8">
+      <div className="ticket board-slam p-8">
         <p className="font-[family-name:var(--font-display)] text-xl tracking-[0.16em] text-[var(--bib)]">
           Sign in required
         </p>
