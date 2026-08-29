@@ -12,7 +12,7 @@ const links = [
 export function SiteHeader() {
   return (
     <header className="relative z-20">
-      <div className="led-flicker flex items-center justify-between gap-4 bg-[var(--stud)] px-5 py-1.5 font-[family-name:var(--font-display)] text-lg tracking-[0.18em] text-[var(--bib)] md:px-8">
+      <div className="led-strip flex items-center justify-between gap-4 bg-[var(--stud)] px-5 py-1.5 font-[family-name:var(--font-display)] text-lg tracking-[0.18em] text-[var(--bib)] md:px-8">
         <span className="flex items-center gap-2">
           <span className="live-dot size-2 rounded-full bg-[var(--led)]" />
           Live auctions
@@ -24,7 +24,7 @@ export function SiteHeader() {
       <div className="border-b-4 border-[var(--ink)] bg-[var(--tape)]">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-5 py-4 md:px-8">
           <Link href="/" className="flex items-center gap-3">
-            <span className="relative grid size-12 place-items-center bg-[var(--led)] text-[var(--tape)]">
+            <span className="brand-mark relative grid size-12 place-items-center bg-[var(--led)] text-[var(--tape)]">
               <span className="font-[family-name:var(--font-display)] text-3xl leading-none">KV</span>
             </span>
             <span>

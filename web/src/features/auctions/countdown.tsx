@@ -14,10 +14,14 @@ export function Countdown({ endsAt, className = "" }: { endsAt: string; classNam
     );
   }
 
+  const label = `${remaining.days > 0 ? `${remaining.days}d ` : ""}${pad(remaining.hours)}:${pad(remaining.minutes)}:${pad(remaining.seconds)}`;
+
   return (
-    <span className={`scoreboard font-[family-name:var(--font-display)] tabular-nums tracking-widest ${className}`}>
-      {remaining.days > 0 ? `${remaining.days}d ` : ""}
-      {pad(remaining.hours)}:{pad(remaining.minutes)}:{pad(remaining.seconds)}
+    <span
+      key={label}
+      className={`scoreboard digit-tick font-[family-name:var(--font-display)] tabular-nums tracking-widest ${className}`}
+    >
+      {label}
     </span>
   );
 }
