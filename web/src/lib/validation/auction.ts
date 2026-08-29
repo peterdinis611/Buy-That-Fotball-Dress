@@ -44,15 +44,15 @@ export const sellFieldsSchema = v.object({
   reservePrice: v.pipe(
     v.string(),
     v.trim(),
-    v.nonEmpty("Reserve is required."),
-    v.check((value) => /^\d+$/.test(value), "Reserve must be a whole number."),
+    v.nonEmpty("Starting price is required."),
+    v.check((value) => /^\d+$/.test(value), "Starting price must be a whole number."),
   ),
   league: v.pipe(v.string(), v.trim(), v.maxLength(50, "League is too long.")),
   auctionEnd: v.pipe(
     v.string(),
-    v.nonEmpty("Final whistle is required."),
-    v.check((value) => !Number.isNaN(new Date(value).getTime()), "That whistle time is offside."),
-    v.check((value) => new Date(value).getTime() > Date.now(), "Final whistle must still be ahead."),
+    v.nonEmpty("End time is required."),
+    v.check((value) => !Number.isNaN(new Date(value).getTime()), "Enter a valid end time."),
+    v.check((value) => new Date(value).getTime() > Date.now(), "End time must be in the future."),
   ),
   imageUrl: v.pipe(
     v.string(),

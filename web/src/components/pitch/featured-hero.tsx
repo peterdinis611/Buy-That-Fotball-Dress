@@ -6,60 +6,64 @@ import type { KitListing } from "@/lib/types";
 
 export function FeaturedHero({ listing }: { listing: KitListing }) {
   const number = listing.playerNumber?.toString().padStart(2, "0") ?? "00";
+  const bid = listing.currentHighBid ?? listing.reservePrice;
+  const live = listing.status === "Live";
 
   return (
-    <section className="relative overflow-hidden border-b-4 border-[var(--chalk)]">
-      <div className="pointer-events-none absolute -right-8 top-0 font-[family-name:var(--font-teko)] text-[38vw] leading-none text-[color-mix(in_oklab,var(--chalk)_6%,transparent)] select-none">
+    <section className="relative overflow-hidden border-b-4 border-[var(--ink)]">
+      <div className="pointer-events-none absolute -right-4 top-0 font-[family-name:var(--font-display)] text-[34vw] leading-none text-[color-mix(in_oklab,var(--ink)_8%,transparent)] select-none">
         {number}
       </div>
 
-      <div className="relative mx-auto grid max-w-[1400px] items-center gap-10 px-5 py-12 md:grid-cols-[1.05fr_0.95fr] md:px-8 md:py-16">
+      <div className="relative mx-auto grid max-w-[1400px] items-center gap-10 px-5 py-12 md:grid-cols-[1fr_0.9fr] md:px-8 md:py-16">
         <div>
-          <p className="reveal font-[family-name:var(--font-teko)] text-xl tracking-[0.28em] text-[var(--line)]">
-            Kick-off lot
+          <p className="reveal font-[family-name:var(--font-display)] text-lg tracking-[0.22em] text-[var(--led)]">
+            Live now
           </p>
-          <h1 className="reveal delay-1 mt-2 max-w-[12ch] text-7xl leading-[0.82] text-[var(--chalk)] md:text-9xl">
+          <h1 className="reveal delay-1 mt-2 max-w-[14ch] text-6xl leading-[0.86] text-[var(--ink)] md:text-8xl">
             {listing.playerName}
           </h1>
-          <p className="reveal delay-2 mt-5 max-w-md text-lg text-[var(--chalk)]/80">
-            {listing.club} {listing.season} {listing.kitType.toLowerCase()} shirt. {listing.condition}. Size {listing.size}.
+          <p className="reveal delay-2 mt-4 max-w-md text-lg text-[var(--ink)]/80">
+            {listing.club} {listing.season} {listing.kitType.toLowerCase()} shirt, size {listing.size}. Match-worn.
+            {live
+              ? " Bid higher than the current price before the clock hits zero."
+              : " This lot is no longer taking bids."}
           </p>
 
-          <div className="reveal delay-3 mt-8 flex flex-wrap items-end gap-10">
-            <div>
-              <p className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] text-[var(--muted-foreground)]">
-                Scoreline
-              </p>
-              <p className="font-[family-name:var(--font-teko)] text-7xl leading-none text-[var(--line)]">
-                {formatMoney(listing.currentHighBid ?? listing.reservePrice)}
-              </p>
-            </div>
-            <div>
-              <p className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] text-[var(--muted-foreground)]">
-                Until the whistle
-              </p>
-              <Countdown endsAt={listing.auctionEnd} className="text-5xl text-[var(--chalk)]" />
-            </div>
+          <div className="reveal delay-3 relative mt-8 flex min-h-[280px] items-end justify-center md:justify-start">
+            <JerseyBack number={number} color={listing.color} className="relative z-10 h-64 w-52 -rotate-6 md:h-72 md:w-56" />
+            {listing.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={listing.imageUrl}
+                alt={`${listing.club} ${listing.playerName} shirt`}
+                className="absolute right-0 top-0 hidden h-64 w-48 rotate-3 border-4 border-[var(--ink)] object-cover md:block"
+              />
+            ) : null}
           </div>
-
-          <Link href={`/auctions/${listing.id}`} className="banner-cta reveal delay-4 mt-10 text-3xl">
-            <span>Walk out</span>
-          </Link>
         </div>
 
-        <div className="reveal delay-3 relative flex min-h-[420px] items-center justify-center">
-          <div className="absolute size-[min(420px,80vw)] rounded-full border border-[var(--chalk)]/35 shadow-[0_0_80px_rgb(232_255_106/0.12)]" />
-          <div className="absolute size-[min(280px,55vw)] rounded-full border border-[var(--chalk)]/20" />
-          <JerseyBack number={number} color={listing.color} className="relative z-10 h-72 w-56 md:h-80 md:w-64" />
-          {listing.imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={listing.imageUrl}
-              alt={`${listing.club} ${listing.playerName}`}
-              className="absolute right-0 top-6 hidden h-72 w-52 -rotate-6 border-4 border-[var(--chalk)] object-cover shadow-[12px_18px_0_var(--line)] md:block"
-            />
-          ) : null}
-        </div>
+        <aside className="sub-board reveal delay-2 overflow-hidden">
+          <div className="sub-board-bib px-5 py-2 text-center text-lg">Live lot</div>
+          <div className="p-6 md:p-7">
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <span className="live-dot inline-flex items-center gap-2 bg-[var(--led)] px-2 py-0.5 font-[family-name:var(--font-display)] text-lg tracking-wide text-white uppercase">
+                {live ? "Live" : listing.status === "Finished" ? "Ended" : "Unsold"}
+              </span>
+              <span className="text-sm text-[var(--muted-foreground)]">{listing.club}</span>
+            </div>
+            <p className="text-sm tracking-[0.16em] text-[var(--muted-foreground)] uppercase">Current bid</p>
+            <p className="led-num mt-1 text-6xl leading-none md:text-7xl">{formatMoney(bid)}</p>
+            <p className="mt-6 text-sm tracking-[0.16em] text-[var(--muted-foreground)] uppercase">Time left</p>
+            <Countdown endsAt={listing.auctionEnd} className="led-num mt-1 block text-5xl" />
+            <Link href={`/auctions/${listing.id}`} className="banner-cta mt-8 w-full justify-center text-2xl">
+              Bid on this shirt
+            </Link>
+            <p className="mt-3 text-center text-sm text-[var(--muted-foreground)]">
+              Starting price {formatMoney(listing.reservePrice)}
+            </p>
+          </div>
+        </aside>
       </div>
     </section>
   );

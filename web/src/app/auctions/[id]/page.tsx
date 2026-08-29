@@ -19,7 +19,7 @@ export default async function AuctionDetailPage({
 
   return (
     <div className="relative overflow-hidden">
-      <div className="pointer-events-none absolute left-[-6%] top-6 font-[family-name:var(--font-teko)] text-[46vw] leading-none text-[color-mix(in_oklab,var(--chalk)_7%,transparent)] select-none">
+      <div className="pointer-events-none absolute left-[-4%] top-4 font-[family-name:var(--font-display)] text-[40vw] leading-none text-[color-mix(in_oklab,var(--ink)_8%,transparent)] select-none">
         {number}
       </div>
 
@@ -27,32 +27,32 @@ export default async function AuctionDetailPage({
         <div className="reveal">
           <Link
             href="/auctions"
-            className="nav-line font-[family-name:var(--font-teko)] text-lg tracking-[0.18em] text-[var(--line)] uppercase"
+            className="nav-line font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--ink)] uppercase"
           >
-            ← Back to the squad
+            ← All lots
           </Link>
-          <p className="mt-8 font-[family-name:var(--font-teko)] text-xl tracking-[0.22em] text-[var(--line)] uppercase">
+          <p className="mt-8 font-[family-name:var(--font-display)] text-xl tracking-[0.16em] text-[var(--led)] uppercase">
             {item.club} · {item.season}
           </p>
-          <h1 className="mt-3 text-7xl leading-[0.82] text-[var(--chalk)] md:text-8xl">{item.playerName}</h1>
-          <p className="mt-6 max-w-md text-lg text-[var(--chalk)]/75">
-            {item.kitType} kit in {item.color}. {item.condition}. Worn out by {auction.seller}.
+          <h1 className="mt-3 text-7xl leading-[0.86] text-[var(--ink)] md:text-8xl">{item.playerName}</h1>
+          <p className="mt-6 max-w-md text-lg text-[var(--ink)]/75">
+            {item.kitType} kit in {item.color}. {item.condition}. Listed by {auction.seller}.
           </p>
 
           <div className="mt-10 flex items-center gap-8">
             <JerseyBack number={number} color={item.color} className="h-40 w-32" />
             <dl className="grid grid-cols-2 gap-x-8 gap-y-5 text-sm">
               {[
-                ["Squad number", number],
+                ["Number", number],
                 ["Size", item.size],
                 ["Competition", item.league ?? "—"],
                 ["Listed", formatDate(auction.createdAt)],
               ].map(([label, value]) => (
                 <div key={label}>
-                  <dt className="font-[family-name:var(--font-teko)] text-lg tracking-[0.18em] text-[var(--muted-foreground)] uppercase">
+                  <dt className="font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
                     {label}
                   </dt>
-                  <dd className="mt-1 text-[var(--chalk)]">{value}</dd>
+                  <dd className="mt-1 text-[var(--ink)]">{value}</dd>
                 </div>
               ))}
             </dl>

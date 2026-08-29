@@ -50,7 +50,7 @@ export function Field({
 }: ComponentProps<typeof Input> & { label: string; name: string; error?: string }) {
   return (
     <div className={cn("grid gap-2", className)}>
-      <Label htmlFor={name} className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] uppercase">
+      <Label htmlFor={name} className="font-[family-name:var(--font-display)] text-lg tracking-[0.16em] uppercase">
         {label}
       </Label>
       <Input
@@ -58,7 +58,7 @@ export function Field({
         name={name}
         aria-invalid={Boolean(error)}
         className={cn(
-          "h-11 rounded-none border-[var(--border)] bg-black/50 font-[family-name:var(--font-teko)] text-xl text-[var(--chalk)] caret-[var(--line)] placeholder:text-[var(--chalk)]/40",
+          "h-11 rounded-none border-[var(--border)] bg-black/40 font-[family-name:var(--font-display)] text-xl text-[var(--chalk)] caret-[var(--bib)] placeholder:text-[var(--chalk)]/40",
           error && "border-[var(--cardinal)]",
         )}
         {...props}
@@ -110,7 +110,7 @@ export function NativeSelect({
 }) {
   return (
     <div className="grid gap-2">
-      <Label htmlFor={name} className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] uppercase">
+      <Label htmlFor={name} className="font-[family-name:var(--font-display)] text-lg tracking-[0.16em] uppercase">
         {label}
       </Label>
       <select
@@ -121,7 +121,7 @@ export function NativeSelect({
         onChange={(event) => onChange?.(event.target.value)}
         aria-invalid={Boolean(error)}
         className={cn(
-          "h-11 rounded-none border border-[var(--border)] bg-black/50 px-2.5 font-[family-name:var(--font-teko)] text-xl text-[var(--chalk)]",
+          "h-11 rounded-none border border-[var(--border)] bg-black/40 px-2.5 font-[family-name:var(--font-display)] text-xl text-[var(--chalk)]",
           error && "border-[var(--cardinal)]",
         )}
       >

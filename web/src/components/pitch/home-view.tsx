@@ -2,25 +2,10 @@
 
 import Link from "next/link";
 import { FeaturedHero } from "./featured-hero";
+import { HowItWorks } from "./how-it-works";
 import { PegWall } from "./kit-peg";
-import { PitchBoard } from "./pitch-board";
 import { useAuctionsQuery } from "@/lib/query/hooks";
 import { fromAuction, type Auction } from "@/lib/types";
-
-const ticker = [
-  "GOAL",
-  "Real Madrid",
-  "CORNER",
-  "Barcelona",
-  "OFFSIDE",
-  "Liverpool",
-  "Bayern",
-  "KICK-OFF",
-  "Inter Miami",
-  "United",
-  "Brazil 2002",
-  "Slovan",
-];
 
 export function HomeView({ auctions }: { auctions: Auction[] }) {
   const { data = auctions } = useAuctionsQuery(auctions);
@@ -31,56 +16,44 @@ export function HomeView({ auctions }: { auctions: Auction[] }) {
 
   return (
     <div>
-      <div className="overflow-hidden bg-black py-2">
-        <div className="ticker-track flex w-max gap-10 whitespace-nowrap font-[family-name:var(--font-teko)] text-2xl tracking-[0.22em] text-[var(--line)]">
-          {[...ticker, ...ticker].map((club, index) => (
-            <span key={`${club}-${index}`}>· {club}</span>
-          ))}
-        </div>
-      </div>
-
       {featured ? (
         <FeaturedHero listing={featured} />
       ) : (
-        <PitchBoard
-          overlay={
-            <div className="absolute inset-x-5 bottom-8 z-10 max-w-xl md:inset-auto md:bottom-10 md:left-10">
-              <p className="reveal font-[family-name:var(--font-teko)] text-xl tracking-[0.28em] text-[var(--line)]">
-                Kick-off delayed
-              </p>
-              <h1 className="reveal delay-1 mt-1 text-6xl leading-[0.82] text-[var(--chalk)] md:text-8xl">
-                The tunnel is dark.
-              </h1>
-              <p className="reveal delay-2 mt-4 max-w-sm text-[var(--chalk)]/80">
-                The XI is already marked in chalk. Wake the services and the shirts walk out.
-              </p>
-              <div className="reveal delay-3 mt-6 flex flex-wrap items-center gap-4">
-                <Link href="/sell" className="banner-cta text-2xl">
-                  <span>Sub on</span>
-                </Link>
-                <p className="text-xs text-[var(--chalk)]/55">Auction · Search · Gateway on 5025–5027</p>
-              </div>
-            </div>
-          }
-        />
+        <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8">
+          <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.2em] text-[var(--led)]">
+            No live lots
+          </p>
+          <h1 className="mt-2 max-w-[14ch] text-6xl leading-[0.86] text-[var(--ink)] md:text-8xl">
+            No shirts listed yet.
+          </h1>
+          <p className="mt-4 max-w-md text-lg text-[var(--ink)]/75">
+            List a match-worn shirt to open the first auction, or come back when someone else does.
+          </p>
+          <Link href="/sell" className="banner-cta mt-8 text-2xl">
+            Sell a shirt
+          </Link>
+        </section>
       )}
+
+      <HowItWorks />
 
       {rest.length > 0 ? (
         <section className="mx-auto max-w-[1400px] px-5 py-14 md:px-8">
           <div className="mb-8 flex items-end justify-between gap-4">
             <div>
-              <p className="font-[family-name:var(--font-teko)] text-lg tracking-[0.22em] text-[var(--line)]">
-                Starting XI
+              <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.2em] text-[var(--led)]">
+                More shirts
               </p>
-              <h2 className="text-5xl text-[var(--chalk)] md:text-6xl">Still on the pitch</h2>
+              <h2 className="text-5xl text-[var(--ink)] md:text-6xl">Also live</h2>
             </div>
             <Link
               href="/auctions"
-              className="nav-line font-[family-name:var(--font-teko)] text-xl tracking-[0.16em] text-[var(--line)] uppercase"
+              className="nav-line font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--ink)] uppercase"
             >
-              Full squad →
+              All lots →
             </Link>
           </div>
+          <div className="peg-rail mb-0" />
           <PegWall listings={rest} />
         </section>
       ) : null}

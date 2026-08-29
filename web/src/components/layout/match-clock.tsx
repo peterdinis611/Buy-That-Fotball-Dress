@@ -12,7 +12,7 @@ export function MatchClock() {
   }, []);
 
   return (
-    <span className="scoreboard font-[family-name:var(--font-teko)] text-xl leading-none text-[var(--line)]">
+    <span className="scoreboard font-[family-name:var(--font-display)] text-xl leading-none text-[var(--bib)]">
       {pad(now.getHours())}:{pad(now.getMinutes())}
     </span>
   );

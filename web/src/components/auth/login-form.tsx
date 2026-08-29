@@ -31,7 +31,7 @@ export function LoginForm() {
         router.push(searchParams.get("next") || "/");
         router.refresh();
       } catch (err) {
-        setBanner(err instanceof Error ? err.message : "Offside — that kick-off failed.");
+        setBanner(err instanceof Error ? err.message : "Sign in failed. Check the name and password.");
       }
     },
   });
@@ -49,7 +49,7 @@ export function LoginForm() {
       <div className="grid gap-5">
         <form.Field name="username">
           {(field) => (
-            <TextField field={bindStringField(field)} label="Name on the sheet" placeholder="kitvault" autoComplete="username" />
+            <TextField field={bindStringField(field)} label="Username" placeholder="kitvault" autoComplete="username" />
           )}
         </form.Field>
         <form.Field name="password">
@@ -64,16 +64,16 @@ export function LoginForm() {
           <Button
             type="submit"
             disabled={!canSubmit || isSubmitting || login.isPending}
-            className="mt-8 h-11 w-full rounded-none border border-[var(--line)] bg-[var(--line)] font-[family-name:var(--font-teko)] text-2xl tracking-[0.14em] text-[var(--pitch)] uppercase"
+            className="mt-8 h-11 w-full rounded-none border-0 bg-[var(--bib)] font-[family-name:var(--font-display)] text-2xl tracking-[0.08em] text-[var(--stud)] uppercase"
           >
-            {isSubmitting || login.isPending ? "Walking out…" : "Kick off"}
+            {isSubmitting || login.isPending ? "Signing in…" : "Sign in"}
           </Button>
         )}
       </form.Subscribe>
       <p className="mt-5 text-sm text-[var(--chalk)]/70">
-        No squad number yet?{" "}
-        <Link href="/register" className="text-[var(--line)]">
-          Sub on
+        Need an account?{" "}
+        <Link href="/register" className="text-[var(--bib)]">
+          Create one
         </Link>
       </p>
     </form>

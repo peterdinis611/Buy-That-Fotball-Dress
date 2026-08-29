@@ -48,7 +48,7 @@ export function SellForm() {
         router.push(`/auctions/${auction.id}`);
         router.refresh();
       } catch (err) {
-        setBanner(err instanceof Error ? err.message : "The kit man refused the card.");
+        setBanner(err instanceof Error ? err.message : "Could not list this shirt.");
       }
     },
   });
@@ -64,8 +64,8 @@ export function SellForm() {
       }}
     >
       <div className="grid gap-5 md:grid-cols-2">
-        <p className="md:col-span-2 font-[family-name:var(--font-teko)] text-xl tracking-[0.16em] text-[var(--line)]">
-          Shirt hangs under {user?.displayName || user?.username}
+        <p className="md:col-span-2 font-[family-name:var(--font-display)] text-xl tracking-[0.12em] text-[var(--bib)]">
+          Listed as {user?.displayName || user?.username}
         </p>
         <form.Field name="club">
           {(field) => <TextField field={bindStringField(field)} label="Club" placeholder="Arsenal" />}
@@ -92,13 +92,13 @@ export function SellForm() {
           {(field) => <SelectField field={bindStringField(field)} label="Condition" options={[...conditions]} />}
         </form.Field>
         <form.Field name="reservePrice">
-          {(field) => <TextField field={bindStringField(field)} label="Reserve €" placeholder="140" />}
+          {(field) => <TextField field={bindStringField(field)} label="Starting price €" placeholder="140" />}
         </form.Field>
         <form.Field name="league">
           {(field) => <TextField field={bindStringField(field)} label="League" placeholder="Premier League" />}
         </form.Field>
         <form.Field name="auctionEnd">
-          {(field) => <TextField field={bindStringField(field)} label="Final whistle" type="datetime-local" />}
+          {(field) => <TextField field={bindStringField(field)} label="Auction ends" type="datetime-local" />}
         </form.Field>
         <form.Field name="imageUrl">
           {(field) => (
@@ -114,9 +114,9 @@ export function SellForm() {
           <Button
             type="submit"
             disabled={!canSubmit || isSubmitting || create.isPending}
-            className="mt-8 h-11 w-full rounded-none border border-[var(--line)] bg-[var(--line)] font-[family-name:var(--font-teko)] text-2xl tracking-[0.14em] text-[var(--pitch)] uppercase"
+            className="mt-8 h-11 w-full rounded-none border-0 bg-[var(--bib)] font-[family-name:var(--font-display)] text-2xl tracking-[0.08em] text-[var(--stud)] uppercase"
           >
-            {isSubmitting || create.isPending ? "Coming on…" : "Sub on"}
+            {isSubmitting || create.isPending ? "Listing…" : "List this shirt"}
           </Button>
         )}
       </form.Subscribe>

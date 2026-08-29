@@ -29,7 +29,7 @@ export function SearchFilters({ query }: { query: SearchQuery }) {
 
   return (
     <form
-      className="reveal delay-2 mb-10 grid gap-4 bg-black/50 p-5 md:grid-cols-5"
+      className="reveal delay-2 mb-10 grid gap-4 bg-[var(--tape)] p-5 md:grid-cols-5"
       onSubmit={(event) => event.preventDefault()}
     >
       <Filter label="Club" value={query.club ?? ""} onChange={(value) => update("club", value)} />
@@ -43,9 +43,9 @@ export function SearchFilters({ query }: { query: SearchQuery }) {
         value={query.status ?? ""}
         options={[
           { value: "", label: "Any" },
-          { value: "Live", label: "On pitch" },
-          { value: "Finished", label: "Full time" },
-          { value: "ReserveNotMet", label: "Red card" },
+          { value: "Live", label: "Live" },
+          { value: "Finished", label: "Ended" },
+          { value: "ReserveNotMet", label: "Unsold" },
         ]}
         onChange={(value) => update("status", value)}
       />
@@ -82,7 +82,7 @@ function Filter({
 }) {
   return (
     <div className="grid gap-2">
-      <Label className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] uppercase">
+      <Label className="font-[family-name:var(--font-display)] text-lg tracking-[0.12em] uppercase">
         {label}
       </Label>
       <Input
@@ -91,7 +91,7 @@ function Filter({
         onKeyDown={(event) => {
           if (event.key === "Enter") onChange(event.currentTarget.value);
         }}
-        className="h-10 rounded-none text-[var(--chalk)] placeholder:text-[var(--chalk)]/40"
+        className="h-10 rounded-none text-[var(--ink)] placeholder:text-[var(--ink)]/40"
       />
     </div>
   );
@@ -110,16 +110,16 @@ function NativeFilter({
 }) {
   return (
     <div className="grid gap-2">
-      <Label className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] uppercase">
+      <Label className="font-[family-name:var(--font-display)] text-lg tracking-[0.12em] uppercase">
         {label}
       </Label>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 rounded-none border border-[var(--border)] bg-black/50 px-2 font-[family-name:var(--font-teko)] text-sm text-[var(--chalk)]"
+        className="h-10 rounded-none border border-[var(--border)] bg-[var(--tape)] px-2 font-[family-name:var(--font-display)] text-sm text-[var(--ink)]"
       >
         {options.map((option) => (
-          <option key={option.value || "any"} value={option.value} className="bg-[var(--pitch)]">
+          <option key={option.value || "any"} value={option.value} className="bg-[var(--tape)]">
             {option.label}
           </option>
         ))}

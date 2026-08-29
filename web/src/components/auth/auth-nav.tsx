@@ -7,7 +7,7 @@ export function AuthNav() {
   const { user, ready, logout } = useAuth();
 
   if (!ready) {
-    return <span className="hidden h-10 w-28 bg-black/40 md:inline-block" />;
+    return <span className="hidden h-10 w-28 bg-[var(--ground)] md:inline-block" />;
   }
 
   if (!user) {
@@ -15,12 +15,12 @@ export function AuthNav() {
       <div className="flex items-center gap-3">
         <Link
           href="/login"
-          className="hidden font-[family-name:var(--font-teko)] text-xl tracking-[0.16em] text-[var(--chalk)] uppercase md:inline nav-line"
+          className="hidden font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--ink)] uppercase md:inline nav-line"
         >
-          Kick off
+          Sign in
         </Link>
         <Link href="/sell" className="banner-cta text-2xl">
-          <span>Sub on</span>
+          Sell a shirt
         </Link>
       </div>
     );
@@ -32,20 +32,20 @@ export function AuthNav() {
     <div className="flex items-center gap-3">
       <Link
         href="/profile"
-        className="hidden max-w-[16ch] truncate font-[family-name:var(--font-teko)] text-xl tracking-[0.12em] text-[var(--line)] nav-line md:inline"
-        title="Open your dressing room"
+        className="hidden max-w-[16ch] truncate font-[family-name:var(--font-display)] text-xl tracking-[0.06em] text-[var(--ink)] nav-line md:inline"
+        title="Open your profile"
       >
         {name}
       </Link>
       <button
         type="button"
         onClick={logout}
-        className="hidden font-[family-name:var(--font-teko)] text-xl tracking-[0.16em] text-[var(--chalk)]/70 uppercase hover:text-[var(--cardinal)] md:inline"
+        className="hidden font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--ink)]/60 uppercase hover:text-[var(--led)] md:inline"
       >
-        Full time
+        Sign out
       </button>
       <Link href="/sell" className="banner-cta text-2xl">
-        <span>Sub on</span>
+        Sell a shirt
       </Link>
     </div>
   );
@@ -61,15 +61,15 @@ export function MobileAuthLinks() {
       <>
         <Link
           href="/login"
-          className="shrink-0 font-[family-name:var(--font-teko)] text-lg tracking-[0.14em] text-[var(--chalk)] uppercase"
+          className="shrink-0 font-[family-name:var(--font-display)] text-lg tracking-[0.08em] text-[var(--ink)] uppercase"
         >
-          Kick off
+          Sign in
         </Link>
         <Link
           href="/sell"
-          className="shrink-0 font-[family-name:var(--font-teko)] text-lg tracking-[0.14em] text-[var(--chalk)] uppercase"
+          className="shrink-0 font-[family-name:var(--font-display)] text-lg tracking-[0.08em] text-[var(--ink)] uppercase"
         >
-          Sub on
+          Sell
         </Link>
       </>
     );
@@ -79,15 +79,15 @@ export function MobileAuthLinks() {
     <>
       <Link
         href="/profile"
-        className="shrink-0 font-[family-name:var(--font-teko)] text-lg tracking-[0.14em] text-[var(--line)] uppercase"
+        className="shrink-0 font-[family-name:var(--font-display)] text-lg tracking-[0.08em] text-[var(--led)] uppercase"
       >
-        Sheet
+        Profile
       </Link>
       <Link
         href="/sell"
-        className="shrink-0 font-[family-name:var(--font-teko)] text-lg tracking-[0.14em] text-[var(--chalk)] uppercase"
+        className="shrink-0 font-[family-name:var(--font-display)] text-lg tracking-[0.08em] text-[var(--ink)] uppercase"
       >
-        Sub on
+        Sell
       </Link>
     </>
   );

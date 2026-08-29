@@ -4,8 +4,8 @@ export const loginSchema = v.object({
   username: v.pipe(
     v.string(),
     v.trim(),
-    v.nonEmpty("Name on the sheet is required."),
-    v.maxLength(256, "That squad name is too long."),
+    v.nonEmpty("Username is required."),
+    v.maxLength(256, "Username is too long."),
   ),
   password: v.pipe(v.string(), v.nonEmpty("Password is required.")),
 });
@@ -14,9 +14,9 @@ export const registerSchema = v.object({
   username: v.pipe(
     v.string(),
     v.trim(),
-    v.nonEmpty("Name on the sheet is required."),
-    v.minLength(3, "Squad names are at least 3 characters."),
-    v.maxLength(32, "Squad names are 32 characters max."),
+    v.nonEmpty("Username is required."),
+    v.minLength(3, "Username needs at least 3 characters."),
+    v.maxLength(32, "Username is 32 characters max."),
     v.regex(
       /^[a-zA-Z0-9._-]+$/,
       "Only letters, numbers, dots, underscores and hyphens.",
@@ -25,13 +25,13 @@ export const registerSchema = v.object({
   displayName: v.pipe(
     v.string(),
     v.trim(),
-    v.maxLength(64, "Shirt name is too long."),
+    v.maxLength(64, "Display name is too long."),
   ),
   email: v.pipe(
     v.string(),
     v.trim(),
     v.nonEmpty("Email is required."),
-    v.email("That email is offside."),
+    v.email("Enter a valid email."),
     v.maxLength(256, "That email is too long."),
   ),
   password: v.pipe(

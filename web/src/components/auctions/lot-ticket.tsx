@@ -28,10 +28,12 @@ export function LotTicket({ auction: initial }: { auction: Auction }) {
   const { item } = lot;
 
   return (
-    <aside className="ticket reveal delay-2 p-6 md:p-8">
+    <aside className="sub-board reveal delay-2 overflow-hidden">
+      <div className="sub-board-bib px-5 py-2 text-center text-lg">Bid board</div>
+      <div className="p-6 md:p-8">
       <div className="mb-6 flex items-center justify-between">
         <StatusPill status={lot.status} />
-        <Countdown endsAt={lot.auctionEnd} className="text-2xl" />
+        <Countdown endsAt={lot.auctionEnd} className="led-num text-2xl" />
       </div>
 
       {item.imageUrl ? (
@@ -39,19 +41,20 @@ export function LotTicket({ auction: initial }: { auction: Auction }) {
         <img src={item.imageUrl} alt="" className="mb-6 aspect-[3/4] w-full object-cover" />
       ) : null}
 
-      <div className="space-y-4 border-t border-dashed border-[var(--chalk)]/25 pt-6">
-        <TicketLine label="Reserve" value={formatMoney(lot.reservePrice)} />
+      <div className="space-y-4 border-t border-dashed border-white/15 pt-6">
+        <TicketLine label="Starting price" value={formatMoney(lot.reservePrice)} />
         <TicketLine
-          label="Scoreline"
-          value={lot.currentHighBid ? formatMoney(lot.currentHighBid) : "No shot yet"}
+          label="Current bid"
+          value={lot.currentHighBid ? formatMoney(lot.currentHighBid) : "No bids yet"}
         />
-        {lot.highBidder ? <TicketLine label="On the ball" value={lot.highBidder} /> : null}
-        {lot.winner ? <TicketLine label="Man of the match" value={lot.winner} /> : null}
-        {lot.soldAmount ? <TicketLine label="Final" value={formatMoney(lot.soldAmount)} /> : null}
-        <TicketLine label="Final whistle" value={formatDate(lot.auctionEnd)} />
+        {lot.highBidder ? <TicketLine label="Highest bidder" value={lot.highBidder} /> : null}
+        {lot.winner ? <TicketLine label="Winner" value={lot.winner} /> : null}
+        {lot.soldAmount ? <TicketLine label="Sold for" value={formatMoney(lot.soldAmount)} /> : null}
+        <TicketLine label="Auction ends" value={formatDate(lot.auctionEnd)} />
       </div>
 
       <BidPanel auction={lot} />
+      </div>
     </aside>
   );
 }
@@ -63,13 +66,13 @@ function BidPanel({ auction }: { auction: Auction }) {
   const leading = sameName(user?.username, auction.highBidder);
 
   if (!ready) {
-    return <p className="mt-8 text-sm text-[var(--chalk)]/55">Checking the team sheet…</p>;
+    return <p className="mt-8 text-sm text-[var(--chalk)]/70">Checking your account…</p>;
   }
 
   if (!live) {
     return (
-      <p className="mt-8 font-[family-name:var(--font-teko)] text-lg tracking-[0.12em] text-[var(--muted-foreground)]">
-        The whistle has gone on this lot.
+      <p className="mt-8 text-[var(--muted-foreground)]">
+        This auction has ended. You cannot place a new bid.
       </p>
     );
   }
@@ -77,11 +80,9 @@ function BidPanel({ auction }: { auction: Auction }) {
   if (!user) {
     return (
       <div className="mt-8">
-        <p className="font-[family-name:var(--font-teko)] text-lg tracking-[0.12em] text-[var(--muted-foreground)]">
-          Kick off to put a number on this shirt.
-        </p>
+        <p className="text-[var(--muted-foreground)]">Sign in to place a bid on this shirt.</p>
         <Link href={`/login?next=/auctions/${auction.id}`} className="banner-cta mt-4 text-2xl">
-          <span>Kick off</span>
+          Sign in to bid
         </Link>
       </div>
     );
@@ -89,8 +90,8 @@ function BidPanel({ auction }: { auction: Auction }) {
 
   if (ownShirt) {
     return (
-      <p className="mt-8 font-[family-name:var(--font-teko)] text-lg tracking-[0.12em] text-[var(--line)]">
-        This is your shirt on the peg. You cannot shoot at it.
+      <p className="mt-8 text-[var(--bib)]">
+        This is your listing. You cannot bid on your own shirt.
       </p>
     );
   }
@@ -98,8 +99,8 @@ function BidPanel({ auction }: { auction: Auction }) {
   return (
     <div className="mt-8">
       {leading ? (
-        <p className="mb-4 font-[family-name:var(--font-teko)] text-lg tracking-[0.14em] text-[var(--line)]">
-          You are on the ball.
+        <p className="mb-4 font-[family-name:var(--font-display)] text-lg tracking-[0.08em] text-[var(--bib)]">
+          You are the highest bidder.
         </p>
       ) : null}
       <BidForm key={`${auction.id}-${auction.currentHighBid ?? 0}`} auction={auction} />
@@ -123,7 +124,7 @@ function BidForm({ auction }: { auction: Auction }) {
       try {
         await bid.mutateAsync(Number(value.amount));
       } catch (err) {
-        setBanner(err instanceof Error ? err.message : "That shot did not count.");
+        setBanner(err instanceof Error ? err.message : "That bid did not go through.");
       }
     },
   });
@@ -141,22 +142,24 @@ function BidForm({ auction }: { auction: Auction }) {
         {(field) => (
           <TextField
             field={bindStringField(field)}
-            label="Your shot"
+            label="Your bid"
             inputMode="numeric"
             placeholder={String(floor)}
           />
         )}
       </form.Field>
-      <p className="mt-2 text-sm text-[var(--chalk)]/55">Next shot from {formatMoney(floor)}.</p>
+      <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+        Bid at least {formatMoney(floor)}. If nobody bids higher before time runs out, you win.
+      </p>
       <FormBanner message={banner} />
       <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting] as const}>
         {([canSubmit, isSubmitting]) => (
           <Button
             type="submit"
             disabled={!canSubmit || isSubmitting || bid.isPending}
-            className="mt-5 h-11 w-full rounded-none border border-[var(--line)] bg-[var(--line)] font-[family-name:var(--font-teko)] text-2xl tracking-[0.14em] text-[var(--pitch)] uppercase"
+            className="mt-5 h-11 w-full rounded-none border-0 bg-[var(--bib)] font-[family-name:var(--font-display)] text-2xl tracking-[0.08em] text-[var(--stud)] uppercase"
           >
-            {isSubmitting || bid.isPending ? "The shot is in…" : "Take the shot"}
+            {isSubmitting || bid.isPending ? "Placing bid…" : "Place bid"}
           </Button>
         )}
       </form.Subscribe>
@@ -167,10 +170,10 @@ function BidForm({ auction }: { auction: Auction }) {
 function TicketLine({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline justify-between gap-4">
-      <span className="font-[family-name:var(--font-teko)] text-lg tracking-[0.16em] text-[var(--muted-foreground)] uppercase">
+      <span className="font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
         {label}
       </span>
-      <span className="text-right font-[family-name:var(--font-teko)] text-2xl text-[var(--line)]">{value}</span>
+      <span className="led-num text-right text-2xl">{value}</span>
     </div>
   );
 }

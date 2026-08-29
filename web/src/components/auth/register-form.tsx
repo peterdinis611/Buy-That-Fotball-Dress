@@ -35,7 +35,7 @@ export function RegisterForm() {
         router.push("/sell");
         router.refresh();
       } catch (err) {
-        setBanner(err instanceof Error ? err.message : "The fourth official refused the card.");
+        setBanner(err instanceof Error ? err.message : "Could not create the account.");
       }
     },
   });
@@ -53,11 +53,11 @@ export function RegisterForm() {
       <div className="grid gap-5">
         <form.Field name="username">
           {(field) => (
-            <TextField field={bindStringField(field)} label="Name on the sheet" placeholder="kitvault" autoComplete="username" />
+            <TextField field={bindStringField(field)} label="Username" placeholder="kitvault" autoComplete="username" />
           )}
         </form.Field>
         <form.Field name="displayName">
-          {(field) => <TextField field={bindStringField(field)} label="Shirt name" placeholder="Kit Vault" />}
+          {(field) => <TextField field={bindStringField(field)} label="Display name" placeholder="Kit Vault" />}
         </form.Field>
         <form.Field name="email">
           {(field) => (
@@ -82,16 +82,16 @@ export function RegisterForm() {
           <Button
             type="submit"
             disabled={!canSubmit || isSubmitting || register.isPending}
-            className="mt-8 h-11 w-full rounded-none border border-[var(--line)] bg-[var(--line)] font-[family-name:var(--font-teko)] text-2xl tracking-[0.14em] text-[var(--pitch)] uppercase"
+            className="mt-8 h-11 w-full rounded-none border-0 bg-[var(--bib)] font-[family-name:var(--font-display)] text-2xl tracking-[0.08em] text-[var(--stud)] uppercase"
           >
-            {isSubmitting || register.isPending ? "Coming on…" : "Get a squad number"}
+            {isSubmitting || register.isPending ? "Creating account…" : "Create account"}
           </Button>
         )}
       </form.Subscribe>
       <p className="mt-5 text-sm text-[var(--chalk)]/70">
-        Already in the tunnel?{" "}
-        <Link href="/login" className="text-[var(--line)]">
-          Kick off
+        Already have an account?{" "}
+        <Link href="/login" className="text-[var(--bib)]">
+          Sign in
         </Link>
       </p>
     </form>

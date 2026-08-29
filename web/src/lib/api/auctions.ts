@@ -38,7 +38,7 @@ export async function createAuction(payload: CreateAuctionPayload) {
     body: JSON.stringify(payload),
   });
 
-  if (response.status === 401) throw new Error("Kick off first.");
+  if (response.status === 401) throw new Error("Sign in first.");
   if (!response.ok) {
     throw new Error(await readError(response));
   }
@@ -52,7 +52,7 @@ export async function getPlayerSheet() {
     headers: authHeaders(),
   });
 
-  if (response.status === 401) throw new Error("Kick off first.");
+  if (response.status === 401) throw new Error("Sign in first.");
   if (!response.ok) {
     throw new Error(await readError(response));
   }
@@ -67,7 +67,7 @@ export async function placeBid(id: string, amount: number) {
     body: JSON.stringify({ amount }),
   });
 
-  if (response.status === 401) throw new Error("Kick off first.");
+  if (response.status === 401) throw new Error("Sign in first.");
   if (!response.ok) {
     throw new Error(await readError(response));
   }

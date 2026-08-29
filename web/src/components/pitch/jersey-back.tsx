@@ -10,7 +10,7 @@ function kitColors(color: string) {
   if (value.includes("white")) return { fill: "#f4f1ea", number: "#0b1d12", stripe: "#c8102e" };
   if (value.includes("red")) return { fill: "#c8102e", number: "#ffffff", stripe: "#ffffff" };
   if (value.includes("blue")) return { fill: "#0033a0", number: "#ffffff", stripe: "#ffffff" };
-  if (value.includes("black")) return { fill: "#161616", number: "#ffffff", stripe: "#e8ff6a" };
+  if (value.includes("black")) return { fill: "#161616", number: "#ffffff", stripe: "#f5c400" };
   if (value.includes("green")) return { fill: "#0b7a3b", number: "#ffffff", stripe: "#ffffff" };
 
   return { fill: "#f4f1ea", number: "#0b1d12", stripe: "#c8102e" };
