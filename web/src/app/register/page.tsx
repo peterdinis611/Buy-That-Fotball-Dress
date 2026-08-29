@@ -1,4 +1,13 @@
+import type { Metadata } from "next";
 import { RegisterForm } from "@/components/auth";
+import { noIndex } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Create an account",
+  description: "Create an account to bid on live lots or list a match-worn shirt.",
+  alternates: { canonical: "/register" },
+  ...noIndex,
+};
 
 export default function RegisterPage() {
   return (

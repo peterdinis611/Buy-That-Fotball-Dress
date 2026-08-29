@@ -10,7 +10,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/Caching.csproj",
         "projectName": "Caching",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/Caching.csproj",
-        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget",
+        "packagesPath": "/Users/peterdinis/.nuget/packages/",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -365,7 +365,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/Contracts.csproj",
         "projectName": "Contracts",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/Contracts.csproj",
-        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget",
+        "packagesPath": "/Users/peterdinis/.nuget/packages/",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -698,7 +698,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/IdentityService.csproj",
         "projectName": "IdentityService",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/IdentityService.csproj",
-        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget",
+        "packagesPath": "/Users/peterdinis/.nuget/packages/",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [

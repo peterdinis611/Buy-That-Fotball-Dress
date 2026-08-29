@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { LoginForm } from "@/components/auth";
+import { noIndex } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Sign in",
+  description: "Sign in to bid on live lots or list a match-worn shirt.",
+  alternates: { canonical: "/login" },
+  ...noIndex,
+};
 
 export default function LoginPage() {
   return (

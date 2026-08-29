@@ -1,15 +1,52 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LotTicket } from "@/components/auctions";
 import { JerseyBack } from "@/components/pitch";
+import { JsonLd } from "@/components/seo";
 import { getAuction } from "@/lib/api";
 import { formatDate } from "@/lib/format";
+import { auctionDescription, auctionJsonLd, auctionTitle } from "@/lib/seo";
 
-export default async function AuctionDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+type AuctionParams = { params: Promise<{ id: string }> };
+
+export async function generateMetadata({ params }: AuctionParams): Promise<Metadata> {
+  const { id } = await params;
+  const auction = await getAuction(id);
+
+  if (!auction) {
+    return {
+      title: "Shirt not found",
+      robots: { index: false, follow: true },
+    };
+  }
+
+  const title = auctionTitle(auction);
+  const description = auctionDescription(auction);
+  const path = `/auctions/${auction.id}`;
+  const image = auction.item.imageUrl;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      title,
+      description,
+      url: path,
+      type: "website",
+      images: image ? [{ url: image, alt: title }] : undefined,
+    },
+    twitter: {
+      card: image ? "summary_large_image" : "summary",
+      title,
+      description,
+      images: image ? [image] : undefined,
+    },
+  };
+}
+
+export default async function AuctionDetailPage({ params }: AuctionParams) {
   const { id } = await params;
   const auction = await getAuction(id);
   if (!auction) notFound();
@@ -19,6 +56,7 @@ export default async function AuctionDetailPage({
 
   return (
     <div className="relative overflow-hidden">
+      <JsonLd data={auctionJsonLd(auction)} />
       <div className="pointer-events-none absolute left-[-4%] top-4 font-[family-name:var(--font-display)] text-[40vw] leading-none text-[color-mix(in_oklab,var(--ink)_8%,transparent)] select-none">
         {number}
       </div>

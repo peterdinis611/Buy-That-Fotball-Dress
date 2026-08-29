@@ -1,4 +1,13 @@
+import type { Metadata } from "next";
 import { SellGate } from "@/components/sell";
+import { noIndex } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Sell a shirt",
+  description: "List a match-worn shirt. Set a starting price and an end time, then buyers bid up from there.",
+  alternates: { canonical: "/sell" },
+  ...noIndex,
+};
 
 export default function SellPage() {
   return (

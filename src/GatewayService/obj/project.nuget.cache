@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "OkP0H7t+lk8=",
+  "dgSpecHash": "iqhnkgx7reU=",
   "success": true,
   "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/GatewayService.csproj",
   "expectedPackageFiles": [
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget/system.io.hashing/8.0.0/system.io.hashing.8.0.0.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/c7a5aa789c1c1f8a99aa584733bb7b4b/nuget/yarp.reverseproxy/2.3.0/yarp.reverseproxy.2.3.0.nupkg.sha512"
+    "/Users/peterdinis/.nuget/packages/system.io.hashing/8.0.0/system.io.hashing.8.0.0.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/yarp.reverseproxy/2.3.0/yarp.reverseproxy.2.3.0.nupkg.sha512"
   ],
   "logs": []
 }
