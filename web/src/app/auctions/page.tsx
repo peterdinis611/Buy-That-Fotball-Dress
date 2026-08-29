@@ -10,13 +10,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/auctions" },
   openGraph: {
     title: "Live lots",
-    description: "Browse live and ended auctions for match-worn football jerseys.",
+    description: "Browse live auctions for match-worn football jerseys.",
     url: "/auctions",
   },
 };
 
 export default async function AuctionsPage() {
-  const auctions = await getAuctions();
+  const auctions = await getAuctions({ status: "Live" });
 
   return (
     <>

@@ -3,21 +3,21 @@
 import Link from "next/link";
 import { PegWall } from "@/features/pitch";
 import { useAuctionsQuery } from "@/hooks";
-import { fromAuction, type Auction } from "@/lib/types";
+import { fromAuction, isOpenLot, type Auction } from "@/lib/types";
 
 export function SquadView({ auctions }: { auctions: Auction[] }) {
   const { data = auctions } = useAuctionsQuery(auctions);
-  const listings = data.map(fromAuction);
+  const listings = data.map(fromAuction).filter(isOpenLot);
 
   return (
     <div>
       <div className="mx-auto max-w-[1400px] px-5 pt-12 md:px-8 md:pt-16">
         <p className="reveal font-[family-name:var(--font-display)] text-xl tracking-[0.2em] text-[var(--led)]">
-          All lots
+          Live lots
         </p>
-        <h1 className="reveal delay-1 mt-1 text-7xl text-[var(--ink)] md:text-8xl">All shirts.</h1>
+        <h1 className="reveal delay-1 mt-1 text-7xl text-[var(--ink)] md:text-8xl">Live shirts.</h1>
         <p className="reveal delay-2 mt-3 mb-10 max-w-xl text-[var(--ink)]/75">
-          Open a live lot to bid. Highest bid when the clock hits zero wins. Ended lots stay up so you can see who won.
+          Open a lot to bid. Highest bid when the clock hits zero wins. Ended shirts leave the rail.
         </p>
       </div>
 

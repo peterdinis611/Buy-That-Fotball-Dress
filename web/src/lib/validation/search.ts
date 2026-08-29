@@ -30,7 +30,7 @@ export function parseSearchQuery(
   const raw = {
     club: first(params.club),
     playerName: first(params.playerName),
-    status: pick(first(params.status), statuses),
+    status: "Live",
     size: pick(first(params.size), sizes),
     kitType: pick(first(params.kitType), kits),
     page: 1,
@@ -39,5 +39,5 @@ export function parseSearchQuery(
 
   const result = v.safeParse(searchQuerySchema, raw);
   if (result.success) return result.output;
-  return { page: 1, pageSize: 20 };
+  return { page: 1, pageSize: 20, status: "Live" };
 }

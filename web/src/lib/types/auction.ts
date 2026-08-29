@@ -154,3 +154,7 @@ export function fromAuction(auction: Auction): KitListing {
 export function fromSearchItem(item: SearchItem): KitListing {
   return { ...item };
 }
+
+export function isOpenLot(listing: { status: AuctionStatus; auctionEnd: string }) {
+  return listing.status === "Live" && new Date(listing.auctionEnd).getTime() > Date.now();
+}

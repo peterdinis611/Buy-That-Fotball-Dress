@@ -51,10 +51,17 @@ function patchSheet(sheet: PlayerSheet, id: string, patch: Partial<Auction>): Pl
   };
 }
 
+function isClosedLot(status?: AuctionStatus) {
+  return status === "Finished" || status === "ReserveNotMet";
+}
+
 function applyAuctionPatch(queryClient: QueryClient, id: string, patch: Partial<Auction>) {
   queryClient.setQueriesData({ queryKey: queryKeys.auctions.all }, (current) => {
     if (!current) return current;
     if (Array.isArray(current)) {
+      if (isClosedLot(patch.status)) {
+        return current.filter((auction: Auction) => auction.id !== id);
+      }
       return current.map((auction: Auction) => (auction.id === id ? patchAuction(auction, patch) : auction));
     }
     if (isSheet(current)) return patchSheet(current, id, patch);
@@ -64,6 +71,14 @@ function applyAuctionPatch(queryClient: QueryClient, id: string, patch: Partial<
 
   queryClient.setQueriesData({ queryKey: queryKeys.search.all }, (current) => {
     if (!isSearchPage(current)) return current;
+    if (isClosedLot(patch.status)) {
+      const had = current.results.some((item) => item.id === id);
+      return {
+        ...current,
+        results: current.results.filter((item) => item.id !== id),
+        totalCount: had ? Math.max(0, current.totalCount - 1) : current.totalCount,
+      };
+    }
     return {
       ...current,
       results: current.results.map((item) =>

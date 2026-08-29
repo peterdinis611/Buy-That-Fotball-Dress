@@ -7,8 +7,8 @@ import type { Auction, Bid } from "@/lib/types";
 
 export function useAuctionsQuery(initialData?: Auction[]) {
   return useQuery({
-    queryKey: queryKeys.auctions.list(),
-    queryFn: () => getAuctions(),
+    queryKey: queryKeys.auctions.list({ status: "Live" }),
+    queryFn: () => getAuctions({ status: "Live" }),
     initialData,
   });
 }

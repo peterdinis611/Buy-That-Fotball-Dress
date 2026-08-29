@@ -636,6 +636,52 @@ a:hover .brand-mark {
   transform: rotate(-6deg) scale(1.06);
 }
 
+.board-bay {
+  display: grid;
+  gap: 0.35rem;
+  background: #141414;
+  padding: 0.9rem 1rem 1rem;
+}
+
+.board-bay:focus-within,
+.board-bay-lit {
+  box-shadow: inset 3px 0 0 var(--bib);
+}
+
+.board-bay-label {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8a8a82;
+}
+
+.board-bay-control {
+  width: 100%;
+  height: 2.75rem;
+  border: 0;
+  background: transparent;
+  color: var(--chalk, #f3f1ec);
+  caret-color: var(--bib);
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  outline: none;
+}
+
+.board-bay-control::placeholder {
+  color: rgb(243 241 236 / 0.28);
+}
+
+.board-bay-select {
+  width: 100%;
+}
+
+.board-select-menu [data-slot="select-item"][data-selected] {
+  background: var(--bib);
+  color: var(--stud);
+}
+
 .locker-faq summary {
   list-style: none;
 }

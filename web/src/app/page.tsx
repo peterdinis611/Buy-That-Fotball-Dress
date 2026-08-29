@@ -4,7 +4,7 @@ import { getAuctions } from "@/lib/api";
 import { itemListJsonLd } from "@/lib/seo";
 
 export default async function HomePage() {
-  const auctions = await getAuctions();
+  const auctions = await getAuctions({ status: "Live" });
 
   return (
     <>

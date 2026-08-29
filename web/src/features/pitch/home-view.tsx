@@ -9,14 +9,13 @@ import { PegWall } from "./kit-peg";
 import { PitchFaq } from "./pitch-faq";
 import { TunnelCta } from "./tunnel-cta";
 import { useAuctionsQuery } from "@/hooks";
-import { fromAuction, type Auction } from "@/lib/types";
+import { fromAuction, isOpenLot, type Auction } from "@/lib/types";
 
 export function HomeView({ auctions }: { auctions: Auction[] }) {
   const { data = auctions } = useAuctionsQuery(auctions);
-  const listings = data.map(fromAuction);
-  const live = listings.filter((item) => item.status === "Live");
-  const featured = live[0] ?? listings[0];
-  const rest = listings.filter((item) => item.id !== featured?.id).slice(0, 10);
+  const listings = data.map(fromAuction).filter(isOpenLot);
+  const featured = listings[0];
+  const rest = listings.slice(1, 11);
 
   return (
     <div>
@@ -39,7 +38,7 @@ export function HomeView({ auctions }: { auctions: Auction[] }) {
         </section>
       )}
 
-      <ConcoursePulse live={live.length} listed={listings.length} />
+      <ConcoursePulse live={listings.length} listed={listings.length} />
       <HowItWorks />
 
       {rest.length > 0 ? (

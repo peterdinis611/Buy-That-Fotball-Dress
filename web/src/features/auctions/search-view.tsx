@@ -3,7 +3,7 @@
 import { SearchFilters } from "./search-filters";
 import { PegWall } from "@/features/pitch";
 import { useSearchQuery } from "@/hooks";
-import { fromSearchItem, type PagedResult, type SearchItem, type SearchQuery } from "@/lib/types";
+import { fromSearchItem, isOpenLot, type PagedResult, type SearchItem, type SearchQuery } from "@/lib/types";
 
 export function SearchView({
   query,
@@ -13,7 +13,7 @@ export function SearchView({
   initial: PagedResult<SearchItem>;
 }) {
   const { data = initial } = useSearchQuery(query, initial);
-  const listings = data.results.map(fromSearchItem);
+  const listings = data.results.map(fromSearchItem).filter(isOpenLot);
 
   return (
     <div className="mx-auto max-w-[1400px] px-5 py-12 md:px-8 md:py-16">
@@ -27,7 +27,7 @@ export function SearchView({
       <SearchFilters query={query} />
 
       <p className="mb-6 font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
-        {data.totalCount} shirts
+        {listings.length} shirts
       </p>
 
       {listings.length === 0 ? (

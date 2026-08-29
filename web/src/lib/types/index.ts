@@ -10,5 +10,5 @@ export type {
   SearchItem,
   SearchQuery,
 } from "./auction";
-export { fromAuction, fromSearchItem } from "./auction";
+export { fromAuction, fromSearchItem, isOpenLot } from "./auction";
 export type { AuthUser, RegisterPayload } from "./auth";
