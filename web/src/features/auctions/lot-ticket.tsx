@@ -38,9 +38,9 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
   const lot = data ?? initial;
   const { item } = lot;
   useLiveAuction(lot.id);
-  const remaining = useCountdown(lot.auctionEnd);
-  const live = lot.status === "Live" && Boolean(remaining);
-  const boardStatus = lot.status === "Live" && !remaining ? "Finished" : lot.status;
+  const { remaining, ready } = useCountdown(lot.auctionEnd);
+  const live = lot.status === "Live" && (!ready || Boolean(remaining));
+  const boardStatus = lot.status === "Live" && ready && !remaining ? "Finished" : lot.status;
   const current = lot.currentHighBid ? formatMoney(lot.currentHighBid) : "No bids";
   const number = item.playerNumber?.toString().padStart(2, "0") ?? "00";
   const specs = [
@@ -116,7 +116,11 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
 }
 
 function LedClock({ endsAt }: { endsAt: string }) {
-  const remaining = useCountdown(endsAt);
+  const { remaining, ready } = useCountdown(endsAt);
+
+  if (!ready) {
+    return <span className="led-num text-2xl">—</span>;
+  }
 
   if (!remaining) {
     return <span className="led-num text-2xl">Ended</span>;

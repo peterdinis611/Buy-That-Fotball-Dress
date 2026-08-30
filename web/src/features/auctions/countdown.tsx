@@ -4,7 +4,15 @@ import { useCountdown } from "@/hooks";
 import { pad } from "@/lib/format";
 
 export function Countdown({ endsAt, className = "" }: { endsAt: string; className?: string }) {
-  const remaining = useCountdown(endsAt);
+  const { remaining, ready } = useCountdown(endsAt);
+
+  if (!ready) {
+    return (
+      <span className={`scoreboard font-[family-name:var(--font-display)] tabular-nums tracking-widest ${className}`}>
+        —
+      </span>
+    );
+  }
 
   if (!remaining) {
     return (

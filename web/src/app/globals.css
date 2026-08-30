@@ -1443,13 +1443,208 @@ a.board-desk-player:hover {
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
 }
 
-.sub-row {
+.how-auction {
+  position: relative;
+  overflow: hidden;
+  border-block: 4px solid var(--ink);
+  background: var(--tape);
+}
+
+.how-auction::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8.75rem;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--bib) 0 14px,
+    transparent 14px 28px
+  );
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+@media (min-width: 900px) {
+  .how-auction::before {
+    bottom: 11.5rem;
+  }
+}
+
+.how-auction-mast {
   display: grid;
-  grid-template-columns: 3rem 1fr;
+  gap: 1.75rem;
+  align-items: end;
+}
+
+@media (min-width: 768px) {
+  .how-auction-mast {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3rem;
+  }
+}
+
+.how-zero {
+  justify-self: start;
+  background: #141414;
+  padding: 0.85rem 1rem 1rem;
+  box-shadow: 0 22px 50px rgb(16 32 63 / 0.28);
+  border: 1px solid #2a2a2a;
+}
+
+@media (min-width: 768px) {
+  .how-zero {
+    justify-self: end;
+    transform: rotate(1.5deg);
+  }
+}
+
+.how-zero-label {
+  margin-bottom: 0.45rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #8a8a82;
+}
+
+.how-zero-stamp {
+  margin-top: 0.55rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bib);
+}
+
+.how-paddles {
+  position: relative;
+  z-index: 1;
+  display: grid;
   gap: 1rem;
-  align-items: baseline;
-  border-bottom: 1px dashed color-mix(in oklab, var(--ink) 18%, transparent);
-  padding: 1.15rem 0;
+  margin-top: 2.75rem;
+}
+
+@media (min-width: 900px) {
+  .how-paddles {
+    grid-template-columns: 1fr 1.08fr 1fr;
+    align-items: end;
+    gap: 0.75rem;
+    margin-top: 3.5rem;
+  }
+
+  .how-paddle-bay:nth-child(1) {
+    transform: rotate(-2.4deg) translateY(1.4rem);
+  }
+
+  .how-paddle-bay:nth-child(2) {
+    z-index: 2;
+    transform: rotate(1.6deg) translateY(-1.6rem);
+  }
+
+  .how-paddle-bay:nth-child(3) {
+    transform: rotate(-1.1deg) translateY(0.7rem);
+  }
+}
+
+.how-paddle {
+  position: relative;
+  overflow: hidden;
+  background: #141414;
+  color: #f3f1ec;
+  border: 1px solid #2a2a2a;
+  box-shadow: 0 22px 50px rgb(16 32 63 / 0.28);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.how-paddle-bay:hover .how-paddle,
+.how-paddle-bay:focus-within .how-paddle {
+  transform: translateY(-10px);
+}
+
+.how-paddle-bib {
+  background: var(--bib);
+  color: var(--stud);
+  padding: 0.35rem 0.9rem 0.28rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.how-paddle-bay:nth-child(2) .how-paddle-bib {
+  background: var(--led);
+  color: #fff;
+}
+
+.how-paddle-face {
+  padding: 1.1rem 1.15rem 1.35rem;
+}
+
+.how-paddle-no {
+  font-size: 4.6rem;
+  font-weight: 800;
+  line-height: 0.78;
+  letter-spacing: -0.04em;
+}
+
+@media (min-width: 900px) {
+  .how-paddle-no {
+    font-size: 5.6rem;
+  }
+
+  .how-paddle-bay:nth-child(2) .how-paddle-no {
+    font-size: 6.2rem;
+  }
+}
+
+.how-paddle-title {
+  margin-top: 0.35rem;
+  max-width: 12ch;
+  font-size: 2.15rem;
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: #f3f1ec;
+}
+
+.how-paddle-copy {
+  margin-top: 0.65rem;
+  max-width: 28ch;
+  color: #b4b4aa;
+}
+
+.how-paddle-grip {
+  display: block;
+  height: 10px;
+  background: linear-gradient(#8a6a22, #c9a227 45%, #6b5412);
+  box-shadow: 0 6px 0 #1a1208;
+}
+
+.how-auction-note {
+  position: relative;
+  z-index: 1;
+  margin-top: 2.5rem;
+  max-width: 42rem;
+  color: var(--muted-foreground);
+}
+
+@media (min-width: 900px) {
+  .how-auction-note {
+    margin-top: 4.25rem;
+  }
+}
+
+.how-auction-link {
+  color: var(--led);
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-underline-offset: 4px;
+}
+
+.how-auction-link:hover {
+  text-decoration: underline;
 }
 
 .kit-hang {
@@ -1763,6 +1958,9 @@ a:hover .brand-mark {
   .banner-cta,
   .nav-line::after,
   .ref-slip,
+  .how-paddle,
+  .how-paddle-bay,
+  .how-zero,
   .brand-mark,
   .lot-card-exit-left,
   .lot-card-exit-right,

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Karla, Saira_Extra_Condensed } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { SiteHeader, SiteFooter, Floodlights } from "@/components/layout";
 import { Providers } from "@/providers";
@@ -86,10 +87,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning className={`${display.variable} ${karla.variable} h-full`}>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: lightsBootScript }} />
-      </head>
       <body className="relative flex min-h-full flex-col">
+        <Script id="kit-vault-lights" strategy="beforeInteractive">
+          {lightsBootScript}
+        </Script>
         <JsonLd data={websiteJsonLd()} />
         <Floodlights />
         <div className="grain" />

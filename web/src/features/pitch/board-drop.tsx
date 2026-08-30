@@ -33,28 +33,29 @@ function ago(at: number, now: number) {
   return `${Math.floor(seconds / 86400)}d`;
 }
 
+const EMPTY_LOTS: Auction[] = [];
+const LIVE_LIST_KEY = queryKeys.auctions.list({ status: "Live" });
+
 function useLiveLots() {
   const queryClient = useQueryClient();
-  const [lots, setLots] = useState<Auction[]>(
-    () => queryClient.getQueryData<Auction[]>(queryKeys.auctions.list({ status: "Live" })) ?? [],
-  );
+  const [lots, setLots] = useState<Auction[]>(() => queryClient.getQueryData<Auction[]>(LIVE_LIST_KEY) ?? EMPTY_LOTS);
 
   useEffect(() => {
-    const key = queryKeys.auctions.list({ status: "Live" });
-
     function pull() {
-      setLots(queryClient.getQueryData<Auction[]>(key) ?? []);
+      const next = queryClient.getQueryData<Auction[]>(LIVE_LIST_KEY) ?? EMPTY_LOTS;
+      setLots((current) => (current === next ? current : next));
     }
 
     pull();
     const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
-      if (event.query.queryKey[0] !== "auctions") return;
+      const queryKey = event.query.queryKey;
+      if (queryKey[0] !== "auctions" || queryKey[1] !== "list") return;
       pull();
     });
 
-    if (!queryClient.getQueryData(key)) {
+    if (!queryClient.getQueryData(LIVE_LIST_KEY)) {
       void queryClient.prefetchQuery({
-        queryKey: key,
+        queryKey: LIVE_LIST_KEY,
         queryFn: () => getAuctions({ status: "Live" }),
       });
     }
