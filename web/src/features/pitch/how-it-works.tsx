@@ -1,26 +1,9 @@
 import Link from "next/link";
-import type { CSSProperties } from "react";
-import { JerseyBack } from "./jersey-back";
 
 const steps = [
-  {
-    n: "1",
-    title: "Pick a live shirt",
-    copy: "Only lots marked Live are open. The clock on the board is the time left to bid.",
-    color: "red",
-  },
-  {
-    n: "2",
-    title: "Bid higher",
-    copy: "Your bid must beat the current price. Sign in first. You cannot bid on a shirt you listed.",
-    color: "white",
-  },
-  {
-    n: "3",
-    title: "Lead until zero",
-    copy: "If you are still the highest bid when time runs out, the shirt is yours.",
-    color: "yellow",
-  },
+  { n: "01", mark: "In", title: "Pick a live shirt", copy: "Only lots marked Live are open. The clock on the board is the time left to bid." },
+  { n: "02", mark: "Bid", title: "Bid higher", copy: "Your bid must beat the current price. Sign in first. You cannot bid on a shirt you listed." },
+  { n: "03", mark: "Win", title: "Lead until zero", copy: "If you are still the highest bid when time runs out, the shirt is yours." },
 ];
 
 export function HowItWorks() {
@@ -33,20 +16,22 @@ export function HowItWorks() {
         <h2 className="view-in mt-1 max-w-[18ch] text-5xl leading-[0.9] text-[var(--ink)] md:text-6xl">
           Highest bid when the clock hits zero wins.
         </h2>
-        <div className="stagger-in mt-10 grid gap-6 md:grid-cols-3">
+        <ol className="stagger-in mt-8">
           {steps.map((step) => (
-            <article key={step.n} className="relative bg-[var(--ground)] px-5 pb-6 pt-8">
-              <JerseyBack
-                number={step.n}
-                color={step.color}
-                className="peg-sway absolute -top-7 right-4 h-16 w-14"
-                style={{ "--hang": "-8deg" } as CSSProperties}
-              />
-              <h3 className="pr-16 text-3xl text-[var(--ink)]">{step.title}</h3>
-              <p className="mt-3 text-[var(--ink)]/75">{step.copy}</p>
-            </article>
+            <li key={step.n} className="sub-row">
+              <span className="font-[family-name:var(--font-display)] text-lg tracking-[0.14em] text-[var(--led)]">
+                {step.n}
+              </span>
+              <div>
+                <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.16em] text-[var(--bib)] uppercase">
+                  {step.mark}
+                </p>
+                <h3 className="mt-1 text-3xl text-[var(--ink)]">{step.title}</h3>
+                <p className="mt-2 max-w-xl text-[var(--ink)]/75">{step.copy}</p>
+              </div>
+            </li>
           ))}
-        </div>
+        </ol>
         <p className="mt-8 text-sm text-[var(--muted-foreground)]">
           Starting price is the seller’s minimum. If nobody reaches it, the shirt stays unsold.{" "}
           <Link href="/auctions" className="text-[var(--led)] underline-offset-4 hover:underline">

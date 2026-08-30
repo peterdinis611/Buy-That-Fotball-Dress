@@ -16,8 +16,11 @@ export function SquadView({ auctions }: { auctions: Auction[] }) {
           Live lots
         </p>
         <h1 className="reveal delay-1 mt-1 text-7xl text-[var(--ink)] md:text-8xl">Live shirts.</h1>
-        <p className="reveal delay-2 mt-3 mb-10 max-w-xl text-[var(--ink)]/75">
+        <p className="reveal delay-2 mt-3 mb-4 max-w-xl text-[var(--ink)]/75">
           Open a lot to bid. Highest bid when the clock hits zero wins. Ended shirts leave the rail.
+        </p>
+        <p className="mb-8 font-[family-name:var(--font-display)] text-2xl tracking-[0.12em] text-[var(--led)] uppercase">
+          {listings.length} live
         </p>
       </div>
 

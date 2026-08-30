@@ -13,3 +13,4 @@ export type {
 } from "./auction";
 export { fromAuction, fromSearchItem, isOpenLot } from "./auction";
 export type { AuthUser, RegisterPayload } from "./auth";
+export type { DeskStatus, Settlement } from "./settlement";

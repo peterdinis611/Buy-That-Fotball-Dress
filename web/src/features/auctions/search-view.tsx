@@ -35,7 +35,7 @@ export function SearchView({
 
       {listings.length === 0 ? (
         <p className="border border-dashed border-[var(--ink)]/20 bg-[var(--tape)] px-6 py-20 text-center text-lg text-[var(--ink)]/70">
-          No shirts match those filters. Clear a filter or browse live lots.
+          No shirts on this rail. Clear a filter or browse live lots.
         </p>
       ) : (
         <PegWall listings={listings} />

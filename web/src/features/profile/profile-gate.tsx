@@ -13,22 +13,17 @@ export function ProfileGate() {
 
   if (!user) {
     return (
-      <div className="vault">
-        <div className="vault-shell">
-          <div className="fluor-tube mb-8 max-w-lg" />
-          <div className="ticket max-w-lg p-8">
-            <p className="font-[family-name:var(--font-display)] text-xl tracking-[0.16em] text-[var(--bib)]">
-              Locked locker
-            </p>
-            <h2 className="mt-2 text-5xl text-[var(--chalk)]">Sign in to open your locker.</h2>
-            <p className="mt-3 max-w-sm text-[var(--chalk)]/75">
-              Shirts you listed, bids you placed, and lots you won hang in here.
-            </p>
-            <Link href="/login?next=/profile" className="banner-cta mt-8 text-2xl">
-              Sign in
-            </Link>
-          </div>
-        </div>
+      <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-8">
+        <p className="font-[family-name:var(--font-display)] text-xl tracking-[0.16em] text-[var(--led)]">
+          Dressing room
+        </p>
+        <h1 className="mt-2 text-6xl text-[var(--ink)]">Sign in to open your locker.</h1>
+        <p className="mt-4 max-w-sm text-lg text-[var(--ink)]/75">
+          Shirts you listed, bids you placed, and lots you won hang in here.
+        </p>
+        <Link href="/login?next=/profile" className="banner-cta mt-8 text-2xl">
+          Sign in
+        </Link>
       </div>
     );
   }

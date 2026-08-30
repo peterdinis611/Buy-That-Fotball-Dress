@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { useForm } from "@tanstack/react-form";
 import { FormBanner, TextField, bindStringField } from "@/components/forms/field";
 import { Button } from "@/components/ui/button";
+import { JerseyBack } from "@/features/pitch";
 import {
   useAuctionQuery,
   useAuth,
@@ -19,6 +20,7 @@ import {
 import { formatDate, formatMoney, pad } from "@/lib/format";
 import { BidTape } from "./bid-tape";
 import { StatusPill } from "./status-pill";
+import { DeskSlip } from "@/features/profile/desk-slip";
 import type { Auction, Bid } from "@/lib/types";
 import { bidFieldsSchema } from "@/lib/validation";
 
@@ -34,43 +36,82 @@ function nextFloor(auction: Auction) {
 export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?: Bid[] }) {
   const { data } = useAuctionQuery(initial.id, initial);
   const lot = data ?? initial;
+  const { item } = lot;
   useLiveAuction(lot.id);
   const remaining = useCountdown(lot.auctionEnd);
   const live = lot.status === "Live" && Boolean(remaining);
   const boardStatus = lot.status === "Live" && !remaining ? "Finished" : lot.status;
   const current = lot.currentHighBid ? formatMoney(lot.currentHighBid) : "No bids";
+  const number = item.playerNumber?.toString().padStart(2, "0") ?? "00";
+  const specs = [
+    ["Number", number],
+    ["Size", item.size],
+    ["Kit", item.kitType],
+    ["Color", item.color],
+    ["Competition", item.league ?? "—"],
+    ["Listed", formatDate(lot.createdAt)],
+  ] as const;
 
   return (
-    <aside className="sub-board board-slam overflow-hidden md:mt-16">
-      <div className="sub-board-bib px-5 py-2 text-center text-lg">Bid desk</div>
-      <div className="p-6 md:p-8">
-        <div className="mb-5 flex items-center justify-between gap-4">
+    <article className="lot-board board-slam mt-8 overflow-hidden">
+      <div className="sub-board-bib flex items-center justify-between gap-4 px-5 py-2 text-lg">
+        <span>
+          {item.club} · {item.season}
+        </span>
+        <span className="flex items-center gap-3">
           <StatusPill status={boardStatus} />
-          <LedClock endsAt={lot.auctionEnd} />
+        </span>
+      </div>
+
+      <div className="lot-board-face">
+        <div className="flex justify-center md:justify-start">
+          <JerseyBack
+            number={number}
+            color={item.color}
+            className="peg-sway h-52 w-40 md:h-64 md:w-52"
+            style={{ "--hang": "-5deg" } as CSSProperties}
+          />
         </div>
 
-        <div className="bid-led px-5 py-6">
-          <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.18em] text-[#b4b4aa] uppercase">
+        <div>
+          <h1 className="text-5xl leading-[0.86] text-[var(--chalk)] md:text-7xl">{item.playerName}</h1>
+          <p className="mt-3 text-[var(--muted-foreground)]">
+            {item.condition}. Listed by {lot.seller}.
+          </p>
+          <p className="mt-5 font-[family-name:var(--font-display)] text-lg tracking-[0.18em] text-[var(--muted-foreground)] uppercase">
             Current bid
           </p>
-          <p key={current} className={`led-num mt-2 text-5xl leading-none md:text-6xl ${lot.currentHighBid ? "bid-punch" : ""}`}>
+          <p key={current} className={`led-num mt-1 text-6xl leading-none md:text-7xl ${lot.currentHighBid ? "bid-punch" : ""}`}>
             {current}
           </p>
-          <p className="mt-3 text-sm text-[#b4b4aa]">
-            Starts at {formatMoney(lot.reservePrice)} · Ends {formatDate(lot.auctionEnd)}
-          </p>
-        </div>
-
-        <div className="mt-5 space-y-3 border-t border-dashed border-white/15 pt-5">
+          <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
+            <p className="text-sm text-[var(--muted-foreground)]">
+              Starts at {formatMoney(lot.reservePrice)} · Ends {formatDate(lot.auctionEnd)}
+            </p>
+            <LedClock endsAt={lot.auctionEnd} />
+          </div>
           {lot.highBidder ? <TicketLine label="Highest bidder" value={lot.highBidder} /> : null}
           {lot.winner ? <TicketLine label="Winner" value={lot.winner} /> : null}
           {lot.soldAmount ? <TicketLine label="Sold for" value={formatMoney(lot.soldAmount)} punch /> : null}
-        </div>
 
+          <dl className="lot-board-spec mt-6">
+            {specs.map(([label, value]) => (
+              <div key={label}>
+                <dt className="font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
+                  {label}
+                </dt>
+                <dd className="mt-0.5 text-[var(--chalk)]">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+
+      <div className="border-t border-dashed border-white/15 px-5 py-6 md:px-8">
         <BidPanel auction={lot} live={live} />
         <BidTape auctionId={lot.id} initial={bids} />
       </div>
-    </aside>
+    </article>
   );
 }
 
@@ -123,6 +164,7 @@ function BidPanel({ auction, live }: { auction: Auction; live: boolean }) {
       <div className="mt-8">
         <p className="text-[var(--muted-foreground)]">This auction has ended. You cannot place a new bid.</p>
         {user && watching ? <WatchToggle auction={auction} watching /> : null}
+        <DeskSlip auction={auction} />
       </div>
     );
   }
@@ -220,6 +262,7 @@ function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
       ) : (
         <p className="mt-3 text-[var(--muted-foreground)]">The clock has run out. This lot stays on your sheet.</p>
       )}
+      <DeskSlip auction={auction} />
       {confirm && live ? (
         <button
           type="button"

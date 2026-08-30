@@ -8,5 +8,6 @@
     <Project Path="src/IdentityService/IdentityService.csproj" />
     <Project Path="src/NotificationService/NotificationService.csproj" />
     <Project Path="src/SearchService/SearchService.csproj" />
+    <Project Path="src/SettlementService/SettlementService.csproj" />
   </Folder>
 </Solution>
