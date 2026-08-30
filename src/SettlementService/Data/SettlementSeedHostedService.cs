@@ -13,6 +13,7 @@ public sealed class SettlementSeedHostedService(
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<SettlementDbContext>();
         await db.Database.EnsureCreatedAsync(cancellationToken);
+        await TryAddPaymentRefAsync(db, cancellationToken);
 
         var auctionId = Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466");
         if (await db.Settlements.AnyAsync(x => x.AuctionId == auctionId, cancellationToken))
@@ -35,4 +36,18 @@ public sealed class SettlementSeedHostedService(
     }
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
+    private static async Task TryAddPaymentRefAsync(SettlementDbContext db, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync(
+                "ALTER TABLE Settlements ADD COLUMN PaymentRef TEXT",
+                cancellationToken);
+        }
+        catch
+        {
+            // Column already exists on a fresh EnsureCreated database.
+        }
+    }
 }

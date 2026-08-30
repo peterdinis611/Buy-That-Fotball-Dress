@@ -3,3 +3,5 @@ export { SiteFooter } from "./site-footer";
 export { Floodlights } from "./floodlights";
 export { MatchClock } from "./match-clock";
 export { LightsSwitch } from "./lights-switch";
+export { PitchBall } from "./pitch-ball";
+export { BootClear } from "./boot-clear";

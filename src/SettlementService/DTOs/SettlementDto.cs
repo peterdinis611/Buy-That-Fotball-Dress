@@ -12,6 +12,7 @@ public class SettlementDto
     public string Club { get; set; } = string.Empty;
     public string PlayerName { get; set; } = string.Empty;
     public DeskStatus Status { get; set; }
+    public string? PaymentRef { get; set; }
     public string? Tracking { get; set; }
     public DateTime OpenedAt { get; set; }
     public DateTime? PaidAt { get; set; }

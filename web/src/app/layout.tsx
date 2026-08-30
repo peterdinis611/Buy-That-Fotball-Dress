@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Karla, Saira_Extra_Condensed } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { SiteHeader, SiteFooter, Floodlights } from "@/components/layout";
+import { SiteHeader, SiteFooter, Floodlights, BootClear } from "@/components/layout";
+import { PitchBall } from "@/components/layout/pitch-ball";
 import { Providers } from "@/providers";
 import { JsonLd } from "@/components/seo";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, siteUrl, websiteJsonLd } from "@/lib/seo";
@@ -88,6 +89,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning className={`${display.variable} ${karla.variable} h-full`}>
       <body className="relative flex min-h-full flex-col">
+        <div id="kit-boot" className="kit-boot" role="status" aria-label="Loading Kit Vault">
+          <div className="kit-boot-spot">
+            <PitchBall />
+            <p className="kit-boot-mark">Kit Vault</p>
+          </div>
+        </div>
+        <BootClear />
         <Script id="kit-vault-lights" strategy="beforeInteractive">
           {lightsBootScript}
         </Script>

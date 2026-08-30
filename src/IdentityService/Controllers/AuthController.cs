@@ -51,6 +51,15 @@ public class AuthController(IIdentityService identityService) : ControllerBase
         return ToActionResult(result);
     }
 
+    [HttpGet("users/{username}")]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<UserDto>> ByUsername(string username, CancellationToken cancellationToken)
+    {
+        var result = await identityService.GetByUsernameAsync(username, cancellationToken);
+        return ToActionResult(result);
+    }
+
     private ActionResult<UserDto> ToActionResult(Result<UserDto> result)
     {
         if (result.IsSuccess)

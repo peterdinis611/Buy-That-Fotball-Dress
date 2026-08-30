@@ -15,6 +15,7 @@ public static class SettlementMapper
         Club = row.Club,
         PlayerName = row.PlayerName,
         Status = row.Status,
+        PaymentRef = row.PaymentRef,
         Tracking = row.Tracking,
         OpenedAt = row.OpenedAt,
         PaidAt = row.PaidAt,

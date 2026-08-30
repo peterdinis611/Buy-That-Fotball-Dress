@@ -5,7 +5,8 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { pushBoardToast } from "@/features/pitch/board-toast";
 import { formatMoney } from "@/lib/format";
-import { pushBoardEvent } from "@/lib/realtime/board-log";
+import { queryKeys } from "@/lib/query";
+import { pushBoardEvent, type BoardEventKind } from "@/lib/realtime/board-log";
 import {
   applyLiveAuctionCreated,
   applyLiveAuctionDeleted,
@@ -30,15 +31,29 @@ type LiveAuctionCreated = {
   reservePrice?: number;
 };
 
+type BoardTape = {
+  id: string;
+  kind: BoardEventKind | string;
+  for?: string;
+  eyebrow: string;
+  title: string;
+  detail: string;
+  href: string;
+};
+
 export function useLiveBoard() {
   const queryClient = useQueryClient();
   const { data } = useSession();
   const username = data?.user?.username;
 
   useEffect(() => {
+    const bumpDesk = () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.settlements.all });
+    };
+
     const onBid = (bid: Bid) => {
       const lot = peekAuction(queryClient, bid.auctionId);
-      const wasLeading = sameName(username, lot?.highBidder);
+      const wasLeading = sameName(username, lot?.highBidder) || sameName(username, bid.previousBidder);
       const outbid = wasLeading && !sameName(username, bid.bidder);
       const player = lot?.item.playerName ?? "A shirt";
 
@@ -77,6 +92,7 @@ export function useLiveBoard() {
         detail: sold && update.soldAmount ? `Went for ${formatMoney(update.soldAmount)}` : "Clock hit zero",
         href: `/auctions/${update.id}`,
       });
+      bumpDesk();
     };
 
     const onCreated = (created?: LiveAuctionCreated) => {
@@ -96,12 +112,46 @@ export function useLiveBoard() {
 
     const onDeleted = (removed: LiveAuctionDeleted) => applyLiveAuctionDeleted(queryClient, removed);
 
+    const onTape = (tape: BoardTape) => {
+      if (tape.for && !sameName(tape.for, username)) return;
+      const kind = (["outbid", "won", "shipped", "paid", "bid", "listed", "ended"] as const).includes(
+        tape.kind as BoardEventKind,
+      )
+        ? (tape.kind as BoardEventKind)
+        : "bid";
+
+      pushBoardEvent({
+        id: tape.id,
+        kind,
+        eyebrow: tape.eyebrow,
+        title: tape.title,
+        detail: tape.detail,
+        href: tape.href,
+      });
+
+      if (kind === "outbid" || kind === "won" || kind === "shipped" || kind === "paid") {
+        pushBoardToast({
+          id: tape.id,
+          eyebrow: tape.eyebrow,
+          title: tape.title,
+          detail: tape.detail,
+          href: tape.href,
+        });
+      }
+
+      if (kind === "won" || kind === "shipped" || kind === "paid") bumpDesk();
+    };
+
     void getHub()
       .then((hub) => {
         hub.on("BidPlaced", onBid);
         hub.on("AuctionUpdated", onUpdated);
         hub.on("AuctionCreated", onCreated);
         hub.on("AuctionDeleted", onDeleted);
+        hub.on("BoardTape", onTape);
+        hub.on("SettlementOpened", bumpDesk);
+        hub.on("SettlementPaid", bumpDesk);
+        hub.on("KitShipped", bumpDesk);
       })
       .catch(() => undefined);
 
@@ -111,6 +161,10 @@ export function useLiveBoard() {
       hub?.off("AuctionUpdated", onUpdated);
       hub?.off("AuctionCreated", onCreated);
       hub?.off("AuctionDeleted", onDeleted);
+      hub?.off("BoardTape", onTape);
+      hub?.off("SettlementOpened", bumpDesk);
+      hub?.off("SettlementPaid", bumpDesk);
+      hub?.off("KitShipped", bumpDesk);
     };
   }, [queryClient, username]);
 }

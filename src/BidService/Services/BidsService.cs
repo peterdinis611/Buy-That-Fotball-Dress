@@ -66,6 +66,13 @@ public sealed class BidsService(
         if (amount < floor)
             return Result<BidDto>.BadRequest($"The next bid must be at least {floor}.");
 
+        var previousBidder = await db.Bids
+            .Where(x => x.AuctionId == auctionId)
+            .OrderByDescending(x => x.Amount)
+            .ThenBy(x => x.CreatedAt)
+            .Select(x => x.Bidder)
+            .FirstOrDefaultAsync(cancellationToken);
+
         var bid = new Bid
         {
             Id = Guid.NewGuid(),
@@ -79,7 +86,10 @@ public sealed class BidsService(
         if (lot.CurrentHighBid is not int high || amount > high)
             lot.CurrentHighBid = amount;
         await db.SaveChangesAsync(cancellationToken);
-        await publishEndpoint.Publish(bid.ToBidPlaced(), cancellationToken);
+
+        var outbid = previousBidder is not null
+            && !string.Equals(previousBidder, bidder, StringComparison.OrdinalIgnoreCase);
+        await publishEndpoint.Publish(bid.ToBidPlaced(outbid ? previousBidder : null), cancellationToken);
         await cache.RemoveAsync(CacheKeys.Bids(auctionId), cancellationToken);
 
         return Result<BidDto>.Success(bid.ToDto());

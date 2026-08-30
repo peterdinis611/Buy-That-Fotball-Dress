@@ -1241,8 +1241,14 @@ a.board-desk-player:hover {
 }
 
 .board-desk-mark[data-kind="yours"],
-.board-desk-mark[data-kind="ended"] {
+.board-desk-mark[data-kind="ended"],
+.board-desk-mark[data-kind="shipped"] {
   color: #eef6ea;
+}
+
+.board-desk-mark[data-kind="won"],
+.board-desk-mark[data-kind="paid"] {
+  color: var(--bib);
 }
 
 .board-desk-ago {
@@ -1752,6 +1758,154 @@ a.board-desk-player:hover {
   border-color: #3a2a10 !important;
 }
 
+.till {
+  border-top: 1px dashed rgb(243 241 236 / 0.18);
+  padding-top: 1.25rem;
+}
+
+.till-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.till-kicker {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8a8a82;
+}
+
+.till-stamp {
+  font-size: 1.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.till-stamp[data-paid="false"] {
+  color: #ff3a32;
+  text-shadow: 0 0 18px rgb(227 28 35 / 0.55);
+}
+
+.till-stamp[data-paid="true"] {
+  color: var(--bib);
+  text-shadow: 0 0 18px rgb(245 196 0 / 0.35);
+}
+
+.till-amount {
+  margin-top: 0.35rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 3.4rem;
+  line-height: 0.9;
+  color: #f3f1ec;
+}
+
+.till-meta,
+.till-hint {
+  margin-top: 0.45rem;
+  color: #b4b4aa;
+}
+
+.till-actions {
+  margin-top: 1.15rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.till-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.till-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.till-field span {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8a8a82;
+}
+
+.till-field input,
+.till-field textarea {
+  width: 100%;
+  border: 0;
+  background: #0c0c0c;
+  color: #f3f1ec;
+  caret-color: var(--bib);
+  padding: 0.55rem 0.7rem;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+.till-field textarea {
+  font-family: var(--font-body), sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0;
+  resize: vertical;
+  min-height: 5rem;
+}
+
+.till-pay {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  width: fit-content;
+  padding: 0.35rem 1.1rem;
+  background: var(--bib);
+  color: var(--stud);
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.12), 0 6px 0 #c49c00;
+}
+
+.till-pay:hover {
+  transform: translateY(1px);
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.12), 0 5px 0 #c49c00;
+}
+
+.till-pay:disabled {
+  opacity: 0.6;
+}
+
+.till-ghost {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.35rem 1.1rem;
+  color: #ff3a32;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 0 1px #ff3a32;
+}
+
+.till-quiet {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8a8a82;
+  text-align: left;
+  width: fit-content;
+}
+
+.till-quiet:hover {
+  color: #f3f1ec;
+}
+
 .book-row {
   display: grid;
   grid-template-columns: 2rem 1fr auto auto;
@@ -1936,6 +2090,119 @@ a:hover .brand-mark {
   display: none;
 }
 
+@keyframes pitch-ball-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pitch-ball-shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scaleX(0.78);
+    opacity: 0.18;
+  }
+}
+
+@keyframes pitch-ball-kick {
+  from {
+    opacity: 0;
+    transform: translate(-42%, 28%) rotate(-48deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.kit-boot,
+.kit-load {
+  display: grid;
+  place-items: center;
+  background: var(--ground);
+}
+
+.kit-boot {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  transition: opacity 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kit-boot[data-ready="true"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.kit-load {
+  min-height: 70vh;
+  padding: 4rem 1.25rem;
+}
+
+.kit-boot-spot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 1.15rem;
+}
+
+.kit-boot-spot::before {
+  content: "";
+  position: absolute;
+  width: 10.5rem;
+  height: 10.5rem;
+  border: 3px solid color-mix(in oklab, var(--ink) 16%, transparent);
+  border-radius: 50%;
+}
+
+.kit-boot-spot::after {
+  content: "";
+  position: absolute;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--led);
+  box-shadow: 0 0 0 6px color-mix(in oklab, var(--led) 18%, transparent);
+}
+
+.pitch-ball {
+  position: relative;
+  z-index: 1;
+  width: 7.4rem;
+  height: 7.4rem;
+  overflow: visible;
+}
+
+.kit-boot .pitch-ball {
+  animation: pitch-ball-kick 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.pitch-ball-face {
+  transform-origin: 60px 56px;
+  animation: pitch-ball-spin 0.9s linear infinite;
+}
+
+.pitch-ball-shadow {
+  fill: var(--ink);
+  opacity: 0.28;
+  transform-origin: 60px 108px;
+  animation: pitch-ball-shadow 0.9s ease-in-out infinite;
+}
+
+.kit-boot-mark {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .board-slam,
@@ -1966,7 +2233,11 @@ a:hover .brand-mark {
   .lot-card-exit-right,
   .bay-tab,
   .board-desk-panel,
-  .board-desk-row {
+  .board-desk-row,
+  .pitch-ball,
+  .pitch-ball-face,
+  .pitch-ball-shadow,
+  .kit-boot {
     animation: none;
     transition: none;
     transform: none;

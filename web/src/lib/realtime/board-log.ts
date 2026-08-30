@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export type BoardEventKind = "bid" | "outbid" | "listed" | "ended";
+export type BoardEventKind = "bid" | "outbid" | "listed" | "ended" | "won" | "shipped" | "paid";
 
 export type BoardEvent = {
   id: string;

@@ -39,8 +39,20 @@ public sealed class SettlementsService(
 
         row.Status = DeskStatus.Paid;
         row.PaidAt = DateTime.UtcNow;
+        row.PaymentRef = TillRef(row.Id);
         await db.SaveChangesAsync(cancellationToken);
-        await publishEndpoint.Publish(new SettlementPaid { Id = row.Id, AuctionId = row.AuctionId, PaidAt = row.PaidAt.Value }, cancellationToken);
+        await publishEndpoint.Publish(new SettlementPaid
+        {
+            Id = row.Id,
+            AuctionId = row.AuctionId,
+            Seller = row.Seller,
+            Buyer = row.Buyer,
+            Amount = row.Amount,
+            Club = row.Club,
+            PlayerName = row.PlayerName,
+            PaymentRef = row.PaymentRef,
+            PaidAt = row.PaidAt.Value
+        }, cancellationToken);
         return Result<SettlementDto>.Success(row.ToDto());
     }
 
@@ -51,14 +63,23 @@ public sealed class SettlementsService(
         if (!Same(username, row.Seller)) return Result<SettlementDto>.Forbidden("Only the seller can ship.");
         if (row.Status != DeskStatus.Paid) return Result<SettlementDto>.Conflict("Pay first, then ship.");
 
+        var slip = tracking?.Trim() ?? "";
+        if (slip.Length < 4 || slip.Length > 80)
+            return Result<SettlementDto>.BadRequest("Add a tracking number (at least 4 characters).");
+
         row.Status = DeskStatus.Shipped;
-        row.Tracking = string.IsNullOrWhiteSpace(tracking) ? null : tracking.Trim();
+        row.Tracking = slip;
         row.ShippedAt = DateTime.UtcNow;
         await db.SaveChangesAsync(cancellationToken);
         await publishEndpoint.Publish(new KitShipped
         {
             Id = row.Id,
             AuctionId = row.AuctionId,
+            Seller = row.Seller,
+            Buyer = row.Buyer,
+            Amount = row.Amount,
+            Club = row.Club,
+            PlayerName = row.PlayerName,
             Tracking = row.Tracking,
             ShippedAt = row.ShippedAt.Value
         }, cancellationToken);
@@ -88,10 +109,14 @@ public sealed class SettlementsService(
         if (row.Status is DeskStatus.Received or DeskStatus.Disputed)
             return Result<SettlementDto>.Conflict("This desk is already closed.");
 
+        var reason = note?.Trim() ?? "";
+        if (reason.Length < 8 || reason.Length > 400)
+            return Result<SettlementDto>.BadRequest("Say why you are raising a dispute (at least 8 characters).");
+
         row.Status = DeskStatus.Disputed;
         row.DisputedAt = DateTime.UtcNow;
         row.DisputedBy = username;
-        row.DisputeNote = string.IsNullOrWhiteSpace(note) ? null : note.Trim();
+        row.DisputeNote = reason;
         await db.SaveChangesAsync(cancellationToken);
         await publishEndpoint.Publish(new SettlementDisputed
         {
@@ -106,4 +131,7 @@ public sealed class SettlementsService(
 
     private static bool Same(string left, string right) =>
         left.Equals(right, StringComparison.OrdinalIgnoreCase);
+
+    private static string TillRef(Guid id) =>
+        $"TILL-{id.ToString("N")[..8].ToUpperInvariant()}";
 }

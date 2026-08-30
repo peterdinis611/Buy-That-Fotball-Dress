@@ -15,11 +15,12 @@ public static class BidMapper
         CreatedAt = bid.CreatedAt
     };
 
-    public static BidPlaced ToBidPlaced(this Bid bid) => new()
+    public static BidPlaced ToBidPlaced(this Bid bid, string? previousBidder = null) => new()
     {
         Id = bid.Id,
         AuctionId = bid.AuctionId,
         Bidder = bid.Bidder,
+        PreviousBidder = previousBidder,
         Amount = bid.Amount,
         CreatedAt = bid.CreatedAt
     };

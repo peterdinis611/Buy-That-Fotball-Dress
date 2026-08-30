@@ -69,4 +69,13 @@ public sealed class IdentityAppService(
         await cache.SetAsync(key, dto, CacheKeys.UserTtl, cancellationToken);
         return Result<UserDto>.Success(dto);
     }
+
+    public async Task<Result<UserDto>> GetByUsernameAsync(string username, CancellationToken cancellationToken)
+    {
+        var user = await userManager.FindByNameAsync(username.Trim());
+        if (user is null)
+            return Result<UserDto>.NotFound("Player not found.");
+
+        return Result<UserDto>.Success(user.ToDto());
+    }
 }

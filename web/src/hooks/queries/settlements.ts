@@ -12,6 +12,15 @@ import {
 import { queryKeys } from "@/lib/query";
 import type { Settlement } from "@/lib/types";
 
+function rememberDesk(queryClient: ReturnType<typeof useQueryClient>, auctionId: string) {
+  return {
+    onSuccess: (row: Settlement) => {
+      queryClient.setQueryData(queryKeys.settlements.auction(auctionId), row);
+      void queryClient.invalidateQueries({ queryKey: queryKeys.settlements.mine() });
+    },
+  };
+}
+
 export function useMySettlementsQuery(enabled: boolean) {
   return useQuery({
     queryKey: queryKeys.settlements.mine(),
@@ -29,29 +38,34 @@ export function useSettlementQuery(auctionId: string, enabled = true) {
   });
 }
 
-function useDeskAction(auctionId: string, action: (id: string) => Promise<Settlement>) {
+export function usePaySettlement(auctionId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: action,
-    onSuccess: (row) => {
-      queryClient.setQueryData(queryKeys.settlements.auction(auctionId), row);
-      void queryClient.invalidateQueries({ queryKey: queryKeys.settlements.mine() });
-    },
+    mutationFn: (id: string) => paySettlement(id),
+    ...rememberDesk(queryClient, auctionId),
   });
 }
 
-export function usePaySettlement(auctionId: string) {
-  return useDeskAction(auctionId, paySettlement);
-}
-
 export function useShipSettlement(auctionId: string) {
-  return useDeskAction(auctionId, (id) => shipSettlement(id));
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, tracking }: { id: string; tracking: string }) => shipSettlement(id, tracking),
+    ...rememberDesk(queryClient, auctionId),
+  });
 }
 
 export function useReceiveSettlement(auctionId: string) {
-  return useDeskAction(auctionId, receiveSettlement);
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => receiveSettlement(id),
+    ...rememberDesk(queryClient, auctionId),
+  });
 }
 
 export function useDisputeSettlement(auctionId: string) {
-  return useDeskAction(auctionId, (id) => disputeSettlement(id));
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, note }: { id: string; note: string }) => disputeSettlement(id, note),
+    ...rememberDesk(queryClient, auctionId),
+  });
 }

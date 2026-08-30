@@ -33,6 +33,7 @@ export type Bid = {
   id: string;
   auctionId: string;
   bidder: string;
+  previousBidder?: string;
   amount: number;
   createdAt: string;
 };

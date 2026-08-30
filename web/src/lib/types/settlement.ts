@@ -9,6 +9,7 @@ export type Settlement = {
   club: string;
   playerName: string;
   status: DeskStatus;
+  paymentRef?: string;
   tracking?: string;
   openedAt: string;
   paidAt?: string;
