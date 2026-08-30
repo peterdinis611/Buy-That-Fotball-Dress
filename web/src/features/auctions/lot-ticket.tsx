@@ -16,9 +16,8 @@ import {
   usePlayerSheetQuery,
   useWatchMutation,
 } from "@/hooks";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate, formatMoney, pad } from "@/lib/format";
 import { BidTape } from "./bid-tape";
-import { Countdown } from "./countdown";
 import { StatusPill } from "./status-pill";
 import type { Auction, Bid } from "@/lib/types";
 import { bidFieldsSchema } from "@/lib/validation";
@@ -35,43 +34,71 @@ function nextFloor(auction: Auction) {
 export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?: Bid[] }) {
   const { data } = useAuctionQuery(initial.id, initial);
   const lot = data ?? initial;
-  const { item } = lot;
   useLiveAuction(lot.id);
   const remaining = useCountdown(lot.auctionEnd);
   const live = lot.status === "Live" && Boolean(remaining);
   const boardStatus = lot.status === "Live" && !remaining ? "Finished" : lot.status;
+  const current = lot.currentHighBid ? formatMoney(lot.currentHighBid) : "No bids";
 
   return (
-    <aside className="sub-board board-slam overflow-hidden">
-      <div className="sub-board-bib px-5 py-2 text-center text-lg">Bid board</div>
+    <aside className="sub-board board-slam overflow-hidden md:mt-16">
+      <div className="sub-board-bib px-5 py-2 text-center text-lg">Bid desk</div>
       <div className="p-6 md:p-8">
-      <div className="mb-6 flex items-center justify-between">
-        <StatusPill status={boardStatus} />
-        <Countdown endsAt={lot.auctionEnd} className="led-num text-2xl" />
-      </div>
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <StatusPill status={boardStatus} />
+          <LedClock endsAt={lot.auctionEnd} />
+        </div>
 
-      {item.imageUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={item.imageUrl} alt="" className="mb-6 aspect-[3/4] w-full object-cover" />
-      ) : null}
+        <div className="bid-led px-5 py-6">
+          <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.18em] text-[#b4b4aa] uppercase">
+            Current bid
+          </p>
+          <p key={current} className={`led-num mt-2 text-5xl leading-none md:text-6xl ${lot.currentHighBid ? "bid-punch" : ""}`}>
+            {current}
+          </p>
+          <p className="mt-3 text-sm text-[#b4b4aa]">
+            Starts at {formatMoney(lot.reservePrice)} · Ends {formatDate(lot.auctionEnd)}
+          </p>
+        </div>
 
-      <div className="space-y-4 border-t border-dashed border-white/15 pt-6">
-        <TicketLine label="Starting price" value={formatMoney(lot.reservePrice)} />
-        <TicketLine
-          label="Current bid"
-          value={lot.currentHighBid ? formatMoney(lot.currentHighBid) : "No bids yet"}
-          punch
-        />
-        {lot.highBidder ? <TicketLine label="Highest bidder" value={lot.highBidder} /> : null}
-        {lot.winner ? <TicketLine label="Winner" value={lot.winner} /> : null}
-        {lot.soldAmount ? <TicketLine label="Sold for" value={formatMoney(lot.soldAmount)} /> : null}
-        <TicketLine label="Auction ends" value={formatDate(lot.auctionEnd)} />
-      </div>
+        <div className="mt-5 space-y-3 border-t border-dashed border-white/15 pt-5">
+          {lot.highBidder ? <TicketLine label="Highest bidder" value={lot.highBidder} /> : null}
+          {lot.winner ? <TicketLine label="Winner" value={lot.winner} /> : null}
+          {lot.soldAmount ? <TicketLine label="Sold for" value={formatMoney(lot.soldAmount)} punch /> : null}
+        </div>
 
-      <BidPanel auction={lot} live={live} />
-      <BidTape auctionId={lot.id} initial={bids} />
+        <BidPanel auction={lot} live={live} />
+        <BidTape auctionId={lot.id} initial={bids} />
       </div>
     </aside>
+  );
+}
+
+function LedClock({ endsAt }: { endsAt: string }) {
+  const remaining = useCountdown(endsAt);
+
+  if (!remaining) {
+    return <span className="led-num text-2xl">Ended</span>;
+  }
+
+  const cells = [
+    remaining.days > 0 ? { value: remaining.days, unit: "d" } : null,
+    { value: remaining.hours, unit: "h" },
+    { value: remaining.minutes, unit: "m" },
+    { value: remaining.seconds, unit: "s" },
+  ].filter((cell): cell is { value: number; unit: string } => Boolean(cell));
+
+  return (
+    <div className="led-clock" aria-label="Time left">
+      {cells.map((cell) => (
+        <span key={cell.unit} className="led-cell">
+          <span key={`${cell.unit}-${cell.value}`} className="led-cell-value digit-tick">
+            {cell.unit === "d" ? cell.value : pad(cell.value)}
+          </span>
+          <span className="led-cell-unit">{cell.unit}</span>
+        </span>
+      ))}
+    </div>
   );
 }
 
@@ -102,9 +129,10 @@ function BidPanel({ auction, live }: { auction: Auction; live: boolean }) {
 
   if (!user) {
     return (
-      <div className="mt-8">
-        <p className="text-[var(--muted-foreground)]">Sign in to bid, or to keep this lot on your peg.</p>
-        <Link href={`/login?next=/auctions/${auction.id}`} className="banner-cta mt-4 text-2xl">
+      <div className="bid-slip mt-8 px-5 py-6">
+        <p className="font-[family-name:var(--font-display)] text-xl tracking-[0.08em] uppercase">Sign in to bid</p>
+        <p className="mt-2 text-sm">Keep this lot on your peg, or place a bid from the desk.</p>
+        <Link href={`/login?next=/auctions/${auction.id}`} className="banner-cta mt-5 text-2xl">
           Sign in
         </Link>
       </div>
@@ -230,23 +258,26 @@ function BidForm({ auction }: { auction: Auction }) {
   return (
     <form
       noValidate
+      className="bid-slip px-5 py-6"
       onSubmit={(event) => {
         event.preventDefault();
         event.stopPropagation();
         void form.handleSubmit();
       }}
     >
+      <p className="font-[family-name:var(--font-display)] text-xl tracking-[0.12em] uppercase">Your bid</p>
       <form.Field name="amount">
         {(field) => (
           <TextField
             field={bindStringField(field)}
-            label="Your bid"
+            label="Amount"
+            className="mt-3"
             inputMode="numeric"
             placeholder={String(floor)}
           />
         )}
       </form.Field>
-      <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+      <p className="bid-slip-hint mt-2 text-sm">
         Bid at least {formatMoney(floor)}. If nobody bids higher before time runs out, you win.
       </p>
       <FormBanner message={banner} />
@@ -255,7 +286,7 @@ function BidForm({ auction }: { auction: Auction }) {
           <Button
             type="submit"
             disabled={!canSubmit || isSubmitting || bid.isPending}
-            className="mt-5 h-11 w-full rounded-none border-0 bg-[var(--bib)] font-[family-name:var(--font-display)] text-2xl tracking-[0.08em] text-[var(--stud)] uppercase"
+            className="mt-5 h-12 w-full rounded-none border-0 bg-[var(--stud)] font-[family-name:var(--font-display)] text-2xl tracking-[0.08em] text-[var(--bib)] uppercase hover:bg-[#0c0c0c]"
           >
             {isSubmitting || bid.isPending ? "Placing bid…" : "Place bid"}
           </Button>

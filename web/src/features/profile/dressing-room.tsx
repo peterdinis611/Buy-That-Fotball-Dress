@@ -1,9 +1,13 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
 import { JerseyBack, PegWall } from "@/features/pitch";
 import { fromAuction, type AuthUser, type KitListing } from "@/lib/types";
 import { usePlayerSheetQuery } from "@/hooks";
 import type { CSSProperties } from "react";
+
+type RackId = "watching" | "listed" | "chasing" | "won";
 
 function squadNumber(name: string) {
   let n = 0;
@@ -18,6 +22,43 @@ export function DressingRoom({ user }: { user: AuthUser }) {
   const chasing = (sheet.data?.chasing ?? []).map(fromAuction);
   const won = (sheet.data?.won ?? []).map(fromAuction);
   const watching = (sheet.data?.watching ?? []).map(fromAuction);
+  const racks: { id: RackId; title: string; kicker: string; empty: string; listings: KitListing[]; trophy?: boolean }[] = [
+    {
+      id: "watching",
+      title: "Watching",
+      kicker: "On your peg",
+      empty: "Watch a live lot to hang it here before you bid.",
+      listings: watching,
+    },
+    {
+      id: "listed",
+      title: "For sale",
+      kicker: "You listed",
+      empty: "You have not listed a shirt yet. Hang one from Sell a shirt.",
+      listings: listed,
+    },
+    {
+      id: "chasing",
+      title: "Your bids",
+      kicker: "You joined",
+      empty: "You have not bid on a live lot yet.",
+      listings: chasing,
+    },
+    {
+      id: "won",
+      title: "Won",
+      kicker: "Yours now",
+      empty: "No wins yet. Stay highest until time runs out.",
+      listings: won,
+      trophy: true,
+    },
+  ];
+
+  const preferred =
+    watching.length ? "watching" : listed.length ? "listed" : chasing.length ? "chasing" : won.length ? "won" : "watching";
+  const [picked, setPicked] = useState<RackId | null>(null);
+  const open = picked ?? preferred;
+  const active = racks.find((rack) => rack.id === open) ?? racks[0];
 
   return (
     <div className="relative overflow-hidden">
@@ -26,22 +67,27 @@ export function DressingRoom({ user }: { user: AuthUser }) {
       </div>
 
       <div className="relative mx-auto max-w-[1400px] px-5 py-12 md:px-8 md:py-16">
-        <div className="grid items-end gap-10 md:grid-cols-[0.9fr_1.1fr]">
+        <div className="fluor-tube mb-8" />
+
+        <div className="grid items-end gap-10 md:grid-cols-[0.95fr_1.05fr]">
           <div className="reveal">
             <p className="font-[family-name:var(--font-display)] text-xl tracking-[0.2em] text-[var(--led)]">
-              Your lots
+              Dressing room
             </p>
-            <h1 className="mt-2 text-6xl leading-[0.86] text-[var(--ink)] md:text-8xl">Profile.</h1>
+            <h1 className="mt-2 text-6xl leading-[0.86] text-[var(--ink)] md:text-8xl">Your locker.</h1>
             <p className="mt-4 max-w-sm text-lg text-[var(--ink)]/75">
-              Shirts you listed, lots you are watching, auctions you bid in, and shirts you won.
+              Shirts on your peg, lots you listed, auctions you joined, and kits you won.
             </p>
+            <Link href="/sell" className="banner-cta mt-8 text-2xl">
+              Sell a shirt
+            </Link>
           </div>
 
           <div className="locker-bay reveal delay-2 flex items-end gap-6 md:justify-end">
             <JerseyBack
               number={number}
               color="red"
-              className="peg-sway h-44 w-36"
+              className="peg-sway h-44 w-36 md:h-52 md:w-40"
               style={{ "--hang": "-6deg" } as CSSProperties}
             />
             <div className="locker-plate mb-4 min-w-[14rem] px-5 py-4">
@@ -58,12 +104,21 @@ export function DressingRoom({ user }: { user: AuthUser }) {
           </div>
         </div>
 
-        <dl className="reveal delay-3 mt-12 grid grid-cols-2 gap-px bg-[var(--ink)]/15 md:grid-cols-4">
-          <Stat label="Watching" value={watching.length} />
-          <Stat label="For sale" value={listed.length} />
-          <Stat label="Your bids" value={chasing.length} />
-          <Stat label="Won" value={won.length} />
-        </dl>
+        <div className="reveal delay-3 mt-12 grid grid-cols-2 gap-px bg-[var(--ink)] md:grid-cols-4">
+          {racks.map((rack) => (
+            <button
+              key={rack.id}
+              type="button"
+              data-open={open === rack.id}
+              onClick={() => setPicked(rack.id)}
+              className="locker-door px-5 py-6"
+            >
+              <p className="locker-door-label text-lg">{rack.title}</p>
+              <p className="locker-door-count mt-2 text-6xl">{rack.listings.length}</p>
+              <p className="locker-door-kicker mt-2 text-sm">{rack.kicker}</p>
+            </button>
+          ))}
+        </div>
 
         {sheet.isError ? (
           <p className="mt-8 border border-[var(--cardinal)] px-4 py-3 text-[var(--cardinal)]">
@@ -71,81 +126,26 @@ export function DressingRoom({ user }: { user: AuthUser }) {
           </p>
         ) : null}
 
-        <Rack
-          title="Watching"
-          kicker="Lots on your peg"
-          listings={watching}
-          empty="Watch a live lot to hang it here before you bid."
-          loading={sheet.isLoading}
-        />
-        <Rack
-          title="For sale"
-          kicker="Shirts you listed"
-          listings={listed}
-          empty="You have not listed a shirt yet. Hang one from Sell a shirt."
-          loading={sheet.isLoading}
-        />
-        <Rack
-          title="Your bids"
-          kicker="Auctions you joined"
-          listings={chasing}
-          empty="You have not bid on a live lot yet."
-          loading={sheet.isLoading}
-        />
-        <Rack
-          title="Won"
-          kicker="Yours after the clock hit zero"
-          listings={won}
-          empty="No wins yet. Stay highest until time runs out."
-          loading={sheet.isLoading}
-          trophy
-        />
+        <section className={`mt-14 ${active.trophy ? "trophy-rack" : ""}`}>
+          <div className="mb-4 flex items-end justify-between gap-4">
+            <div>
+              <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.18em] text-[var(--led)] uppercase">
+                Open locker
+              </p>
+              <h2 className="text-5xl leading-none text-[var(--ink)] md:text-6xl">{active.title}</h2>
+            </div>
+            <p className="max-w-[18ch] text-right text-sm text-[var(--ink)]/55">{active.kicker}</p>
+          </div>
+          <div className="peg-rail" />
+          {sheet.isLoading ? (
+            <p className="border border-dashed border-[var(--ink)]/18 bg-[var(--tape)] px-5 py-12 text-center text-[var(--ink)]/50">
+              Loading lots…
+            </p>
+          ) : (
+            <PegWall listings={active.listings} empty={active.empty} />
+          )}
+        </section>
       </div>
     </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="bg-[var(--tape)] px-5 py-6">
-      <dt className="font-[family-name:var(--font-display)] text-lg tracking-[0.16em] text-[var(--muted-foreground)] uppercase">
-        {label}
-      </dt>
-      <dd className="mt-1 font-[family-name:var(--font-display)] text-6xl leading-none text-[var(--led)]">{value}</dd>
-    </div>
-  );
-}
-
-function Rack({
-  title,
-  kicker,
-  listings,
-  empty,
-  loading,
-  trophy = false,
-}: {
-  title: string;
-  kicker: string;
-  listings: KitListing[];
-  empty: string;
-  loading: boolean;
-  trophy?: boolean;
-}) {
-  return (
-    <section className={`mt-16 ${trophy ? "trophy-rack" : ""}`}>
-      <div className="mb-4 flex items-end justify-between gap-4">
-        <div>
-          <h2 className="text-5xl leading-none text-[var(--ink)] md:text-6xl">{title}</h2>
-        </div>
-        <p className="max-w-[18ch] text-right text-sm text-[var(--ink)]/55">{kicker}</p>
-      </div>
-      {loading ? (
-        <p className="border border-dashed border-[var(--ink)]/18 bg-[var(--tape)] px-5 py-12 text-center text-[var(--ink)]/50">
-          Loading lots…
-        </p>
-      ) : (
-        <PegWall listings={listings} empty={empty} />
-      )}
-    </section>
   );
 }

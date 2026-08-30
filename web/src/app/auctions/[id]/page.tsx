@@ -54,6 +54,14 @@ export default async function AuctionDetailPage({ params }: AuctionParams) {
 
   const { item } = auction;
   const number = item.playerNumber?.toString().padStart(2, "0") ?? "00";
+  const specs = [
+    ["Number", number],
+    ["Size", item.size],
+    ["Kit", item.kitType],
+    ["Color", item.color],
+    ["Competition", item.league ?? "—"],
+    ["Listed", formatDate(auction.createdAt)],
+  ] as const;
 
   return (
     <div className="relative overflow-hidden">
@@ -62,36 +70,39 @@ export default async function AuctionDetailPage({ params }: AuctionParams) {
         {number}
       </div>
 
-      <div className="relative mx-auto grid max-w-[1400px] gap-12 px-5 py-12 md:grid-cols-[1.05fr_0.95fr] md:px-8 md:py-20">
-        <div className="reveal">
-          <Link
-            href="/auctions"
-            className="nav-line font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--ink)] uppercase"
-          >
-            ← All lots
-          </Link>
-          <p className="mt-8 font-[family-name:var(--font-display)] text-xl tracking-[0.16em] text-[var(--led)] uppercase">
-            {item.club} · {item.season}
-          </p>
-          <h1 className="mt-3 text-7xl leading-[0.86] text-[var(--ink)] md:text-8xl">{item.playerName}</h1>
-          <p className="mt-6 max-w-md text-lg text-[var(--ink)]/75">
-            {item.kitType} kit in {item.color}. {item.condition}. Listed by {auction.seller}.
-          </p>
+      <div className="relative mx-auto max-w-[1400px] px-5 py-12 md:px-8 md:py-20">
+        <Link
+          href="/auctions"
+          className="nav-line font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--ink)] uppercase"
+        >
+          ← All lots
+        </Link>
 
-          <div className="mt-10 flex items-center gap-8">
-            <JerseyBack
-              number={number}
-              color={item.color}
-              className="peg-sway h-40 w-32"
-              style={{ "--hang": "-5deg" } as CSSProperties}
-            />
-            <dl className="grid grid-cols-2 gap-x-8 gap-y-5 text-sm">
-              {[
-                ["Number", number],
-                ["Size", item.size],
-                ["Competition", item.league ?? "—"],
-                ["Listed", formatDate(auction.createdAt)],
-              ].map(([label, value]) => (
+        <div className="mt-8 grid items-start gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-0">
+          <div className="kit-hang reveal">
+            <p className="font-[family-name:var(--font-display)] text-xl tracking-[0.16em] text-[var(--led)] uppercase">
+              {item.club} · {item.season}
+            </p>
+            <h1 className="mt-3 text-7xl leading-[0.86] text-[var(--ink)] md:text-8xl">{item.playerName}</h1>
+            <p className="mt-5 max-w-md text-lg text-[var(--ink)]/75">
+              {item.condition}. Listed by {auction.seller}.
+            </p>
+
+            <div className="kit-hang-bay mt-8 overflow-hidden">
+              {item.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={item.imageUrl} alt="" className="kit-hang-photo" />
+              ) : null}
+              <JerseyBack
+                number={number}
+                color={item.color}
+                className="peg-sway relative z-[1] h-64 w-52 md:h-80 md:w-64"
+                style={{ "--hang": "-5deg" } as CSSProperties}
+              />
+            </div>
+
+            <dl className="kit-spec mt-0">
+              {specs.map(([label, value]) => (
                 <div key={label}>
                   <dt className="font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
                     {label}
@@ -101,9 +112,9 @@ export default async function AuctionDetailPage({ params }: AuctionParams) {
               ))}
             </dl>
           </div>
-        </div>
 
-        <LotTicket auction={auction} bids={bids} />
+          <LotTicket auction={auction} bids={bids} />
+        </div>
       </div>
     </div>
   );

@@ -30,7 +30,7 @@ const columns = [
     links: [
       { href: "/login", label: "Sign in" },
       { href: "/register", label: "Create an account" },
-      { href: "/profile", label: "Your lots" },
+      { href: "/profile", label: "Your locker" },
     ],
   },
 ];

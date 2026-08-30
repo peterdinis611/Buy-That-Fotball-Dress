@@ -58,7 +58,7 @@ export function Field({
         name={name}
         aria-invalid={Boolean(error)}
         className={cn(
-          "h-11 rounded-none border-[var(--border)] bg-black/40 font-[family-name:var(--font-display)] text-xl text-[var(--chalk)] caret-[var(--bib)] placeholder:text-[var(--chalk)]/40",
+          "h-11 rounded-none border-[var(--border)] bg-[#0c0c0c] font-[family-name:var(--font-display)] text-xl text-[#f3f1ec] caret-[var(--bib)] placeholder:text-[#f3f1ec]/40 [-webkit-text-fill-color:#f3f1ec]",
           error && "border-[var(--cardinal)]",
         )}
         {...props}
@@ -121,7 +121,7 @@ export function NativeSelect({
         onChange={(event) => onChange?.(event.target.value)}
         aria-invalid={Boolean(error)}
         className={cn(
-          "h-11 rounded-none border border-[var(--border)] bg-black/40 px-2.5 font-[family-name:var(--font-display)] text-xl text-[var(--chalk)]",
+          "h-11 rounded-none border border-[var(--border)] bg-[#0c0c0c] px-2.5 font-[family-name:var(--font-display)] text-xl text-[#f3f1ec] [-webkit-text-fill-color:#f3f1ec]",
           error && "border-[var(--cardinal)]",
         )}
       >

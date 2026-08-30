@@ -3,7 +3,7 @@ import { ProfileGate } from "@/features/profile";
 import { noIndex } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Your lots",
+  title: "Your locker",
   description: "Shirts you listed, auctions you bid in, and lots you won.",
   alternates: { canonical: "/profile" },
   ...noIndex,
