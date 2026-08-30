@@ -49,6 +49,10 @@ export function SellForm({ auction }: { auction?: Auction }) {
           league: "",
           auctionEnd: defaultAuctionEnd(),
           imageUrl: "",
+          match: "",
+          matchDate: "",
+          opponent: "",
+          pitchPhotoUrl: "",
         }) as SellFields,
     validators: {
       onChange: sellFieldsSchema,
@@ -123,6 +127,26 @@ export function SellForm({ auction }: { auction?: Auction }) {
         <form.Field name="imageUrl">
           {(field) => (
             <TextField field={bindStringField(field)} label="Shirt photo" placeholder="https://" className="md:col-span-2" />
+          )}
+        </form.Field>
+        <p className="md:col-span-2 mt-2 font-[family-name:var(--font-display)] text-xl tracking-[0.12em] text-[var(--bib)]">
+          On the grass
+        </p>
+        <p className="md:col-span-2 -mt-2 text-sm text-[var(--ink)]/60">
+          Optional. Match, opponent, and date stamp the lot Worn. Pitch photo sits on the ticket.
+        </p>
+        <form.Field name="match">
+          {(field) => <TextField field={bindStringField(field)} label="Match" placeholder="World Cup final" />}
+        </form.Field>
+        <form.Field name="opponent">
+          {(field) => <TextField field={bindStringField(field)} label="Opponent" placeholder="Germany" />}
+        </form.Field>
+        <form.Field name="matchDate">
+          {(field) => <TextField field={bindStringField(field)} label="Match date" type="date" />}
+        </form.Field>
+        <form.Field name="pitchPhotoUrl">
+          {(field) => (
+            <TextField field={bindStringField(field)} label="Pitch photo" placeholder="https://" />
           )}
         </form.Field>
       </div>

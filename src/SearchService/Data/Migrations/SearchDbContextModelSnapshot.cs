@@ -54,6 +54,18 @@ namespace SearchService.Data.Migrations
                     b.Property<string>("League")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Match")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("MatchDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Opponent")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PitchPhotoUrl")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("PlayerName")
                         .IsRequired()
                         .HasColumnType("TEXT");

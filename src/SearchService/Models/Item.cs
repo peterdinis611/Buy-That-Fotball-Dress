@@ -22,4 +22,8 @@ public class Item
     public required string Condition { get; set; }
     public string? League { get; set; }
     public string? ImageUrl { get; set; }
+    public string? Match { get; set; }
+    public DateTime? MatchDate { get; set; }
+    public string? Opponent { get; set; }
+    public string? PitchPhotoUrl { get; set; }
 }

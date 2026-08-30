@@ -12,6 +12,10 @@ export type AuctionItem = {
   condition: string;
   league?: string;
   imageUrl?: string;
+  match?: string;
+  matchDate?: string;
+  opponent?: string;
+  pitchPhotoUrl?: string;
 };
 
 export type Auction = {
@@ -59,6 +63,10 @@ export type SearchItem = {
   condition: string;
   league?: string;
   imageUrl?: string;
+  match?: string;
+  matchDate?: string;
+  opponent?: string;
+  pitchPhotoUrl?: string;
 };
 
 export type PagedResult<T> = {
@@ -96,6 +104,10 @@ export type KitListing = {
   condition: string;
   league?: string;
   imageUrl?: string;
+  match?: string;
+  matchDate?: string;
+  opponent?: string;
+  pitchPhotoUrl?: string;
 };
 
 export type SearchQuery = {
@@ -129,6 +141,10 @@ export type CreateAuctionPayload = {
     condition: string;
     league?: string;
     imageUrl?: string;
+    match?: string;
+    matchDate?: string;
+    opponent?: string;
+    pitchPhotoUrl?: string;
   };
 };
 
@@ -145,6 +161,10 @@ export type UpdateAuctionPayload = {
   condition?: string;
   league?: string;
   imageUrl?: string;
+  match?: string;
+  matchDate?: string;
+  opponent?: string;
+  pitchPhotoUrl?: string;
 };
 
 export function fromAuction(auction: Auction): KitListing {
@@ -168,6 +188,10 @@ export function fromAuction(auction: Auction): KitListing {
     condition: auction.item.condition,
     league: auction.item.league,
     imageUrl: auction.item.imageUrl,
+    match: auction.item.match,
+    matchDate: auction.item.matchDate,
+    opponent: auction.item.opponent,
+    pitchPhotoUrl: auction.item.pitchPhotoUrl,
   };
 }
 

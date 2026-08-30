@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { Countdown } from "@/features/auctions/countdown";
 import { StatusPill } from "@/features/auctions/status-pill";
 import { JerseyBack } from "./jersey-back";
+import { WornStamp } from "./worn-stamp";
 import { formatMoney } from "@/lib/format";
 import type { KitListing } from "@/lib/types";
 
@@ -13,11 +14,14 @@ export function KitPeg({ listing, index = 0 }: { listing: KitListing; index?: nu
   return (
     <Link
       href={`/auctions/${listing.id}`}
-      className="kit-hover group relative flex min-w-0 flex-col items-center overflow-hidden bg-[var(--tape)] px-3 pb-5 pt-7 sm:px-4"
+      className="kit-hover group relative flex min-w-0 flex-col items-center bg-[var(--tape)] px-3 pb-5 pt-7 sm:px-4"
       style={{ "--peg": index, "--hang": hang } as CSSProperties}
     >
       <span className="absolute top-2 size-2.5 rounded-full bg-[#c9a227] shadow-[0_6px_0_#6b5412]" />
-      <JerseyBack number={number} color={listing.color} className="peg-sway h-28 w-24 shrink-0" />
+      <span className="relative">
+        <JerseyBack number={number} color={listing.color} className="peg-sway h-28 w-24 shrink-0" />
+        <WornStamp row={listing} compact className="worn-stamp-peg" />
+      </span>
       <p className="mt-4 w-full truncate text-center font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--led)]">
         {listing.club}
       </p>

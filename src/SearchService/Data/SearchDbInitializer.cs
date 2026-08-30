@@ -11,6 +11,14 @@ public sealed class SearchDbInitializer(
     IHttpClientFactory httpClientFactory,
     ILogger<SearchDbInitializer> logger) : IHostedService
 {
+    private static readonly Guid[] SeededProvenanceLots =
+    [
+        Guid.Parse("c3a1f4d2-8b6e-4c91-9f20-1a7b5e3d8c44"),
+        Guid.Parse("0f6c8a21-5e44-4b7d-9c18-2d3a91e5b860"),
+        Guid.Parse("1a8d3f62-9e47-4c05-b2d8-7f13e6a90c55"),
+        Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466"),
+    ];
+
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         using var scope = services.CreateScope();
@@ -21,11 +29,19 @@ public sealed class SearchDbInitializer(
 
         await db.Database.MigrateAsync(cancellationToken);
 
-        if (await items.CountAsync(cancellationToken) > 0)
+        var indexedCount = await items.CountAsync(cancellationToken);
+        var missingProvenance = indexedCount > 0 && await db.Items.AnyAsync(
+            x => SeededProvenanceLots.Contains(x.Id) && x.Match == null,
+            cancellationToken);
+
+        if (indexedCount > 0 && !missingProvenance)
         {
             logger.LogInformation("Search database already contains items, skipping HTTP sync.");
             return;
         }
+
+        if (missingProvenance)
+            logger.LogInformation("Search index is missing provenance, refreshing from AuctionService.");
 
         try
         {

@@ -27,4 +27,8 @@ public class AuctionSyncItemDto
     public string Condition { get; set; } = string.Empty;
     public string? League { get; set; }
     public string? ImageUrl { get; set; }
+    public string? Match { get; set; }
+    public DateTime? MatchDate { get; set; }
+    public string? Opponent { get; set; }
+    public string? PitchPhotoUrl { get; set; }
 }

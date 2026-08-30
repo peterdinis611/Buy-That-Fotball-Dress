@@ -38,6 +38,10 @@ export const salah: KitListing = {
   kitType: "Home",
   condition: "Match-worn",
   league: "Premier League",
+  match: "Premier League",
+  matchDate: "2024-03-10T12:00:00.000Z",
+  opponent: "Manchester City",
+  pitchPhotoUrl: "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass",
 };
 
 export const vini: KitListing = {
@@ -56,6 +60,10 @@ export const vini: KitListing = {
   kitType: "Home",
   condition: "Match-worn",
   league: "La Liga",
+  match: "El Clasico",
+  matchDate: "2024-04-21T12:00:00.000Z",
+  opponent: "Barcelona",
+  pitchPhotoUrl: "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass",
 };
 
 export const cantona: KitListing = {
@@ -74,6 +82,10 @@ export const cantona: KitListing = {
   kitType: "Home",
   condition: "Match-worn",
   league: "Premier League",
+  match: "FA Cup final",
+  matchDate: "1996-05-11T12:00:00.000Z",
+  opponent: "Liverpool",
+  pitchPhotoUrl: "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass",
 };
 
 export const liveWall: KitListing[] = [kane, salah, vini];

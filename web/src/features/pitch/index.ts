@@ -11,3 +11,4 @@ export { TunnelCta } from "./tunnel-cta";
 export { StatusScreen } from "./status-screen";
 export { BoardToaster, pushBoardToast } from "./board-toast";
 export { BoardDrop } from "./board-drop";
+export { WornStamp, hasWornStamp } from "./worn-stamp";

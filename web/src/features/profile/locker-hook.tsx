@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { Countdown, StatusPill } from "@/features/auctions";
 import { JerseyBack } from "@/features/pitch";
+import { WornStamp } from "@/features/pitch/worn-stamp";
 import { formatMoney } from "@/lib/format";
 import type { KitListing } from "@/lib/types";
 
@@ -42,7 +43,10 @@ export function LockerHook({
       style={{ "--peg": index, "--hang": hang } as CSSProperties}
     >
       <span className="absolute top-2 size-2.5 rounded-full bg-[#c9a227] shadow-[0_6px_0_#6b5412]" />
-      <JerseyBack number={number} color={listing.color} className="peg-sway h-32 w-28 shrink-0" />
+      <span className="relative">
+        <JerseyBack number={number} color={listing.color} className="peg-sway h-32 w-28 shrink-0" />
+        <WornStamp row={listing} compact className="worn-stamp-peg" />
+      </span>
       <div className="mt-3 flex w-full items-center justify-between gap-2 px-0.5">
         <p className="truncate font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--led)]">
           {listing.club}

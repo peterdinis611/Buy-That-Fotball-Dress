@@ -3,6 +3,7 @@ using IdentityService.DTOs;
 using IdentityService.Entities;
 using IdentityService.Mapping;
 using Caching;
+using MassTransit;
 using Microsoft.AspNetCore.Identity;
 
 namespace IdentityService.Services;
@@ -10,7 +11,8 @@ namespace IdentityService.Services;
 public sealed class IdentityAppService(
     UserManager<ApplicationUser> userManager,
     ITokenService tokenService,
-    IPitchCache cache) : IIdentityService
+    IPitchCache cache,
+    IPublishEndpoint publishEndpoint) : IIdentityService
 {
     public async Task<Result<UserDto>> RegisterAsync(RegisterDto dto, CancellationToken cancellationToken)
     {
@@ -37,6 +39,8 @@ public sealed class IdentityAppService(
             var error = string.Join(" ", created.Errors.Select(e => e.Description));
             return Result<UserDto>.BadRequest(error);
         }
+
+        await publishEndpoint.Publish(user.ToUserCreated(), cancellationToken);
 
         return Result<UserDto>.Success(user.ToDto(tokenService.CreateToken(user)));
     }

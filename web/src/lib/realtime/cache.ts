@@ -23,6 +23,10 @@ export type LiveAuctionUpdated = {
   condition?: string;
   league?: string;
   imageUrl?: string;
+  match?: string;
+  matchDate?: string;
+  opponent?: string;
+  pitchPhotoUrl?: string;
 };
 
 export type LiveAuctionDeleted = {
@@ -240,6 +244,10 @@ export function applyLiveAuctionUpdated(queryClient: QueryClient, update: LiveAu
               condition: update.condition ?? item.condition,
               league: update.league ?? item.league,
               imageUrl: update.imageUrl ?? item.imageUrl,
+              match: update.match ?? item.match,
+              matchDate: update.matchDate ?? item.matchDate,
+              opponent: update.opponent ?? item.opponent,
+              pitchPhotoUrl: update.pitchPhotoUrl ?? item.pitchPhotoUrl,
             }
           : item,
       ),
@@ -269,6 +277,10 @@ function withLiveUpdate(auction: Auction, update: LiveAuctionUpdated): Auction {
       condition: update.condition ?? auction.item.condition,
       league: update.league ?? auction.item.league,
       imageUrl: update.imageUrl ?? auction.item.imageUrl,
+      match: update.match ?? auction.item.match,
+      matchDate: update.matchDate ?? auction.item.matchDate,
+      opponent: update.opponent ?? auction.item.opponent,
+      pitchPhotoUrl: update.pitchPhotoUrl ?? auction.item.pitchPhotoUrl,
     },
   };
 }

@@ -19,6 +19,7 @@ public static class DbInitializer
         {
             logger.LogInformation("Database already contains auctions, skipping auction seed.");
             await SeedBiddersIfEmptyAsync(context, logger, cancellationToken);
+            await BackfillProvenanceAsync(context, publishEndpoint, logger, cancellationToken);
             return;
         }
 
@@ -46,7 +47,11 @@ public static class DbInitializer
                     KitType = "Home",
                     Condition = "New",
                     League = "La Liga",
-                    ImageUrl = "https://placehold.co/600x800/ffffff/1d3557?text=Real+Madrid+7"
+                    ImageUrl = "https://placehold.co/600x800/ffffff/1d3557?text=Real+Madrid+7",
+                    Match = "El Clasico",
+                    MatchDate = new DateTime(2024, 4, 21, 12, 0, 0, DateTimeKind.Utc),
+                    Opponent = "Barcelona",
+                    PitchPhotoUrl = "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass"
                 }
             },
             new()
@@ -92,7 +97,11 @@ public static class DbInitializer
                     KitType = "Home",
                     Condition = "New",
                     League = "Premier League",
-                    ImageUrl = "https://placehold.co/600x800/c8102e/ffffff?text=LFC+11"
+                    ImageUrl = "https://placehold.co/600x800/c8102e/ffffff?text=LFC+11",
+                    Match = "Premier League",
+                    MatchDate = new DateTime(2024, 3, 10, 12, 0, 0, DateTimeKind.Utc),
+                    Opponent = "Manchester City",
+                    PitchPhotoUrl = "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass"
                 }
             },
             new()
@@ -161,7 +170,11 @@ public static class DbInitializer
                     KitType = "Home",
                     Condition = "Vintage",
                     League = "Premier League",
-                    ImageUrl = "https://placehold.co/600x800/da291c/ffffff?text=Cantona+7"
+                    ImageUrl = "https://placehold.co/600x800/da291c/ffffff?text=Cantona+7",
+                    Match = "FA Cup final",
+                    MatchDate = new DateTime(1996, 5, 11, 12, 0, 0, DateTimeKind.Utc),
+                    Opponent = "Liverpool",
+                    PitchPhotoUrl = "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass"
                 }
             },
             new()
@@ -188,7 +201,11 @@ public static class DbInitializer
                     KitType = "Home",
                     Condition = "Vintage",
                     League = "World Cup",
-                    ImageUrl = "https://placehold.co/600x800/ffdf00/009c3b?text=Ronaldo+9"
+                    ImageUrl = "https://placehold.co/600x800/ffdf00/009c3b?text=Ronaldo+9",
+                    Match = "World Cup final",
+                    MatchDate = new DateTime(2002, 6, 30, 12, 0, 0, DateTimeKind.Utc),
+                    Opponent = "Germany",
+                    PitchPhotoUrl = "https://placehold.co/800x500/1a5c2a/ffdf00?text=Yokohama+2002"
                 }
             },
             new()
@@ -284,5 +301,43 @@ public static class DbInitializer
 
         await context.SaveChangesAsync(cancellationToken);
         logger.LogInformation("Seeded {Count} bidders onto the dressing-room sheet.", seeded);
+    }
+
+    private static async Task BackfillProvenanceAsync(
+        AuctionDbContext context,
+        IPublishEndpoint publishEndpoint,
+        ILogger logger,
+        CancellationToken cancellationToken)
+    {
+        var shots = new (Guid Id, string Match, DateTime Date, string Opponent, string Pitch)[]
+        {
+            (Guid.Parse("c3a1f4d2-8b6e-4c91-9f20-1a7b5e3d8c44"), "El Clasico", new DateTime(2024, 4, 21, 12, 0, 0, DateTimeKind.Utc), "Barcelona", "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass"),
+            (Guid.Parse("0f6c8a21-5e44-4b7d-9c18-2d3a91e5b860"), "Premier League", new DateTime(2024, 3, 10, 12, 0, 0, DateTimeKind.Utc), "Manchester City", "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass"),
+            (Guid.Parse("1a8d3f62-9e47-4c05-b2d8-7f13e6a90c55"), "FA Cup final", new DateTime(1996, 5, 11, 12, 0, 0, DateTimeKind.Utc), "Liverpool", "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass"),
+            (Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466"), "World Cup final", new DateTime(2002, 6, 30, 12, 0, 0, DateTimeKind.Utc), "Germany", "https://placehold.co/800x500/1a5c2a/ffdf00?text=Yokohama+2002"),
+        };
+
+        var touched = new List<Auction>();
+        foreach (var shot in shots)
+        {
+            var auction = await context.Auctions.Include(x => x.Item).FirstOrDefaultAsync(x => x.Id == shot.Id, cancellationToken);
+            if (auction?.Item is null || !string.IsNullOrWhiteSpace(auction.Item.Match))
+                continue;
+
+            auction.Item.Match = shot.Match;
+            auction.Item.MatchDate = shot.Date;
+            auction.Item.Opponent = shot.Opponent;
+            auction.Item.PitchPhotoUrl = shot.Pitch;
+            auction.UpdatedAt = DateTime.UtcNow;
+            touched.Add(auction);
+        }
+
+        if (touched.Count == 0) return;
+
+        await context.SaveChangesAsync(cancellationToken);
+        foreach (var auction in touched)
+            await publishEndpoint.Publish(auction.ToAuctionUpdated(), cancellationToken);
+
+        logger.LogInformation("Stamped provenance on {Count} shirts.", touched.Count);
     }
 }

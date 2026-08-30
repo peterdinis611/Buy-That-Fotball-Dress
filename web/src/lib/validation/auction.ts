@@ -60,6 +60,19 @@ export const sellFieldsSchema = v.object({
     v.maxLength(500, "Photo URL is too long."),
     v.check((value) => value === "" || /^https?:\/\/.+/i.test(value), "Photo must be a URL."),
   ),
+  match: v.pipe(v.string(), v.trim(), v.maxLength(120, "Match name is too long.")),
+  matchDate: v.pipe(
+    v.string(),
+    v.trim(),
+    v.check((value) => value === "" || !Number.isNaN(new Date(value).getTime()), "Enter a valid match date."),
+  ),
+  opponent: v.pipe(v.string(), v.trim(), v.maxLength(100, "Opponent is too long.")),
+  pitchPhotoUrl: v.pipe(
+    v.string(),
+    v.trim(),
+    v.maxLength(500, "Pitch photo URL is too long."),
+    v.check((value) => value === "" || /^https?:\/\/.+/i.test(value), "Pitch photo must be a URL."),
+  ),
 });
 
 export type SellFields = v.InferOutput<typeof sellFieldsSchema>;
@@ -79,6 +92,10 @@ export function toCreateAuctionPayload(fields: SellFields): CreateAuctionPayload
       condition: fields.condition,
       league: fields.league || undefined,
       imageUrl: fields.imageUrl || undefined,
+      match: fields.match || undefined,
+      matchDate: fields.matchDate ? `${fields.matchDate}T12:00:00.000Z` : undefined,
+      opponent: fields.opponent || undefined,
+      pitchPhotoUrl: fields.pitchPhotoUrl || undefined,
     },
   };
 }
@@ -97,6 +114,10 @@ export function toUpdateAuctionPayload(fields: SellFields): UpdateAuctionPayload
     condition: fields.condition,
     league: fields.league || undefined,
     imageUrl: fields.imageUrl || undefined,
+    match: fields.match || undefined,
+    matchDate: fields.matchDate ? `${fields.matchDate}T12:00:00.000Z` : undefined,
+    opponent: fields.opponent || undefined,
+    pitchPhotoUrl: fields.pitchPhotoUrl || undefined,
   };
 }
 
@@ -116,6 +137,10 @@ export function toSellFields(auction: Auction): SellFields {
     league: auction.item.league ?? "",
     auctionEnd: new Date(offset).toISOString().slice(0, 16),
     imageUrl: auction.item.imageUrl ?? "",
+    match: auction.item.match ?? "",
+    matchDate: auction.item.matchDate ? auction.item.matchDate.slice(0, 10) : "",
+    opponent: auction.item.opponent ?? "",
+    pitchPhotoUrl: auction.item.pitchPhotoUrl ?? "",
   };
 }
 

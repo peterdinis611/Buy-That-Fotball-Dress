@@ -7,6 +7,8 @@ import { useForm } from "@tanstack/react-form";
 import { FormBanner, TextField, bindStringField } from "@/components/forms/field";
 import { Button } from "@/components/ui/button";
 import { JerseyBack } from "@/features/pitch";
+import { WornStamp } from "@/features/pitch/worn-stamp";
+import { formatDate, formatMatchDay, formatMoney, pad } from "@/lib/format";
 import {
   useAuctionQuery,
   useAuth,
@@ -17,7 +19,6 @@ import {
   usePlayerSheetQuery,
   useWatchMutation,
 } from "@/hooks";
-import { formatDate, formatMoney, pad } from "@/lib/format";
 import { BidTape } from "./bid-tape";
 import { StatusPill } from "./status-pill";
 import { DeskSlip } from "@/features/profile/desk-slip";
@@ -49,6 +50,9 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
     ["Kit", item.kitType],
     ["Color", item.color],
     ["Competition", item.league ?? "—"],
+    ...(item.match ? ([["Match", item.match]] as const) : []),
+    ...(item.opponent ? ([["Opponent", `vs ${item.opponent}`]] as const) : []),
+    ...(item.matchDate ? ([["On the grass", formatMatchDay(item.matchDate)]] as const) : []),
     ["Listed", formatDate(lot.createdAt)],
   ] as const;
 
@@ -64,13 +68,14 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
       </div>
 
       <div className="lot-board-face">
-        <div className="flex justify-center md:justify-start">
+        <div className="relative flex justify-center md:justify-start">
           <JerseyBack
             number={number}
             color={item.color}
             className="peg-sway h-52 w-40 md:h-64 md:w-52"
             style={{ "--hang": "-5deg" } as CSSProperties}
           />
+          <WornStamp row={item} className="worn-stamp-lot" />
         </div>
 
         <div>
@@ -104,6 +109,16 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
               </div>
             ))}
           </dl>
+          {item.pitchPhotoUrl ? (
+            <figure className="grass-shot mt-6">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={item.pitchPhotoUrl} alt="" />
+              <figcaption>
+                On the grass{item.match ? ` · ${item.match}` : ""}
+                {item.opponent ? ` vs ${item.opponent}` : ""}
+              </figcaption>
+            </figure>
+          ) : null}
         </div>
       </div>
 

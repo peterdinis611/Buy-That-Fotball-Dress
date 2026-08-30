@@ -26,7 +26,11 @@ public static class ItemMapper
         message.KitType,
         message.Condition,
         message.League,
-        message.ImageUrl);
+        message.ImageUrl,
+        message.Match,
+        message.MatchDate,
+        message.Opponent,
+        message.PitchPhotoUrl);
 
     public static Item ToItem(this AuctionUpdated message) => Create(
         message.Id,
@@ -48,7 +52,11 @@ public static class ItemMapper
         message.KitType,
         message.Condition,
         message.League,
-        message.ImageUrl);
+        message.ImageUrl,
+        message.Match,
+        message.MatchDate,
+        message.Opponent,
+        message.PitchPhotoUrl);
 
     public static Item ToItem(this AuctionSyncDto auction) => Create(
         auction.Id,
@@ -70,7 +78,11 @@ public static class ItemMapper
         auction.Item.KitType,
         auction.Item.Condition,
         auction.Item.League,
-        auction.Item.ImageUrl);
+        auction.Item.ImageUrl,
+        auction.Item.Match,
+        auction.Item.MatchDate,
+        auction.Item.Opponent,
+        auction.Item.PitchPhotoUrl);
 
     private static Item Create(
         Guid id,
@@ -92,7 +104,11 @@ public static class ItemMapper
         string kitType,
         string condition,
         string? league,
-        string? imageUrl) => new()
+        string? imageUrl,
+        string? match,
+        DateTime? matchDate,
+        string? opponent,
+        string? pitchPhotoUrl) => new()
     {
         Id = id,
         ReservePrice = reservePrice,
@@ -113,6 +129,10 @@ public static class ItemMapper
         KitType = kitType,
         Condition = condition,
         League = league,
-        ImageUrl = imageUrl
+        ImageUrl = imageUrl,
+        Match = match,
+        MatchDate = matchDate,
+        Opponent = opponent,
+        PitchPhotoUrl = pitchPhotoUrl
     };
 }

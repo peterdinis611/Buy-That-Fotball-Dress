@@ -46,3 +46,11 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/NotificationService/bin/Debug/net10.0/RabbitMQ.Client.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/NotificationService/bin/Debug/net10.0/Contracts.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/NotificationService/bin/Debug/net10.0/Contracts.pdb
+/tmp/kitvault-build/notify/appsettings.Development.json
+/tmp/kitvault-build/notify/appsettings.json
+/tmp/kitvault-build/notify/NotificationService.staticwebassets.endpoints.json
+/tmp/kitvault-build/notify/NotificationService
+/tmp/kitvault-build/notify/NotificationService.deps.json
+/tmp/kitvault-build/notify/NotificationService.runtimeconfig.json
+/tmp/kitvault-build/notify/NotificationService.dll
+/tmp/kitvault-build/notify/NotificationService.pdb

@@ -868,6 +868,111 @@
   transform: rotate(12deg);
 }
 
+.worn-stamp {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  padding: 0.38em 0.58em 0.3em;
+  border: 3px solid var(--led);
+  outline: 1px dashed var(--led);
+  outline-offset: 3px;
+  color: var(--led);
+  background: color-mix(in oklab, var(--tape) 78%, transparent);
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.08em;
+  line-height: 0.92;
+  text-transform: uppercase;
+  transform: rotate(-11deg);
+  mix-blend-mode: multiply;
+  box-shadow: inset 0 0 10px color-mix(in oklab, var(--led) 22%, transparent);
+}
+
+.worn-stamp::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.2;
+  background-image: radial-gradient(var(--led) 0.55px, transparent 0.7px);
+  background-size: 3px 3px;
+}
+
+.worn-stamp-mark,
+.worn-stamp-vs,
+.worn-stamp-when {
+  position: relative;
+}
+
+.worn-stamp-mark {
+  font-size: 1.55rem;
+  letter-spacing: 0.2em;
+}
+
+.worn-stamp-vs {
+  margin-top: 0.14em;
+  max-width: 8.6rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+}
+
+.worn-stamp-when {
+  margin-top: 0.08em;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+}
+
+.worn-stamp-sm {
+  padding: 0.18em 0.3em 0.14em;
+  border-width: 2px;
+  outline-width: 1px;
+  outline-offset: 2px;
+  transform: rotate(-13deg);
+}
+
+.worn-stamp-sm .worn-stamp-mark {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+}
+
+.worn-stamp-sm .worn-stamp-vs {
+  max-width: 4.8rem;
+  font-size: 0.46rem;
+}
+
+.worn-stamp-sm .worn-stamp-when {
+  font-size: 0.4rem;
+}
+
+.worn-stamp-lot {
+  right: -0.35rem;
+  bottom: 1.15rem;
+  mix-blend-mode: normal;
+  background: color-mix(in oklab, #f3f1ec 88%, transparent);
+}
+
+.worn-stamp-peg {
+  right: -0.2rem;
+  bottom: 0.2rem;
+}
+
+.worn-stamp-card {
+  top: 16%;
+  right: 8%;
+  mix-blend-mode: multiply;
+}
+
+.dark .worn-stamp-peg,
+.dark .worn-stamp-card {
+  mix-blend-mode: normal;
+  background: color-mix(in oklab, var(--led) 16%, transparent);
+}
+
 .lot-card-exit-right {
   animation: lot-fly-right 0.32s cubic-bezier(0.2, 0.85, 0.25, 1) forwards;
 }
@@ -1442,6 +1547,31 @@ a.board-desk-player:hover {
   gap: 0.15rem 1.5rem;
   border-top: 1px dashed rgb(243 241 236 / 0.18);
   padding-top: 1rem;
+}
+
+.grass-shot {
+  margin: 0;
+  background: #f3f1ec;
+  border: 8px solid #f3f1ec;
+  box-shadow: 0 10px 0 rgb(0 0 0 / 0.28), 0 18px 28px rgb(0 0 0 / 0.35);
+  transform: rotate(-1.5deg);
+}
+
+.grass-shot img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 8 / 5;
+  object-fit: cover;
+  filter: saturate(0.88) contrast(1.06);
+}
+
+.grass-shot figcaption {
+  padding: 0.5rem 0.45rem 0.4rem;
+  color: var(--stud);
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .lot-board .led-cell {

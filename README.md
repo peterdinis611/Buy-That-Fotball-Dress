@@ -69,11 +69,15 @@ All mutating routes need a JWT from Identity.
 
 ## Letters and the LED tape
 
-NotificationService listens on RabbitMQ and pushes the live board over SignalR.
+NotificationService listens on RabbitMQ and pushes the live board over SignalR. IdentityService is on the same bus: a new squad name publishes `UserCreated`.
 
-Personal letters (outbid, you won, paid / ship it, shirt shipped) are written to the NotificationService log. They look up email at Identity `GET /api/auth/users/{username}`. To send real mail, set `Smtp:Host` (and optional `Port`, `From`, `Username`, `Password`, `Ssl`) on NotificationService.
+Personal letters (outbid, you won, paid / ship it, shirt shipped, you're on the sheet) are written to the NotificationService log. They look up email at Identity `GET /api/auth/users/{username}`. To send real mail, set `Smtp:Host` (and optional `Port`, `From`, `Username`, `Password`, `Ssl`) on NotificationService.
 
 The same events show as LED toasts and Board tape when you are signed in as the person they are for.
+
+## Provenance
+
+A lot can carry the **match**, the **date**, the **opponent**, and a **photo from the grass**. Fill match, opponent, and date and the shirt gets a **Worn** stamp on the peg and the lot board. The pitch photo is optional and sits on the ticket. That is KIT VAULT, not a generic listing.
 
 ## Layout
 

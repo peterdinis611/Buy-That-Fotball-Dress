@@ -93,6 +93,20 @@ public class ItemValidator : AbstractValidator<Item>
             .Must(BeHttpsUrl)
             .When(x => !string.IsNullOrWhiteSpace(x.ImageUrl))
             .WithMessage("Image URL must be an HTTPS URL.");
+
+        RuleFor(x => x.Match)
+            .MaximumLength(JerseyRules.MaxMatchLength)
+            .When(x => x.Match is not null);
+
+        RuleFor(x => x.Opponent)
+            .MaximumLength(JerseyRules.MaxNameLength)
+            .When(x => x.Opponent is not null);
+
+        RuleFor(x => x.PitchPhotoUrl)
+            .MaximumLength(JerseyRules.MaxImageUrlLength)
+            .Must(BeHttpsUrl)
+            .When(x => !string.IsNullOrWhiteSpace(x.PitchPhotoUrl))
+            .WithMessage("Pitch photo URL must be an HTTPS URL.");
     }
 
     private static bool NotContainControlChars(string value) =>

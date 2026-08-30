@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { Countdown } from "@/features/auctions";
 import { JerseyBack, kitColors } from "./jersey-back";
+import { WornStamp } from "./worn-stamp";
 import { pushBoardToast } from "./board-toast";
-import { formatMoney } from "@/lib/format";
+import { formatMatchDay, formatMoney } from "@/lib/format";
 import { fromAuction, type Auction, type KitListing } from "@/lib/types";
 import { useAuth, useHangLotMutation, usePlayerSheetQuery, useSwipeCard, type SwipeDir } from "@/hooks";
 
@@ -191,7 +192,10 @@ export function FeaturedHero({ lots }: { lots: Auction[] }) {
             {listing.playerName}
           </h1>
           <p className="reveal delay-2 mt-4 max-w-md text-lg text-[var(--ink)]/80">
-            {listing.club} {listing.season} {listing.kitType.toLowerCase()} shirt, size {listing.size}. Match-worn.
+            {listing.club} {listing.season} {listing.kitType.toLowerCase()} shirt, size {listing.size}.
+            {listing.match && listing.opponent && listing.matchDate
+              ? ` Worn vs ${listing.opponent} · ${formatMatchDay(listing.matchDate)}.`
+              : " Match-worn."}
             {live
               ? " Bid higher than the current price before the clock hits zero."
               : " This lot is no longer taking bids."}
@@ -201,12 +205,15 @@ export function FeaturedHero({ lots }: { lots: Auction[] }) {
           </p>
 
           <div className="reveal delay-3 relative mt-8 hidden min-h-[280px] items-end justify-start lg:flex">
-            <JerseyBack
-              number={number}
-              color={listing.color}
-              className="peg-sway relative z-10 h-64 w-52 md:h-72 md:w-56"
-              style={{ "--hang": "-6deg" } as CSSProperties}
-            />
+            <span className="relative z-10">
+              <JerseyBack
+                number={number}
+                color={listing.color}
+                className="peg-sway h-64 w-52 md:h-72 md:w-56"
+                style={{ "--hang": "-6deg" } as CSSProperties}
+              />
+              <WornStamp row={listing} className="worn-stamp-lot" />
+            </span>
             {listing.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -463,6 +470,7 @@ function ShirtFace({ listing, muted = false }: { listing: KitListing; muted?: bo
       <p className="lot-card-club">{clubWord(listing.club)}</p>
       <p className="lot-card-number">{number}</p>
       <p className="lot-card-player">{listing.playerName}</p>
+      <WornStamp row={listing} compact className="worn-stamp-card" />
     </div>
   );
 }

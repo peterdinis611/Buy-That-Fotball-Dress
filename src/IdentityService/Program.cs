@@ -6,6 +6,7 @@ using IdentityService.Data;
 using IdentityService.Entities;
 using IdentityService.Services;
 using IdentityService.Validation;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -66,6 +67,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("identity", false));
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMq:Host"] ?? "localhost", "/", h =>
+        {
+            h.Username(builder.Configuration["RabbitMq:Username"] ?? "guest");
+            h.Password(builder.Configuration["RabbitMq:Password"] ?? "guest");
+        });
+
+        cfg.UseMessageRetry(r => r.Interval(5, TimeSpan.FromSeconds(5)));
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 builder.Services.AddHostedService<IdentitySeedHostedService>();
 builder.Services.AddOpenApi();

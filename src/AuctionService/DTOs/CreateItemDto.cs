@@ -33,4 +33,15 @@ public class CreateItemDto
 
     [Url, MaxLength(500)]
     public string? ImageUrl { get; set; }
+
+    [MaxLength(120)]
+    public string? Match { get; set; }
+
+    public DateTime? MatchDate { get; set; }
+
+    [MaxLength(100)]
+    public string? Opponent { get; set; }
+
+    [Url, MaxLength(500)]
+    public string? PitchPhotoUrl { get; set; }
 }

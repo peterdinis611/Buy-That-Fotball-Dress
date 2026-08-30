@@ -16,6 +16,14 @@ export function formatDate(iso: string) {
   }).format(new Date(iso));
 }
 
+export function formatMatchDay(iso: string) {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(iso));
+}
+
 export function remainingParts(iso: string) {
   const diff = new Date(iso).getTime() - Date.now();
   if (diff <= 0) return null;

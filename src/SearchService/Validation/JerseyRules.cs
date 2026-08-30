@@ -18,6 +18,7 @@ public static class JerseyRules
     public const int MaxColorLength = 50;
     public const int MaxLeagueLength = 50;
     public const int MaxImageUrlLength = 500;
+    public const int MaxMatchLength = 120;
     public const int MaxReservePrice = 1_000_000;
     public const int MinPage = 1;
     public const int MaxPage = 1_000;

@@ -16,3 +16,6 @@
 /tmp/kv-notify-check/Contracts.deps.json
 /tmp/kv-notify-check/Contracts.dll
 /tmp/kv-notify-check/Contracts.pdb
+/tmp/kitvault-build/notify/Contracts.deps.json
+/tmp/kitvault-build/notify/Contracts.dll
+/tmp/kitvault-build/notify/Contracts.pdb

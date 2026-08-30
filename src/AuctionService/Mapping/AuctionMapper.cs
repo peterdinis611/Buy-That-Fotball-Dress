@@ -34,7 +34,11 @@ public static class AuctionMapper
         KitType = item.KitType,
         Condition = item.Condition,
         League = item.League,
-        ImageUrl = item.ImageUrl
+        ImageUrl = item.ImageUrl,
+        Match = item.Match,
+        MatchDate = item.MatchDate,
+        Opponent = item.Opponent,
+        PitchPhotoUrl = item.PitchPhotoUrl
     };
 
     public static Auction ToEntity(this CreateAuctionDto dto)
@@ -62,7 +66,11 @@ public static class AuctionMapper
                 KitType = dto.Item.KitType.Trim(),
                 Condition = dto.Item.Condition.Trim(),
                 League = dto.Item.League?.Trim(),
-                ImageUrl = dto.Item.ImageUrl
+                ImageUrl = BlankToNull(dto.Item.ImageUrl),
+                Match = BlankToNull(dto.Item.Match),
+                MatchDate = dto.Item.MatchDate?.ToUniversalTime(),
+                Opponent = BlankToNull(dto.Item.Opponent),
+                PitchPhotoUrl = BlankToNull(dto.Item.PitchPhotoUrl)
             }
         };
     }
@@ -103,7 +111,19 @@ public static class AuctionMapper
             auction.Item.League = dto.League.Trim();
 
         if (dto.ImageUrl is not null)
-            auction.Item.ImageUrl = dto.ImageUrl;
+            auction.Item.ImageUrl = BlankToNull(dto.ImageUrl);
+
+        if (dto.Match is not null)
+            auction.Item.Match = BlankToNull(dto.Match);
+
+        if (dto.MatchDate is not null)
+            auction.Item.MatchDate = dto.MatchDate.Value.ToUniversalTime();
+
+        if (dto.Opponent is not null)
+            auction.Item.Opponent = BlankToNull(dto.Opponent);
+
+        if (dto.PitchPhotoUrl is not null)
+            auction.Item.PitchPhotoUrl = BlankToNull(dto.PitchPhotoUrl);
 
         auction.UpdatedAt = DateTime.UtcNow;
     }
@@ -129,7 +149,11 @@ public static class AuctionMapper
         KitType = auction.Item.KitType,
         Condition = auction.Item.Condition,
         League = auction.Item.League,
-        ImageUrl = auction.Item.ImageUrl
+        ImageUrl = auction.Item.ImageUrl,
+        Match = auction.Item.Match,
+        MatchDate = auction.Item.MatchDate,
+        Opponent = auction.Item.Opponent,
+        PitchPhotoUrl = auction.Item.PitchPhotoUrl
     };
 
     public static AuctionUpdated ToAuctionUpdated(this Auction auction) => new()
@@ -153,6 +177,13 @@ public static class AuctionMapper
         KitType = auction.Item.KitType,
         Condition = auction.Item.Condition,
         League = auction.Item.League,
-        ImageUrl = auction.Item.ImageUrl
+        ImageUrl = auction.Item.ImageUrl,
+        Match = auction.Item.Match,
+        MatchDate = auction.Item.MatchDate,
+        Opponent = auction.Item.Opponent,
+        PitchPhotoUrl = auction.Item.PitchPhotoUrl
     };
+
+    private static string? BlankToNull(string? value) =>
+        string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 }
