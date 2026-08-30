@@ -16,6 +16,22 @@ Opens [http://localhost:3000](http://localhost:3000). Ctrl+C stops everything.
 
 Backends only: `./dev.sh --no-web`. After you change a service DLL, stop and run `./dev.sh` again — running processes hold the old binaries.
 
+## Tests
+
+```bash
+dotnet test
+```
+
+SQLite in memory, no RabbitMQ. Covers lot provenance, bid floor, desk till / tracking / dispute, search rules, and squad-name validation.
+
+Frontend:
+
+```bash
+cd web && npm test
+```
+
+Vitest. Worn stamp, sell/bid validation, live cache, search fuse.
+
 ## Sign in
 
 Seed password for every squad name: `PitchSide!1`

@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "3gkk/UzHd84=",
+  "success": false,
+  "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/KitVault.Tests.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Unable to load the service index for source https://api.nuget.org/v3/index.json.\n  No route to host (api.nuget.org:443)\n  No route to host",
+      "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/KitVault.Tests.csproj",
+      "filePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/KitVault.Tests.csproj",
+      "targetGraphs": []
+    }
+  ]
+}

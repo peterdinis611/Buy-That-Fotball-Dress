@@ -17,3 +17,9 @@ npm run storybook
 ```
 
 [http://localhost:6006](http://localhost:6006). Stories sit next to the components (`*.stories.tsx`).
+
+## Tests
+
+```bash
+npm test
+```

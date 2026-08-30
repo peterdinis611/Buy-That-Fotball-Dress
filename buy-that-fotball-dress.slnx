@@ -10,4 +10,7 @@
     <Project Path="src/SearchService/SearchService.csproj" />
     <Project Path="src/SettlementService/SettlementService.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/KitVault.Tests/KitVault.Tests.csproj" />
+  </Folder>
 </Solution>
