@@ -3031,7 +3031,7 @@
     ]
   },
   "packageFolders": {
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget": {}
+    "/Users/peterdinis/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -3039,7 +3039,7 @@
       "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/BidService/BidService.csproj",
       "projectName": "BidService",
       "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/BidService/BidService.csproj",
-      "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget",
+      "packagesPath": "/Users/peterdinis/.nuget/packages/",
       "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/BidService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [

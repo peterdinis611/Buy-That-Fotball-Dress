@@ -1,19 +1,19 @@
 {
   "version": 2,
-  "dgSpecHash": "skJ0MSqGC2w=",
+  "dgSpecHash": "SACW5MUMie0=",
   "success": true,
   "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/EmailService/EmailService.csproj",
   "expectedPackageFiles": [
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget/bouncycastle.cryptography/2.5.1/bouncycastle.cryptography.2.5.1.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget/mailkit/4.11.0/mailkit.4.11.0.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget/masstransit/8.3.6/masstransit.8.3.6.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget/masstransit.abstractions/8.3.6/masstransit.abstractions.8.3.6.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget/masstransit.rabbitmq/8.3.6/masstransit.rabbitmq.8.3.6.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget/mimekit/4.11.0/mimekit.4.11.0.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget/rabbitmq.client/7.0.0/rabbitmq.client.7.0.0.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/36bacb186957c6163031d0567ba0022f/nuget/system.security.cryptography.pkcs/8.0.1/system.security.cryptography.pkcs.8.0.1.nupkg.sha512"
+    "/Users/peterdinis/.nuget/packages/bouncycastle.cryptography/2.5.1/bouncycastle.cryptography.2.5.1.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/mailkit/4.11.0/mailkit.4.11.0.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/masstransit/8.3.6/masstransit.8.3.6.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/masstransit.abstractions/8.3.6/masstransit.abstractions.8.3.6.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/masstransit.rabbitmq/8.3.6/masstransit.rabbitmq.8.3.6.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/mimekit/4.11.0/mimekit.4.11.0.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/rabbitmq.client/7.0.0/rabbitmq.client.7.0.0.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/system.security.cryptography.pkcs/8.0.1/system.security.cryptography.pkcs.8.0.1.nupkg.sha512"
   ],
   "logs": [
     {
