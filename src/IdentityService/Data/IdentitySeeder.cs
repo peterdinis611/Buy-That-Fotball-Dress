@@ -1,3 +1,4 @@
+using Contracts;
 using IdentityService.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,16 +19,29 @@ public static class IdentitySeeder
         ("intermiami.official", "miami@kitvault.test", "Inter Miami Official"),
         ("oldtrafford.vault", "oldtrafford@kitvault.test", "Old Trafford Vault"),
         ("selecao.archive", "selecao@kitvault.test", "Selecao Archive"),
-        ("tehelne.kits", "tehelne@kitvault.test", "Tehelne Kits")
+        ("tehelne.kits", "tehelne@kitvault.test", "Tehelne Kits"),
+        ("steward", "steward@kitvault.test", "Match Steward")
     ];
 
     public static async Task SeedAsync(
         IdentityDataContext context,
         UserManager<ApplicationUser> userManager,
+        RoleManager<IdentityRole> roleManager,
         ILogger logger,
         CancellationToken cancellationToken = default)
     {
         await context.Database.MigrateAsync(cancellationToken);
+
+        if (await roleManager.FindByNameAsync(SquadRoles.Steward) is null)
+        {
+            var role = await roleManager.CreateAsync(new IdentityRole(SquadRoles.Steward));
+            if (!role.Succeeded)
+            {
+                logger.LogWarning(
+                    "Could not seed the steward role: {Errors}",
+                    string.Join("; ", role.Errors.Select(e => e.Description)));
+            }
+        }
 
         var added = 0;
         foreach (var (username, email, displayName) in Squad)
@@ -54,6 +68,22 @@ public static class IdentitySeeder
             }
 
             added++;
+        }
+
+        var steward = await userManager.FindByNameAsync("steward");
+        if (steward is not null && !await userManager.IsInRoleAsync(steward, SquadRoles.Steward))
+        {
+            var pinned = await userManager.AddToRoleAsync(steward, SquadRoles.Steward);
+            if (!pinned.Succeeded)
+            {
+                logger.LogWarning(
+                    "Could not pin steward: {Errors}",
+                    string.Join("; ", pinned.Errors.Select(e => e.Description)));
+            }
+            else
+            {
+                logger.LogInformation("Steward is on the tunnel door.");
+            }
         }
 
         if (added == 0)

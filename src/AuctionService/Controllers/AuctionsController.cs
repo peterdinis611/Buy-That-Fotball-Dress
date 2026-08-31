@@ -3,6 +3,7 @@ using AuctionService.Common;
 using AuctionService.DTOs;
 using AuctionService.Entities;
 using AuctionService.Services;
+using Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -106,6 +107,23 @@ public class AuctionsController(IAuctionsService auctionsService) : ControllerBa
             return Unauthorized();
 
         var result = await auctionsService.DeleteAsync(id, seller, cancellationToken);
+
+        if (!result.IsSuccess)
+            return Problem(title: result.Error, statusCode: result.StatusCode);
+
+        return NoContent();
+    }
+
+    [Authorize(Roles = SquadRoles.Steward)]
+    [HttpPost("{id:guid}/scratch")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Scratch(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await auctionsService.ScratchAsync(id, cancellationToken);
 
         if (!result.IsSuccess)
             return Problem(title: result.Error, statusCode: result.StatusCode);

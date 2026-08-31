@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SettlementService.DTOs;
@@ -18,6 +19,12 @@ public class SettlementsController(ISettlementsService desks) : ControllerBase
         if (name is null) return Unauthorized();
         return Ok(await desks.GetMineAsync(name, cancellationToken));
     }
+
+    [Authorize(Roles = SquadRoles.Steward)]
+    [HttpGet]
+    [ProducesResponseType(typeof(IReadOnlyList<SettlementDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<SettlementDto>>> All(CancellationToken cancellationToken) =>
+        Ok(await desks.GetAllAsync(cancellationToken));
 
     [HttpGet("by-auction/{auctionId:guid}")]
     [ProducesResponseType(typeof(SettlementDto), StatusCodes.Status200OK)]
@@ -65,6 +72,14 @@ public class SettlementsController(ISettlementsService desks) : ControllerBase
         var name = UserName();
         if (name is null) return Unauthorized();
         var result = await desks.DisputeAsync(id, name, dto?.Note, cancellationToken);
+        return From(result);
+    }
+
+    [Authorize(Roles = SquadRoles.Steward)]
+    [HttpPost("{id:guid}/whistle")]
+    public async Task<IActionResult> Whistle(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await desks.WhistleAsync(id, cancellationToken);
         return From(result);
     }
 

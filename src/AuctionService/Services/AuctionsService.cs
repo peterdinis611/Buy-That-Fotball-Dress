@@ -126,6 +126,25 @@ public sealed class AuctionsService(
         if (auction.Status is Status.Finished)
             return Result.Conflict("Finished auctions cannot be deleted.");
 
+        return await PullLotAsync(auction, cancellationToken);
+    }
+
+    public async Task<Result> ScratchAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var auction = await db.Auctions.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (auction is null)
+            return Result.NotFound($"Auction '{id}' was not found.");
+
+        if (auction.Status is Status.Finished)
+            return Result.Conflict("Sold lots stay on the desk. The steward cannot scratch them.");
+
+        return await PullLotAsync(auction, cancellationToken);
+    }
+
+    private async Task<Result> PullLotAsync(Auction auction, CancellationToken cancellationToken)
+    {
+        var id = auction.Id;
         db.Auctions.Remove(auction);
         await db.SaveChangesAsync(cancellationToken);
         await publishEndpoint.Publish(new AuctionDeleted { Id = id }, cancellationToken);

@@ -12,10 +12,11 @@ public sealed class IdentitySeedHostedService(
         using var scope = services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IdentityDataContext>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
         try
         {
-            await IdentitySeeder.SeedAsync(context, userManager, logger, cancellationToken);
+            await IdentitySeeder.SeedAsync(context, userManager, roleManager, logger, cancellationToken);
         }
         catch (Exception ex)
         {

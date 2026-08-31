@@ -24,6 +24,15 @@ public sealed class SettlementsService(
         return rows.Select(x => x.ToDto()).ToList();
     }
 
+    public async Task<IReadOnlyList<SettlementDto>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        var rows = await db.Settlements
+            .OrderByDescending(x => x.DisputedAt ?? x.OpenedAt)
+            .ToListAsync(cancellationToken);
+
+        return rows.Select(x => x.ToDto()).ToList();
+    }
+
     public async Task<SettlementDto?> GetByAuctionAsync(Guid auctionId, CancellationToken cancellationToken)
     {
         var row = await db.Settlements.FirstOrDefaultAsync(x => x.AuctionId == auctionId, cancellationToken);
@@ -126,6 +135,25 @@ public sealed class SettlementsService(
             Note = row.DisputeNote,
             DisputedAt = row.DisputedAt.Value
         }, cancellationToken);
+        return Result<SettlementDto>.Success(row.ToDto());
+    }
+
+    public async Task<Result<SettlementDto>> WhistleAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var row = await db.Settlements.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (row is null) return Result<SettlementDto>.NotFound("Desk not found.");
+        if (row.Status != DeskStatus.Disputed)
+            return Result<SettlementDto>.Conflict("The whistle is for disputed desks.");
+
+        row.Status = row.ShippedAt is not null
+            ? DeskStatus.Shipped
+            : row.PaidAt is not null
+                ? DeskStatus.Paid
+                : DeskStatus.Opened;
+        row.DisputedAt = null;
+        row.DisputedBy = null;
+        row.DisputeNote = null;
+        await db.SaveChangesAsync(cancellationToken);
         return Result<SettlementDto>.Success(row.ToDto());
     }
 

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Contracts;
 using IdentityService.Common;
 using IdentityService.DTOs;
 using IdentityService.Services;
@@ -58,6 +59,16 @@ public class AuthController(IIdentityService identityService) : ControllerBase
     {
         var result = await identityService.GetByUsernameAsync(username, cancellationToken);
         return ToActionResult(result);
+    }
+
+    [Authorize(Roles = SquadRoles.Steward)]
+    [HttpGet("squad")]
+    [ProducesResponseType(typeof(IReadOnlyList<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<IReadOnlyList<UserDto>>> Squad(CancellationToken cancellationToken)
+    {
+        return Ok(await identityService.ListSquadAsync(cancellationToken));
     }
 
     private ActionResult<UserDto> ToActionResult(Result<UserDto> result)

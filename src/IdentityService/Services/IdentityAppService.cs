@@ -1,10 +1,11 @@
+using Caching;
 using IdentityService.Common;
 using IdentityService.DTOs;
 using IdentityService.Entities;
 using IdentityService.Mapping;
-using Caching;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityService.Services;
 
@@ -42,7 +43,7 @@ public sealed class IdentityAppService(
 
         await publishEndpoint.Publish(user.ToUserCreated(), cancellationToken);
 
-        return Result<UserDto>.Success(user.ToDto(tokenService.CreateToken(user)));
+        return Result<UserDto>.Success(await SheetAsync(user, withToken: true));
     }
 
     public async Task<Result<UserDto>> LoginAsync(LoginDto dto, CancellationToken cancellationToken)
@@ -55,7 +56,7 @@ public sealed class IdentityAppService(
         if (user is null || !await userManager.CheckPasswordAsync(user, dto.Password))
             return Result<UserDto>.Unauthorized("Wrong squad name or password.");
 
-        return Result<UserDto>.Success(user.ToDto(tokenService.CreateToken(user)));
+        return Result<UserDto>.Success(await SheetAsync(user, withToken: true));
     }
 
     public async Task<Result<UserDto>> GetCurrentAsync(string userId, CancellationToken cancellationToken)
@@ -69,7 +70,7 @@ public sealed class IdentityAppService(
         if (user is null)
             return Result<UserDto>.NotFound("Player not found.");
 
-        var dto = user.ToDto();
+        var dto = await SheetAsync(user, withToken: false);
         await cache.SetAsync(key, dto, CacheKeys.UserTtl, cancellationToken);
         return Result<UserDto>.Success(dto);
     }
@@ -80,6 +81,26 @@ public sealed class IdentityAppService(
         if (user is null)
             return Result<UserDto>.NotFound("Player not found.");
 
-        return Result<UserDto>.Success(user.ToDto());
+        return Result<UserDto>.Success(await SheetAsync(user, withToken: false));
+    }
+
+    public async Task<IReadOnlyList<UserDto>> ListSquadAsync(CancellationToken cancellationToken)
+    {
+        var users = await userManager.Users
+            .OrderBy(x => x.UserName)
+            .ToListAsync(cancellationToken);
+
+        var sheet = new List<UserDto>(users.Count);
+        foreach (var user in users)
+            sheet.Add(await SheetAsync(user, withToken: false));
+
+        return sheet;
+    }
+
+    private async Task<UserDto> SheetAsync(ApplicationUser user, bool withToken)
+    {
+        var roles = await userManager.GetRolesAsync(user);
+        var token = withToken ? await tokenService.CreateTokenAsync(user) : null;
+        return user.ToDto(token, roles);
     }
 }

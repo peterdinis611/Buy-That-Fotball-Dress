@@ -40,6 +40,7 @@ builder.Services
         options.Password.RequireUppercase = false;
         options.Password.RequireDigit = true;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdentityDataContext>();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -62,6 +63,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = jwt["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey)),
             NameClaimType = "unique_name",
+            RoleClaimType = System.Security.Claims.ClaimTypes.Role,
             ClockSkew = TimeSpan.FromMinutes(1)
         };
     });

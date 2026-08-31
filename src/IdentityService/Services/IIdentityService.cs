@@ -9,4 +9,5 @@ public interface IIdentityService
     Task<Result<UserDto>> LoginAsync(LoginDto dto, CancellationToken cancellationToken);
     Task<Result<UserDto>> GetCurrentAsync(string userId, CancellationToken cancellationToken);
     Task<Result<UserDto>> GetByUsernameAsync(string username, CancellationToken cancellationToken);
+    Task<IReadOnlyList<UserDto>> ListSquadAsync(CancellationToken cancellationToken);
 }
