@@ -618,6 +618,417 @@
   text-shadow: 0 0 18px rgb(227 28 35 / 0.55);
 }
 
+.office-tunnel {
+  --chalk: #f3f1ec;
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.25rem 1fr;
+  min-height: calc(100vh - 9rem);
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #101010 0 28px,
+      #161616 28px 56px
+    );
+  color: var(--chalk);
+}
+
+.office-arm {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.4rem 0.35rem;
+  background: var(--bib);
+  color: var(--stud);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  box-shadow: 8px 0 0 #c49c00;
+}
+
+.office-clip {
+  position: relative;
+  padding: 2.5rem 1.25rem 4rem;
+  background:
+    linear-gradient(180deg, rgb(20 20 20 / 0.35), transparent 18%),
+    #141414;
+}
+
+.office-clip::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
+  opacity: 0.55;
+}
+
+.office-head,
+.office-board,
+.office-clip > section {
+  position: relative;
+}
+
+.office-head {
+  display: grid;
+  gap: 1.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.office-kicker {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bib);
+}
+
+.office-head h1,
+.office-shut h1 {
+  font-size: clamp(4.5rem, 12vw, 8.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.03em;
+}
+
+.office-sub,
+.office-shut p {
+  max-width: 28rem;
+  margin-top: 0.75rem;
+  color: #b4b4aa;
+  font-size: 1.05rem;
+}
+
+.office-doors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.office-door {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem;
+  align-items: baseline;
+  padding: 0.55rem 0.9rem 0.45rem;
+  border: 1px solid #2f2f2f;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--chalk);
+}
+
+.office-door[data-on="true"] {
+  background: var(--bib);
+  color: var(--stud);
+  border-color: var(--bib);
+}
+
+.office-door-no {
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  opacity: 0.55;
+}
+
+.office-hero-count {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  column-gap: 1rem;
+  padding: 1.25rem 1.4rem 1.1rem;
+  margin-bottom: 1.25rem;
+  border-left: 10px solid var(--led);
+  background: #0c0c0c;
+  color: inherit;
+}
+
+.office-hero-label,
+.office-tile-label {
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bib);
+}
+
+.office-hero-num,
+.office-tile-num {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: clamp(5rem, 14vw, 9rem);
+  line-height: 0.8;
+  color: #ff3a32;
+  text-shadow: 0 0 22px rgb(227 28 35 / 0.45);
+  font-variant-numeric: tabular-nums;
+}
+
+.office-hero-hint,
+.office-tile-hint {
+  color: #8c8c82;
+  font-size: 0.95rem;
+}
+
+.office-tiles {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.office-tile {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  column-gap: 0.85rem;
+  align-items: end;
+  padding: 0.9rem 1rem;
+  border: 1px solid #2a2a2a;
+  background: #101010;
+  color: inherit;
+}
+
+.office-tile-no {
+  grid-row: 1 / span 2;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.8rem;
+  color: #3a3a3a;
+}
+
+.office-tile-num {
+  font-size: 3.4rem;
+}
+
+.office-tile-label {
+  grid-column: 2;
+}
+
+.office-tile-hint {
+  grid-column: 2;
+}
+
+.office-carbon {
+  margin-top: 2.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed #3a3a3a;
+}
+
+.office-carbon-head,
+.office-sheet-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.office-carbon-head h2,
+.office-sheet-head h2 {
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
+  line-height: 0.9;
+}
+
+.office-carbon-head p,
+.office-sheet-head p {
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8c8c82;
+}
+
+.office-clip-list,
+.office-squad,
+.office-pegs,
+.office-tills {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.office-clip-list li,
+.office-squad li,
+.office-pegs li,
+.office-tills li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #262626;
+}
+
+.office-stamp {
+  display: inline-flex;
+  padding: 0.2rem 0.45rem 0.05rem;
+  border: 2px solid var(--led);
+  color: var(--led);
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: rotate(-8deg);
+}
+
+.office-stamp[data-verb="whistle"],
+.office-stamp[data-verb="steward"] {
+  border-color: var(--bib);
+  color: var(--bib);
+}
+
+.office-clip-list strong,
+.office-squad strong,
+.office-pegs strong,
+.office-tills strong {
+  display: block;
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.office-clip-list em,
+.office-squad em,
+.office-pegs em,
+.office-tills em {
+  display: block;
+  font-style: normal;
+  color: #8c8c82;
+  font-size: 0.92rem;
+}
+
+.office-squad-no {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: 2rem;
+  color: #3a3a3a;
+}
+
+.office-squad-mail {
+  display: none;
+  color: #8c8c82;
+  font-size: 0.9rem;
+}
+
+.office-peg-club {
+  display: block;
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bib);
+  font-size: 0.9rem;
+}
+
+.office-pegs a,
+.office-tills a {
+  color: inherit;
+}
+
+.office-tills q {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--led);
+  font-size: 0.95rem;
+}
+
+.office-pegs li[data-status="Finished"] {
+  opacity: 0.55;
+}
+
+.office-tills li[data-fight="true"] {
+  border-left: 6px solid var(--led);
+  padding-left: 0.75rem;
+  background: rgb(227 28 35 / 0.06);
+}
+
+.office-act {
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--bib);
+  color: var(--stud);
+  padding: 0.45rem 0.7rem 0.35rem;
+  box-shadow: 0 4px 0 #c49c00;
+}
+
+.office-act:hover {
+  transform: translateY(1px);
+  box-shadow: 0 3px 0 #c49c00;
+}
+
+.office-act[data-whistle="true"] {
+  background: var(--led);
+  color: #fff;
+  box-shadow: 0 4px 0 #9a1218;
+}
+
+.office-act:disabled {
+  opacity: 0.45;
+}
+
+.office-mute {
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5a5a52;
+  font-size: 0.85rem;
+}
+
+.office-err {
+  margin: 0 0 1rem;
+  border: 1px solid var(--led);
+  color: var(--led);
+  padding: 0.75rem 1rem;
+}
+
+.office-empty,
+.office-wait {
+  color: #8c8c82;
+  padding: 1rem 0;
+}
+
+.office-shut {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4rem 1.25rem;
+}
+
+.office-shut .office-kicker {
+  color: var(--led);
+}
+
+@media (min-width: 768px) {
+  .office-tunnel {
+    grid-template-columns: 4.5rem 1fr;
+  }
+
+  .office-clip {
+    padding: 3rem 2.5rem 5rem;
+  }
+
+  .office-head {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+
+  .office-tiles {
+    grid-template-columns: 1.4fr 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .office-tile:first-child {
+    grid-row: 1 / span 2;
+    align-content: end;
+    min-height: 100%;
+  }
+
+  .office-tile:first-child .office-tile-num {
+    font-size: 6rem;
+  }
+
+  .office-squad-mail {
+    display: inline;
+  }
+}
+
 .lot-rail:focus {
   outline: none;
 }
@@ -2367,6 +2778,10 @@ a:hover .brand-mark {
   .pitch-ball,
   .pitch-ball-face,
   .pitch-ball-shadow,
+  .office-act,
+  .office-door,
+  .office-hero-count,
+  .office-tile,
   .kit-boot {
     animation: none;
     transition: none;

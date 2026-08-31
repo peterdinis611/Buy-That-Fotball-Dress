@@ -23,3 +23,11 @@ export {
   useReceiveSettlement,
   useDisputeSettlement,
 } from "./settlements";
+export {
+  useOfficeBoardQuery,
+  useOfficeSquadQuery,
+  useOfficePegsQuery,
+  useOfficeTillsQuery,
+  useScratchPeg,
+  useWhistleTill,
+} from "./admin";

@@ -36,19 +36,19 @@ public sealed class OfficeService(IHttpClientFactory http, OfficeDbContext db) :
 
     public async Task<IReadOnlyList<SquadCardDto>> GetSquadAsync(CancellationToken cancellationToken)
     {
-        var rows = await GetJsonAsync<List<SquadCardDto>>("Identity", "/api/auth/squad", cancellationToken);
+        var rows = await GetJsonAsync<SquadCardDto>("Identity", "/api/auth/squad", cancellationToken);
         return rows;
     }
 
     public async Task<IReadOnlyList<PegCardDto>> GetPegsAsync(CancellationToken cancellationToken)
     {
-        var rows = await GetJsonAsync<List<PegCardDto>>("Auction", "/api/auctions", cancellationToken);
+        var rows = await GetJsonAsync<PegCardDto>("Auction", "/api/auctions", cancellationToken);
         return rows;
     }
 
     public async Task<IReadOnlyList<TillCardDto>> GetTillsAsync(CancellationToken cancellationToken)
     {
-        var rows = await GetJsonAsync<List<TillCardDto>>("Settlement", "/api/settlements", cancellationToken);
+        var rows = await GetJsonAsync<TillCardDto>("Settlement", "/api/settlements", cancellationToken);
         return rows;
     }
 

@@ -40,6 +40,7 @@ Seed password for every squad name: `PitchSide!1`
 | --- | --- |
 | `kitvault` | Buyer — pay, confirm received |
 | `selecao.archive` | Seller — add tracking, mark shipped |
+| `steward` | Match official — `/office` tunnel |
 
 Other seed accounts: `jerseyhunter`, `campnou.store`, `anfield.kits`, `munich.matchworn`, `intermiami.official`, `oldtrafford.vault`, `tehelne.kits`.
 
@@ -56,6 +57,7 @@ Other seed accounts: `jerseyhunter`, `campnou.store`, `anfield.kits`, `munich.ma
 | Notifications (SignalR `/hubs/notifications`) | :5030 |
 | Settlement (desk) | :5031 |
 | Email | :5032 |
+| Admin (office) | :5033 |
 | Redis | :6379 |
 | RabbitMQ UI | http://localhost:15672 (`guest` / `guest`) |
 | Mailpit (letters) | http://localhost:8025 SMTP `:1025` |
@@ -85,6 +87,16 @@ All mutating routes need a JWT from Identity.
 - `POST /api/settlements/{id}/receive`
 - `POST /api/settlements/{id}/dispute` `{ "note": "…" }` (min 8 characters)
 
+## Match office
+
+Sign in as `steward` / `PitchSide!1` and open **Office** (`/office`). AdminService sits behind the gateway at `/api/admin`. The steward can:
+
+- Read the squad sheet, every peg, and every till
+- **Scratch** a live lot off the wall (sold desks stay)
+- **Whistle** a disputed desk back to the last honest step (paid / shipped / opened)
+
+Each scratch and whistle is stamped on the office clip (`office.db`).
+
 ## Letters and the LED tape
 
 NotificationService listens on RabbitMQ and pushes the live board over SignalR. IdentityService is on the same bus: a new squad name publishes `UserCreated`.
@@ -109,6 +121,7 @@ src/
   IdentityService
   NotificationService
   EmailService
+  AdminService
   SettlementService
   GatewayService
   Contracts

@@ -103,6 +103,40 @@ public class SettlementsServiceTests
     }
 
     [Fact]
+    public async Task Whistle_reopens_a_paid_desk()
+    {
+        await using var sqlite = SqliteHarness.Settlement();
+        var desk = OpenDesk();
+        desk.Status = DeskStatus.Disputed;
+        desk.PaidAt = DateTime.UtcNow.AddHours(-1);
+        desk.DisputedBy = "kitvault";
+        desk.DisputeNote = "Shirt never left the post.";
+        sqlite.Db.Settlements.Add(desk);
+        await sqlite.Db.SaveChangesAsync();
+        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>());
+
+        var result = await service.WhistleAsync(desk.Id, default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(DeskStatus.Paid, result.Value!.Status);
+        Assert.Null(result.Value.DisputeNote);
+    }
+
+    [Fact]
+    public async Task Whistle_is_only_for_disputes()
+    {
+        await using var sqlite = SqliteHarness.Settlement();
+        var desk = OpenDesk();
+        sqlite.Db.Settlements.Add(desk);
+        await sqlite.Db.SaveChangesAsync();
+        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>());
+
+        var result = await service.WhistleAsync(desk.Id, default);
+
+        Assert.Equal(409, result.StatusCode);
+    }
+
+    [Fact]
     public async Task Sold_lot_opens_one_desk()
     {
         await using var sqlite = SqliteHarness.Settlement();

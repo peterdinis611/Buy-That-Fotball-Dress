@@ -165,4 +165,37 @@ public class AuctionsServiceTests
         Assert.Null(auction.HighBidder);
         await publish.DidNotReceive().Publish(Arg.Any<AuctionUpdated>(), Arg.Any<CancellationToken>());
     }
+
+    [Fact]
+    public async Task Steward_can_scratch_a_live_lot()
+    {
+        await using var sqlite = SqliteHarness.Auction();
+        var auction = Lots.LiveAuction();
+        sqlite.Db.Auctions.Add(auction);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var service = new AuctionsService(sqlite.Db, publish, new MemoryPitchCache());
+
+        var result = await service.ScratchAsync(auction.Id, default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Empty(sqlite.Db.Auctions);
+        await publish.Received(1).Publish(Arg.Is<AuctionDeleted>(x => x.Id == auction.Id), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Steward_cannot_scratch_a_sold_lot()
+    {
+        await using var sqlite = SqliteHarness.Auction();
+        var auction = Lots.LiveAuction();
+        auction.Status = Status.Finished;
+        sqlite.Db.Auctions.Add(auction);
+        await sqlite.Db.SaveChangesAsync();
+        var service = new AuctionsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new MemoryPitchCache());
+
+        var result = await service.ScratchAsync(auction.Id, default);
+
+        Assert.Equal(409, result.StatusCode);
+        Assert.Single(sqlite.Db.Auctions);
+    }
 }

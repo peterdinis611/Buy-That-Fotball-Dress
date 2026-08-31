@@ -10,5 +10,5 @@ export default auth((request) => {
 });
 
 export const config = {
-  matcher: ["/sell/:path*", "/profile/:path*"],
+  matcher: ["/sell/:path*", "/profile/:path*", "/office", "/office/:path*"],
 };

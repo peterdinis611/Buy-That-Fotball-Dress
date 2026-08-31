@@ -25,4 +25,11 @@ export const queryKeys = {
     mine: () => [...queryKeys.settlements.all, "mine"] as const,
     auction: (id: string) => [...queryKeys.settlements.all, "auction", id] as const,
   },
+  office: {
+    all: ["office"] as const,
+    board: () => [...queryKeys.office.all, "board"] as const,
+    squad: () => [...queryKeys.office.all, "squad"] as const,
+    pegs: () => [...queryKeys.office.all, "pegs"] as const,
+    tills: () => [...queryKeys.office.all, "tills"] as const,
+  },
 };

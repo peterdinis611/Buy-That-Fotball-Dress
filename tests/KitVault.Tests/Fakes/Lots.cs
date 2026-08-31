@@ -65,7 +65,7 @@ public static class Lots
         CurrentHighBid = high
     };
 
-    public static Item SearchItem(
+    public static SearchService.Models.Item SearchItem(
         Guid? id = null,
         string club = "Brazil",
         string player = "Ronaldo Nazário",

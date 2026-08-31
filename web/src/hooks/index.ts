@@ -26,4 +26,10 @@ export {
   useShipSettlement,
   useReceiveSettlement,
   useDisputeSettlement,
+  useOfficeBoardQuery,
+  useOfficeSquadQuery,
+  useOfficePegsQuery,
+  useOfficeTillsQuery,
+  useScratchPeg,
+  useWhistleTill,
 } from "./queries";

@@ -20,3 +20,12 @@ export {
 } from "./settlements";
 export { searchItems } from "./search";
 export { login, register, getMe } from "./auth";
+export {
+  getOfficeBoard,
+  getOfficeSquad,
+  getOfficePegs,
+  getOfficeTills,
+  getOfficeClip,
+  scratchPeg,
+  whistleTill,
+} from "./admin";

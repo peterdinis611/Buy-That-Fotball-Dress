@@ -39,6 +39,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             username: user.username,
             displayName: user.displayName,
             accessToken: user.token,
+            roles: user.roles ?? [],
           };
         } catch (error) {
           if (error instanceof CredentialsSignin) throw error;
@@ -54,6 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.username = user.username;
         token.displayName = user.displayName;
         token.email = user.email;
+        token.roles = user.roles;
       }
       return token;
     },
@@ -63,6 +65,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.username = token.username ?? "";
       session.user.displayName = token.displayName ?? session.user.name ?? "";
       session.user.email = token.email ?? "";
+      session.user.roles = token.roles ?? [];
       return session;
     },
   },

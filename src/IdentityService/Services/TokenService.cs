@@ -31,8 +31,10 @@ public sealed class TokenService(IConfiguration configuration, UserManager<Appli
         };
 
         foreach (var role in await userManager.GetRolesAsync(user))
+        {
             claims.Add(new Claim(ClaimTypes.Role, role));
             claims.Add(new Claim("role", role));
+        }
 
         var credentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
