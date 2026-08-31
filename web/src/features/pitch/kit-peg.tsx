@@ -17,18 +17,18 @@ export function KitPeg({ listing, index = 0 }: { listing: KitListing; index?: nu
       className="kit-hover group relative flex min-w-0 flex-col items-center bg-[var(--tape)] px-3 pb-5 pt-7 sm:px-4"
       style={{ "--peg": index, "--hang": hang } as CSSProperties}
     >
-      <span className="absolute top-2 size-2.5 rounded-full bg-[#c9a227] shadow-[0_6px_0_#6b5412]" />
+      <span className="absolute top-2 size-2.5 rounded-full bg-[var(--hook)] shadow-[0_6px_0_#6b5412]" />
       <span className="relative">
         <JerseyBack number={number} color={listing.color} className="peg-sway h-28 w-24 shrink-0" />
         <WornStamp row={listing} compact className="worn-stamp-peg" />
       </span>
-      <p className="mt-4 w-full truncate text-center font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--led)]">
+      <p className="mt-4 w-full truncate text-center font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--bib)]">
         {listing.club}
       </p>
       <h3 className="w-full truncate px-0.5 text-center text-2xl leading-none text-[var(--ink)] lg:text-3xl">
         {listing.playerName}
       </h3>
-      <p className="mt-1 w-full truncate text-center text-xs text-[var(--ink)]/60">
+      <p className="mt-1 w-full truncate text-center text-xs text-[var(--muted-foreground)]">
         {listing.season} · {listing.kitType} · {listing.size}
       </p>
       <div className="mt-3">
@@ -38,7 +38,7 @@ export function KitPeg({ listing, index = 0 }: { listing: KitListing; index?: nu
         {formatMoney(listing.currentHighBid ?? listing.reservePrice)}
       </p>
       <p className="mt-1 text-[11px] tracking-[0.12em] text-[var(--muted-foreground)] uppercase">Current bid</p>
-      <Countdown endsAt={listing.auctionEnd} className="text-base text-[var(--ink)]/80" />
+      <Countdown endsAt={listing.auctionEnd} className="text-base text-[var(--ink)]/85" />
     </Link>
   );
 }
@@ -53,7 +53,7 @@ export function PegWall({ listings, empty }: { listings: KitListing[]; empty?: s
   }
 
   return (
-    <div className="peg-wall grid grid-cols-2 gap-px bg-[var(--ink)]/10 sm:grid-cols-3 lg:grid-cols-5">
+    <div className="peg-wall grid grid-cols-2 gap-px bg-[var(--stud)] sm:grid-cols-3 lg:grid-cols-5">
       {listings.map((listing, index) => (
         <KitPeg key={listing.id} listing={listing} index={index} />
       ))}

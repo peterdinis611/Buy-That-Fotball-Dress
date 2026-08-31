@@ -42,13 +42,13 @@ export function LockerHook({
       className="kit-hover group relative flex min-w-0 flex-col items-center bg-[var(--tape)] px-3 pb-5 pt-7"
       style={{ "--peg": index, "--hang": hang } as CSSProperties}
     >
-      <span className="absolute top-2 size-2.5 rounded-full bg-[#c9a227] shadow-[0_6px_0_#6b5412]" />
+      <span className="absolute top-2 size-2.5 rounded-full bg-[var(--hook)] shadow-[0_6px_0_#6b5412]" />
       <span className="relative">
         <JerseyBack number={number} color={listing.color} className="peg-sway h-32 w-28 shrink-0" />
         <WornStamp row={listing} compact className="worn-stamp-peg" />
       </span>
       <div className="mt-3 flex w-full items-center justify-between gap-2 px-0.5">
-        <p className="truncate font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--led)]">
+        <p className="truncate font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--bib)]">
           {listing.club}
         </p>
         <span className={`shrink-0 font-[family-name:var(--font-display)] text-lg tracking-[0.14em] uppercase ${mark.on ? "text-[var(--bib)]" : "text-[var(--muted-foreground)]"}`}>
@@ -108,7 +108,7 @@ export function LockerRail({
   }
 
   return (
-    <div className="peg-wall grid grid-cols-2 gap-px bg-[var(--ink)]/10 sm:grid-cols-3 lg:grid-cols-4">
+    <div className="peg-wall grid grid-cols-2 gap-px bg-[var(--stud)] sm:grid-cols-3 lg:grid-cols-4">
       {listings.map((listing, index) => (
         <LockerHook key={listing.id} listing={listing} index={index} kind={kind} username={username} />
       ))}

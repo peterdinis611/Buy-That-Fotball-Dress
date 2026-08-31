@@ -24,7 +24,7 @@ const karla = Karla({
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#cfd3ce" },
-    { media: "(prefers-color-scheme: dark)", color: "#121812" },
+    { media: "(prefers-color-scheme: dark)", color: "#10140f" },
   ],
   colorScheme: "light dark",
   width: "device-width",

@@ -14,7 +14,7 @@ import {
   useBoardLog,
   type BoardEvent,
 } from "@/lib/realtime/board-log";
-import { useAuth, useClock, usePlaceBidMutation, usePlayerSheetQuery } from "@/hooks";
+import { useAuth, useClock, useDeleteAuctionMutation, usePlaceBidMutation, usePlayerSheetQuery, useScratchPeg, useWatchMutation } from "@/hooks";
 
 function sameName(left?: string | null, right?: string | null) {
   return Boolean(left && right && left.toLowerCase() === right.toLowerCase());
@@ -67,7 +67,7 @@ function useLiveLots() {
 }
 
 export function BoardDrop() {
-  const { user } = useAuth();
+  const { user, steward } = useAuth();
   const data = useLiveLots();
   const sheet = usePlayerSheetQuery(Boolean(user));
   const tape = useBoardLog();
@@ -164,6 +164,7 @@ export function BoardDrop() {
                     lot={lot}
                     signedIn={Boolean(user)}
                     yours={sameName(user?.username, lot.seller)}
+                    steward={steward}
                     watching={watching.has(lot.id)}
                     chasing={chasing.has(lot.id)}
                     bidding={biddingId === lot.id}
@@ -207,6 +208,7 @@ function LotRow({
   lot,
   signedIn,
   yours,
+  steward,
   watching,
   chasing,
   bidding,
@@ -216,6 +218,7 @@ function LotRow({
   lot: Auction;
   signedIn: boolean;
   yours: boolean;
+  steward: boolean;
   watching: boolean;
   chasing: boolean;
   bidding: boolean;
@@ -225,9 +228,10 @@ function LotRow({
   const bid = lot.currentHighBid ?? lot.reservePrice;
   const leading = chasing;
   const mark = yours ? "Yours" : leading ? "In" : watching ? "Peg" : null;
+  const offKind = yours ? "down" : steward ? "scratch" : watching ? "drop" : null;
 
   return (
-    <li className="board-desk-item" data-open={bidding ? "true" : "false"}>
+    <li className="board-desk-item" data-open={bidding ? "true" : "false"} data-off={offKind ? "true" : "false"}>
       <div className="board-desk-row">
         <span className="board-desk-lamp" aria-hidden />
         <span className="min-w-0">
@@ -247,25 +251,71 @@ function LotRow({
           <span className="board-desk-bid">{formatMoney(bid)}</span>
           <Countdown endsAt={lot.auctionEnd} className="board-desk-clock" />
         </span>
-        {yours ? (
-          <span className="board-desk-go board-desk-go-dead">Yours</span>
-        ) : signedIn ? (
-          <button
-            type="button"
-            className="board-desk-go"
-            aria-expanded={bidding}
-            onClick={onBid}
-          >
-            Bid
-          </button>
-        ) : (
-          <Link href={`/login?next=/auctions/${lot.id}`} className="board-desk-go" onClick={onOpen}>
-            Bid
-          </Link>
-        )}
+        <span className="board-desk-acts">
+          {offKind ? <BoardOff lot={lot} kind={offKind} /> : null}
+          {yours ? null : signedIn ? (
+            <button
+              type="button"
+              className="board-desk-go"
+              aria-expanded={bidding}
+              onClick={onBid}
+            >
+              Bid
+            </button>
+          ) : (
+            <Link href={`/login?next=/auctions/${lot.id}`} className="board-desk-go" onClick={onOpen}>
+              Bid
+            </Link>
+          )}
+        </span>
       </div>
       {bidding && signedIn && !yours ? <BoardBidSlip lot={lot} /> : null}
     </li>
+  );
+}
+
+function BoardOff({ lot, kind }: { lot: Auction; kind: "down" | "scratch" | "drop" }) {
+  const pull = useDeleteAuctionMutation();
+  const scratch = useScratchPeg();
+  const watch = useWatchMutation(lot);
+  const pending = pull.isPending || scratch.isPending || watch.isPending;
+  const label = kind === "drop" ? "Drop" : "Off";
+
+  async function run() {
+    if (kind === "drop") {
+      await watch.mutateAsync(false);
+      return;
+    }
+
+    const line =
+      kind === "scratch"
+        ? `Scratch ${lot.item.playerName}? The shirt leaves the wall.`
+        : `Take ${lot.item.playerName} off the rail?`;
+    if (!window.confirm(line)) return;
+
+    if (kind === "scratch") await scratch.mutateAsync(lot.id);
+    else await pull.mutateAsync(lot.id);
+  }
+
+  return (
+    <button
+      type="button"
+      className="board-desk-off"
+      disabled={pending}
+      aria-label={
+        kind === "drop"
+          ? `Drop ${lot.item.playerName} from your peg`
+          : kind === "scratch"
+            ? `Scratch ${lot.item.playerName} off the wall`
+            : `Take ${lot.item.playerName} off the rail`
+      }
+      onClick={(event) => {
+        event.stopPropagation();
+        void run();
+      }}
+    >
+      {pending ? "…" : label}
+    </button>
   );
 }
 
