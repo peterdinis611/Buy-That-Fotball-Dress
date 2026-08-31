@@ -83,14 +83,16 @@ trap cleanup EXIT INT TERM
 
 ensure_docker
 
-echo "Starting RabbitMQ and Redis…"
+echo "Starting RabbitMQ, Redis, and Mailpit…"
 docker compose up -d
 echo "Waiting for RabbitMQ on :5672…"
 wait_for "RabbitMQ" 60 bash -c 'nc -z 127.0.0.1 5672'
 echo "Waiting for Redis on :6379…"
 wait_for "Redis" 30 bash -c 'nc -z 127.0.0.1 6379'
+echo "Waiting for Mailpit on :1025…"
+wait_for "Mailpit" 30 bash -c 'nc -z 127.0.0.1 1025'
 
-for port in 5025 5026 5027 5028 5029 5030 5031; do
+for port in 5025 5026 5027 5028 5029 5030 5031 5032; do
   stop_port "$port"
 done
 if [[ "$WITH_WEB" == "1" ]]; then
@@ -115,6 +117,7 @@ start_dotnet "IdentityService :5028" "src/IdentityService/IdentityService.csproj
 start_dotnet "BidService      :5029" "src/BidService/BidService.csproj"
 start_dotnet "Notifications   :5030" "src/NotificationService/NotificationService.csproj"
 start_dotnet "Settlement      :5031" "src/SettlementService/SettlementService.csproj"
+start_dotnet "Email           :5032" "src/EmailService/EmailService.csproj"
 
 if [[ "$WITH_WEB" == "1" ]]; then
   echo "→ web             :3000"
@@ -134,8 +137,10 @@ Kit Vault is up. Ctrl+C stops everything.
   Bids     http://localhost:5029
   Live     http://localhost:5030  (SignalR /hubs/notifications)
   Desk     http://localhost:5031
+  Mail     http://localhost:5032
   Redis    localhost:6379
   RabbitMQ http://localhost:15672  (guest/guest)
+  Mailpit  http://localhost:8025   (letters)
 
 EOF
 

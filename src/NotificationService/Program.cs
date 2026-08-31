@@ -10,10 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 var origins = builder.Configuration.GetSection("ClientApps").Get<string[]>()
     ?? ["http://localhost:3000"];
 
-builder.Services.AddHttpClient("IdentityService", client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["IdentityService:BaseUrl"] ?? "http://localhost:5028");
-});
 builder.Services.AddSingleton<IBoardRoom, BoardRoom>();
 
 builder.Services.AddCors(options =>

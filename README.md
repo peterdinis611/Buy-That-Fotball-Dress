@@ -55,8 +55,10 @@ Other seed accounts: `jerseyhunter`, `campnou.store`, `anfield.kits`, `munich.ma
 | Bids | :5029 |
 | Notifications (SignalR `/hubs/notifications`) | :5030 |
 | Settlement (desk) | :5031 |
+| Email | :5032 |
 | Redis | :6379 |
 | RabbitMQ UI | http://localhost:15672 (`guest` / `guest`) |
+| Mailpit (letters) | http://localhost:8025 SMTP `:1025` |
 
 The browser talks to the **gateway**. Direct service ports are for debugging.
 
@@ -87,7 +89,9 @@ All mutating routes need a JWT from Identity.
 
 NotificationService listens on RabbitMQ and pushes the live board over SignalR. IdentityService is on the same bus: a new squad name publishes `UserCreated`.
 
-Personal letters (outbid, you won, paid / ship it, shirt shipped, you're on the sheet) are written to the NotificationService log. They look up email at Identity `GET /api/auth/users/{username}`. To send real mail, set `Smtp:Host` (and optional `Port`, `From`, `Username`, `Password`, `Ssl`) on NotificationService.
+Personal letters (outbid, you won, paid / ship it, shirt shipped, you're on the sheet) are composed by NotificationService and published as `LetterRequested`. **EmailService** looks up the mailbox at Identity `GET /api/auth/users/{username}` and sends SMTP.
+
+Locally `./dev.sh` starts **Mailpit**. Open [http://localhost:8025](http://localhost:8025) for the inbox (`board@kitvault.test`). Production: set `Smtp:Host` (and optional `Port`, `From`, `Username`, `Password`, `Ssl`) on EmailService. Empty host means the letter stays in the EmailService log.
 
 The same events show as LED toasts and Board tape when you are signed in as the person they are for.
 
@@ -104,6 +108,7 @@ src/
   SearchService
   IdentityService
   NotificationService
+  EmailService
   SettlementService
   GatewayService
   Contracts
