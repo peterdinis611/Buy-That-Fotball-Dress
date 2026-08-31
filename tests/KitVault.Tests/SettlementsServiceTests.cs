@@ -19,7 +19,7 @@ public class SettlementsServiceTests
         var desk = OpenDesk();
         sqlite.Db.Settlements.Add(desk);
         await sqlite.Db.SaveChangesAsync();
-        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>());
+        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new FakeTillClient());
 
         var result = await service.PayAsync(desk.Id, "selecao.archive", default);
 
@@ -34,7 +34,7 @@ public class SettlementsServiceTests
         sqlite.Db.Settlements.Add(desk);
         await sqlite.Db.SaveChangesAsync();
         var publish = Substitute.For<IPublishEndpoint>();
-        var service = new SettlementsService(sqlite.Db, publish);
+        var service = new SettlementsService(sqlite.Db, publish, new FakeTillClient());
 
         var result = await service.PayAsync(desk.Id, "kitvault", default);
 
@@ -45,13 +45,31 @@ public class SettlementsServiceTests
     }
 
     [Fact]
+    public async Task Pay_stays_open_when_the_till_is_shut()
+    {
+        await using var sqlite = SqliteHarness.Settlement();
+        var desk = OpenDesk();
+        sqlite.Db.Settlements.Add(desk);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var till = new FakeTillClient { StatusCode = 503, Error = "The till is shut. Try again in a minute." };
+        var service = new SettlementsService(sqlite.Db, publish, till);
+
+        var result = await service.PayAsync(desk.Id, "kitvault", default);
+
+        Assert.Equal(503, result.StatusCode);
+        Assert.Equal(DeskStatus.Opened, sqlite.Db.Settlements.Single().Status);
+        await publish.DidNotReceive().Publish(Arg.Any<SettlementPaid>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task Ship_waits_for_pay()
     {
         await using var sqlite = SqliteHarness.Settlement();
         var desk = OpenDesk();
         sqlite.Db.Settlements.Add(desk);
         await sqlite.Db.SaveChangesAsync();
-        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>());
+        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new FakeTillClient());
 
         var result = await service.ShipAsync(desk.Id, "selecao.archive", "DHL-1234", default);
 
@@ -66,7 +84,7 @@ public class SettlementsServiceTests
         desk.Status = DeskStatus.Paid;
         sqlite.Db.Settlements.Add(desk);
         await sqlite.Db.SaveChangesAsync();
-        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>());
+        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new FakeTillClient());
 
         var result = await service.ShipAsync(desk.Id, "selecao.archive", "ab", default);
 
@@ -81,7 +99,7 @@ public class SettlementsServiceTests
         desk.Status = DeskStatus.Paid;
         sqlite.Db.Settlements.Add(desk);
         await sqlite.Db.SaveChangesAsync();
-        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>());
+        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new FakeTillClient());
 
         var result = await service.ReceiveAsync(desk.Id, "kitvault", default);
 
@@ -95,7 +113,7 @@ public class SettlementsServiceTests
         var desk = OpenDesk();
         sqlite.Db.Settlements.Add(desk);
         await sqlite.Db.SaveChangesAsync();
-        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>());
+        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new FakeTillClient());
 
         var result = await service.DisputeAsync(desk.Id, "kitvault", "no", default);
 
@@ -113,7 +131,7 @@ public class SettlementsServiceTests
         desk.DisputeNote = "Shirt never left the post.";
         sqlite.Db.Settlements.Add(desk);
         await sqlite.Db.SaveChangesAsync();
-        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>());
+        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new FakeTillClient());
 
         var result = await service.WhistleAsync(desk.Id, default);
 
@@ -129,7 +147,7 @@ public class SettlementsServiceTests
         var desk = OpenDesk();
         sqlite.Db.Settlements.Add(desk);
         await sqlite.Db.SaveChangesAsync();
-        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>());
+        var service = new SettlementsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new FakeTillClient());
 
         var result = await service.WhistleAsync(desk.Id, default);
 

@@ -4,6 +4,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SearchService.Data;
 using SettlementService.Data;
+using PaymentService.Data;
 
 namespace KitVault.Tests.Fakes;
 
@@ -43,4 +44,7 @@ public static class SqliteHarness
 
     public static SqliteHarness<SettlementDbContext> Settlement() =>
         new(options => new SettlementDbContext(options));
+
+    public static SqliteHarness<PaymentDbContext> Payment() =>
+        new(options => new PaymentDbContext(options));
 }

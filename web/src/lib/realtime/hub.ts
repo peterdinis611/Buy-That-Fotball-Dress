@@ -2,7 +2,6 @@ import {
   HubConnection,
   HubConnectionBuilder,
   HubConnectionState,
-  HttpTransportType,
   LogLevel,
 } from "@microsoft/signalr";
 
@@ -24,12 +23,9 @@ export function getHub(): Promise<HubConnection> {
   if (start) return start;
 
   const hub = new HubConnectionBuilder()
-    .withUrl(HUB_URL, {
-      skipNegotiation: true,
-      transport: HttpTransportType.WebSockets,
-    })
+    .withUrl(HUB_URL)
     .withAutomaticReconnect()
-    .configureLogging(LogLevel.Warning)
+    .configureLogging(LogLevel.None)
     .build();
 
   connection = hub;

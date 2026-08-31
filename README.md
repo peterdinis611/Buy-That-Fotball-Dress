@@ -22,7 +22,7 @@ Backends only: `./dev.sh --no-web`. After you change a service DLL, stop and run
 dotnet test
 ```
 
-SQLite in memory, no RabbitMQ. Covers lot provenance, bid floor, desk till / tracking / dispute, search rules, and squad-name validation.
+SQLite in memory, no RabbitMQ. Covers lot provenance, bid floor, desk till / tracking / dispute, house till slips, search rules, and squad-name validation.
 
 Frontend:
 
@@ -58,6 +58,7 @@ Other seed accounts: `jerseyhunter`, `campnou.store`, `anfield.kits`, `munich.ma
 | Settlement (desk) | :5031 |
 | Email | :5032 |
 | Admin (office) | :5033 |
+| Payment (till) | :5034 |
 | Redis | :6379 |
 | RabbitMQ UI | http://localhost:15672 (`guest` / `guest`) |
 | Mailpit (letters) | http://localhost:8025 SMTP `:1025` |
@@ -67,8 +68,8 @@ The browser talks to the **gateway**. Direct service ports are for debugging.
 ## How a lot closes
 
 1. Bids go to BidService while the lot is Live.
-2. When the clock hits zero with a winner, SettlementService opens a **desk**.
-3. Buyer pays at the till → status **Paid**, slip `TILL-…` (not Stripe yet).
+2. When the clock hits zero with a winner, SettlementService opens a **desk** and publishes `SettlementOpened`. PaymentService opens a **Held** till for that desk.
+3. Buyer pays (`POST /api/settlements/{id}/pay`) → Settlement asks PaymentService to capture. The house till stamps `TILL-…`, publishes `PaymentCaptured`, and Settlement marks the desk **Paid**. Swap `HouseTillDrawer` when a card processor lands.
 4. Seller enters a **tracking** number and marks shipped.
 5. Buyer confirms **shirt received**. Either side can **dispute** with a written reason before that.
 
@@ -83,6 +84,9 @@ All mutating routes need a JWT from Identity.
 - `GET /api/settlements/mine`
 - `GET /api/settlements/by-auction/{auctionId}`
 - `POST /api/settlements/{id}/pay`
+- `GET /api/payments/mine`
+- `GET /api/payments/by-settlement/{settlementId}`
+- `POST /api/payments/{settlementId}/charge` (Settlement calls this; you can hit it via the gateway too)
 - `POST /api/settlements/{id}/ship` `{ "tracking": "…" }` (min 4 characters)
 - `POST /api/settlements/{id}/receive`
 - `POST /api/settlements/{id}/dispute` `{ "note": "…" }` (min 8 characters)
@@ -123,10 +127,11 @@ src/
   EmailService
   AdminService
   SettlementService
+  PaymentService
   GatewayService
   Contracts
   Caching
 web/          Next.js (npm run dev / npm run storybook)
 ```
 
-SQLite files live next to each service (`identity.db`, `settlement.db`, …).
+SQLite files live next to each service (`identity.db`, `settlement.db`, `payment.db`, …).

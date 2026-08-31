@@ -1065,6 +1065,27 @@
           "Microsoft.AspNetCore.App"
         ]
       },
+      "PaymentService/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "Contracts": "1.0.0",
+          "MassTransit.RabbitMQ": "8.3.6",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "10.0.3",
+          "Microsoft.AspNetCore.OpenApi": "10.0.3",
+          "Microsoft.EntityFrameworkCore": "10.0.3",
+          "Microsoft.EntityFrameworkCore.Sqlite": "10.0.3"
+        },
+        "compile": {
+          "bin/placeholder/PaymentService.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/PaymentService.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "SearchService/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
@@ -2231,6 +2252,11 @@
       "path": "../../src/IdentityService/IdentityService.csproj",
       "msbuildProject": "../../src/IdentityService/IdentityService.csproj"
     },
+    "PaymentService/1.0.0": {
+      "type": "project",
+      "path": "../../src/PaymentService/PaymentService.csproj",
+      "msbuildProject": "../../src/PaymentService/PaymentService.csproj"
+    },
     "SearchService/1.0.0": {
       "type": "project",
       "path": "../../src/SearchService/SearchService.csproj",
@@ -2252,6 +2278,7 @@
       "Microsoft.EntityFrameworkCore.Sqlite >= 10.0.3",
       "Microsoft.NET.Test.Sdk >= 17.14.1",
       "NSubstitute >= 5.3.0",
+      "PaymentService >= 1.0.0",
       "SearchService >= 1.0.0",
       "SettlementService >= 1.0.0",
       "xunit >= 2.9.3",
@@ -2297,6 +2324,9 @@
             },
             "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/IdentityService.csproj": {
               "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/IdentityService.csproj"
+            },
+            "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/PaymentService.csproj": {
+              "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/PaymentService.csproj"
             },
             "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/SearchService.csproj": {
               "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/SearchService.csproj"

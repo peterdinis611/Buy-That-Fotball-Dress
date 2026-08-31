@@ -16,6 +16,7 @@
           "Microsoft.EntityFrameworkCore.Sqlite": "10.0.3",
           "Microsoft.NET.Test.Sdk": "17.14.1",
           "NSubstitute": "5.3.0",
+          "PaymentService": "1.0.0",
           "SearchService": "1.0.0",
           "SettlementService": "1.0.0",
           "xunit": "2.9.3"
@@ -846,6 +847,22 @@
           }
         }
       },
+      "PaymentService/1.0.0": {
+        "dependencies": {
+          "Contracts": "1.0.0",
+          "MassTransit.RabbitMQ": "8.3.6",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "10.0.3",
+          "Microsoft.AspNetCore.OpenApi": "10.0.3",
+          "Microsoft.EntityFrameworkCore": "10.0.3",
+          "Microsoft.EntityFrameworkCore.Sqlite": "10.0.3"
+        },
+        "runtime": {
+          "PaymentService.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "SearchService/1.0.0": {
         "dependencies": {
           "Caching": "1.0.0",
@@ -1210,6 +1227,11 @@
       "sha512": ""
     },
     "IdentityService/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PaymentService/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

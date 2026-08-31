@@ -26,6 +26,7 @@
     <ProjectReference Include="..\..\src\Caching\Caching.csproj" />
     <ProjectReference Include="..\..\src\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\..\src\IdentityService\IdentityService.csproj" />
+    <ProjectReference Include="..\..\src\PaymentService\PaymentService.csproj" />
     <ProjectReference Include="..\..\src\SearchService\SearchService.csproj" />
     <ProjectReference Include="..\..\src\SettlementService\SettlementService.csproj" />
   </ItemGroup>

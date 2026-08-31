@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Countdown } from "@/features/auctions/countdown";
 import { getAuctions } from "@/lib/api";
@@ -38,29 +38,24 @@ const LIVE_LIST_KEY = queryKeys.auctions.list({ status: "Live" });
 
 function useLiveLots() {
   const queryClient = useQueryClient();
-  const [lots, setLots] = useState<Auction[]>(() => queryClient.getQueryData<Auction[]>(LIVE_LIST_KEY) ?? EMPTY_LOTS);
+
+  const lots = useSyncExternalStore(
+    (onChange) =>
+      queryClient.getQueryCache().subscribe((event) => {
+        const key = event.query.queryKey;
+        if (!Array.isArray(key) || key[0] !== "auctions" || key[1] !== "list") return;
+        onChange();
+      }),
+    () => queryClient.getQueryData<Auction[]>(LIVE_LIST_KEY) ?? EMPTY_LOTS,
+    () => EMPTY_LOTS,
+  );
 
   useEffect(() => {
-    function pull() {
-      const next = queryClient.getQueryData<Auction[]>(LIVE_LIST_KEY) ?? EMPTY_LOTS;
-      setLots((current) => (current === next ? current : next));
-    }
-
-    pull();
-    const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
-      const queryKey = event.query.queryKey;
-      if (queryKey[0] !== "auctions" || queryKey[1] !== "list") return;
-      pull();
+    if (queryClient.getQueryData(LIVE_LIST_KEY)) return;
+    void queryClient.prefetchQuery({
+      queryKey: LIVE_LIST_KEY,
+      queryFn: () => getAuctions({ status: "Live" }),
     });
-
-    if (!queryClient.getQueryData(LIVE_LIST_KEY)) {
-      void queryClient.prefetchQuery({
-        queryKey: LIVE_LIST_KEY,
-        queryFn: () => getAuctions({ status: "Live" }),
-      });
-    }
-
-    return unsubscribe;
   }, [queryClient]);
 
   return lots;
@@ -121,13 +116,13 @@ export function BoardDrop() {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (open) markBoardRead();
+    else setBiddingId(null);
+  }, [open]);
+
   function toggle() {
-    setOpen((current) => {
-      const next = !current;
-      if (next) markBoardRead();
-      else setBiddingId(null);
-      return next;
-    });
+    setOpen((current) => !current);
   }
 
   return (
@@ -252,9 +247,10 @@ function LotRow({
           <Countdown endsAt={lot.auctionEnd} className="board-desk-clock" />
         </span>
         <span className="board-desk-acts">
-          {offKind ? <BoardOff lot={lot} kind={offKind} /> : null}
+          {offKind ? <BoardOff key="off" lot={lot} kind={offKind} /> : null}
           {yours ? null : signedIn ? (
             <button
+              key="bid"
               type="button"
               className="board-desk-go"
               aria-expanded={bidding}
@@ -263,7 +259,7 @@ function LotRow({
               Bid
             </button>
           ) : (
-            <Link href={`/login?next=/auctions/${lot.id}`} className="board-desk-go" onClick={onOpen}>
+            <Link key="in" href={`/login?next=/auctions/${lot.id}`} className="board-desk-go" onClick={onOpen}>
               Bid
             </Link>
           )}
@@ -275,43 +271,73 @@ function LotRow({
 }
 
 function BoardOff({ lot, kind }: { lot: Auction; kind: "down" | "scratch" | "drop" }) {
-  const pull = useDeleteAuctionMutation();
-  const scratch = useScratchPeg();
+  if (kind === "drop") return <DropOff lot={lot} />;
+  if (kind === "scratch") return <ScratchOff lot={lot} />;
+  return <DownOff lot={lot} />;
+}
+
+function DropOff({ lot }: { lot: Auction }) {
   const watch = useWatchMutation(lot);
-  const pending = pull.isPending || scratch.isPending || watch.isPending;
-  const label = kind === "drop" ? "Drop" : "Off";
+  return (
+    <OffButton
+      label="Drop"
+      pending={watch.isPending}
+      ariaLabel={`Drop ${lot.item.playerName} from your peg`}
+      onRun={() => watch.mutateAsync(false)}
+    />
+  );
+}
 
-  async function run() {
-    if (kind === "drop") {
-      await watch.mutateAsync(false);
-      return;
-    }
+function ScratchOff({ lot }: { lot: Auction }) {
+  const scratch = useScratchPeg();
+  return (
+    <OffButton
+      label="Off"
+      pending={scratch.isPending}
+      ariaLabel={`Scratch ${lot.item.playerName} off the wall`}
+      onRun={async () => {
+        if (!window.confirm(`Scratch ${lot.item.playerName}? The shirt leaves the wall.`)) return;
+        await scratch.mutateAsync(lot.id);
+      }}
+    />
+  );
+}
 
-    const line =
-      kind === "scratch"
-        ? `Scratch ${lot.item.playerName}? The shirt leaves the wall.`
-        : `Take ${lot.item.playerName} off the rail?`;
-    if (!window.confirm(line)) return;
+function DownOff({ lot }: { lot: Auction }) {
+  const pull = useDeleteAuctionMutation();
+  return (
+    <OffButton
+      label="Off"
+      pending={pull.isPending}
+      ariaLabel={`Take ${lot.item.playerName} off the rail`}
+      onRun={async () => {
+        if (!window.confirm(`Take ${lot.item.playerName} off the rail?`)) return;
+        await pull.mutateAsync(lot.id);
+      }}
+    />
+  );
+}
 
-    if (kind === "scratch") await scratch.mutateAsync(lot.id);
-    else await pull.mutateAsync(lot.id);
-  }
-
+function OffButton({
+  label,
+  pending,
+  ariaLabel,
+  onRun,
+}: {
+  label: string;
+  pending: boolean;
+  ariaLabel: string;
+  onRun: () => void | Promise<unknown>;
+}) {
   return (
     <button
       type="button"
       className="board-desk-off"
       disabled={pending}
-      aria-label={
-        kind === "drop"
-          ? `Drop ${lot.item.playerName} from your peg`
-          : kind === "scratch"
-            ? `Scratch ${lot.item.playerName} off the wall`
-            : `Take ${lot.item.playerName} off the rail`
-      }
+      aria-label={ariaLabel}
       onClick={(event) => {
         event.stopPropagation();
-        void run();
+        void onRun();
       }}
     >
       {pending ? "…" : label}

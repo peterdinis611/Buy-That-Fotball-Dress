@@ -184,3 +184,9 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/obj/Debug/net10.0/KitVault.Tests.pdb
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/obj/Debug/net10.0/KitVault.Tests.genruntimeconfig.cache
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/obj/Debug/net10.0/ref/KitVault.Tests.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/PaymentService.deps.json
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/PaymentService.runtimeconfig.json
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/PaymentService.staticwebassets.endpoints.json
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/PaymentService
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/PaymentService.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/PaymentService.pdb

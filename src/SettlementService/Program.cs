@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SettlementService.Consumers;
 using SettlementService.Data;
+using SettlementService.Payments;
 using SettlementService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,14 @@ builder.Services.AddDbContext<SettlementDbContext>(opt =>
 });
 
 builder.Services.AddScoped<ISettlementsService, SettlementsService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<ForwardAuthHandler>();
+builder.Services.AddScoped<ITillClient, HttpTillClient>();
+builder.Services.AddHttpClient("Payment", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["PaymentService:BaseUrl"] ?? "http://localhost:5034");
+    client.Timeout = TimeSpan.FromSeconds(10);
+}).AddHttpMessageHandler<ForwardAuthHandler>();
 
 var jwt = builder.Configuration.GetSection("Jwt");
 var signingKey = jwt["Key"] ?? throw new InvalidOperationException("Jwt:Key is missing.");

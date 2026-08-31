@@ -6,12 +6,14 @@ using SettlementService.Data;
 using SettlementService.DTOs;
 using SettlementService.Entities;
 using SettlementService.Mapping;
+using SettlementService.Payments;
 
 namespace SettlementService.Services;
 
 public sealed class SettlementsService(
     SettlementDbContext db,
-    IPublishEndpoint publishEndpoint) : ISettlementsService
+    IPublishEndpoint publishEndpoint,
+    ITillClient till) : ISettlementsService
 {
     public async Task<IReadOnlyList<SettlementDto>> GetMineAsync(string username, CancellationToken cancellationToken)
     {
@@ -46,9 +48,13 @@ public sealed class SettlementsService(
         if (!Same(username, row.Buyer)) return Result<SettlementDto>.Forbidden("Only the buyer can pay.");
         if (row.Status != DeskStatus.Opened) return Result<SettlementDto>.Conflict("This desk is not waiting for payment.");
 
+        var charge = await till.ChargeAsync(row, username, cancellationToken);
+        if (!charge.IsSuccess)
+            return Result<SettlementDto>.Fail(charge.Error ?? "The till refused that charge.", charge.StatusCode);
+
         row.Status = DeskStatus.Paid;
         row.PaidAt = DateTime.UtcNow;
-        row.PaymentRef = TillRef(row.Id);
+        row.PaymentRef = charge.Value;
         await db.SaveChangesAsync(cancellationToken);
         await publishEndpoint.Publish(new SettlementPaid
         {
@@ -159,7 +165,4 @@ public sealed class SettlementsService(
 
     private static bool Same(string left, string right) =>
         left.Equals(right, StringComparison.OrdinalIgnoreCase);
-
-    private static string TillRef(Guid id) =>
-        $"TILL-{id.ToString("N")[..8].ToUpperInvariant()}";
 }

@@ -92,7 +92,7 @@ wait_for "Redis" 30 bash -c 'nc -z 127.0.0.1 6379'
 echo "Waiting for Mailpit on :1025…"
 wait_for "Mailpit" 30 bash -c 'nc -z 127.0.0.1 1025'
 
-for port in 5025 5026 5027 5028 5029 5030 5031 5032 5033; do
+for port in 5025 5026 5027 5028 5029 5030 5031 5032 5033 5034; do
   stop_port "$port"
 done
 if [[ "$WITH_WEB" == "1" ]]; then
@@ -119,6 +119,7 @@ start_dotnet "Notifications   :5030" "src/NotificationService/NotificationServic
 start_dotnet "Settlement      :5031" "src/SettlementService/SettlementService.csproj"
 start_dotnet "Email           :5032" "src/EmailService/EmailService.csproj"
 start_dotnet "Admin           :5033" "src/AdminService/AdminService.csproj"
+start_dotnet "Payment         :5034" "src/PaymentService/PaymentService.csproj"
 
 if [[ "$WITH_WEB" == "1" ]]; then
   echo "→ web             :3000"
@@ -140,6 +141,7 @@ Kit Vault is up. Ctrl+C stops everything.
   Desk     http://localhost:5031
   Mail     http://localhost:5032
   Office   http://localhost:5033
+  Till     http://localhost:5034
   Redis    localhost:6379
   RabbitMQ http://localhost:15672  (guest/guest)
   Mailpit  http://localhost:8025   (letters)
