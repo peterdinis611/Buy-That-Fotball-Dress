@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Karla, Saira_Extra_Condensed } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { SiteHeader, SiteFooter, Floodlights, BootClear } from "@/components/layout";
+import { SiteHeader, SiteFooter, Floodlights, BootClear, KickTop } from "@/components/layout";
 import { PitchBall } from "@/components/layout/pitch-ball";
 import { Providers } from "@/providers";
 import { JsonLd } from "@/components/seo";
@@ -88,7 +88,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning className={`${display.variable} ${karla.variable} h-full`}>
-      <body className="relative flex min-h-full flex-col">
+      <body className="relative flex min-h-full flex-col" suppressHydrationWarning>
         <div id="kit-boot" className="kit-boot" role="status" aria-label="Loading Kit Vault">
           <div className="kit-boot-spot">
             <PitchBall />
@@ -106,6 +106,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteHeader />
           <main className="relative z-10 flex-1">{children}</main>
           <SiteFooter />
+          <KickTop />
         </Providers>
       </body>
     </html>

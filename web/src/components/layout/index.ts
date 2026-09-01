@@ -5,3 +5,4 @@ export { MatchClock } from "./match-clock";
 export { LightsSwitch } from "./lights-switch";
 export { PitchBall } from "./pitch-ball";
 export { BootClear } from "./boot-clear";
+export { KickTop } from "./kick-top";
