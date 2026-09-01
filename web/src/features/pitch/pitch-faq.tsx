@@ -1,3 +1,10 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 const questions = [
   {
     q: "What does Live mean?",
@@ -36,19 +43,27 @@ export function PitchFaq() {
           Before you raise a paddle.
         </h2>
 
-        <div className="mt-10 divide-y-2 divide-[var(--ink)] border-y-2 border-[var(--ink)]">
+        <Accordion
+          multiple
+          className="mt-10 divide-y-2 divide-[var(--ink)] border-y-2 border-[var(--ink)]"
+        >
           {questions.map((item) => (
-            <details key={item.q} className="locker-faq group">
-              <summary className="flex cursor-pointer list-none items-baseline justify-between gap-6 py-5 font-[family-name:var(--font-display)] text-2xl text-[var(--ink)] uppercase md:text-3xl">
+            <AccordionItem key={item.q} value={item.q} className="not-last:border-b-0">
+              <AccordionTrigger className="rounded-none py-5 font-[family-name:var(--font-display)] text-2xl text-[var(--ink)] uppercase md:text-3xl **:data-[slot=accordion-trigger-icon]:hidden">
                 <span>{item.q}</span>
-                <span className="shrink-0 text-[var(--led)] transition-transform group-open:rotate-45" aria-hidden>
+                <span
+                  className="ml-auto shrink-0 text-[var(--led)] transition-transform group-aria-expanded/accordion-trigger:rotate-45"
+                  aria-hidden
+                >
                   +
                 </span>
-              </summary>
-              <p className="max-w-2xl text-lg text-[var(--ink)]/75">{item.a}</p>
-            </details>
+              </AccordionTrigger>
+              <AccordionContent className="max-w-2xl pb-5 text-lg text-[var(--ink)]/75">
+                {item.a}
+              </AccordionContent>
+            </AccordionItem>
           ))}
-        </div>
+        </Accordion>
       </div>
     </section>
   );

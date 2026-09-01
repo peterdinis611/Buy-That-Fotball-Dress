@@ -7,6 +7,7 @@ import { useMySettlementsQuery, usePlayerSheetQuery, useSavedPegsQuery } from "@
 import { DeskRail } from "./desk-slip";
 import { TapeRail } from "./tape-rail";
 import { LockerRail, type HookKind } from "./locker-hook";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type RackId = HookKind | "desk" | "tape";
 
@@ -109,9 +110,11 @@ export function DressingRoom({ user }: { user: AuthUser }) {
         </div>
 
         {sheet.isError ? (
-          <p className="mt-8 border border-[var(--cardinal)] px-4 py-3 text-[var(--cardinal)]">
-            {sheet.error instanceof Error ? sheet.error.message : "Could not load your lots."}
-          </p>
+          <Alert variant="destructive" className="mt-8 border-[var(--cardinal)] bg-transparent">
+            <AlertDescription className="text-[var(--cardinal)]">
+              {sheet.error instanceof Error ? sheet.error.message : "Could not load your lots."}
+            </AlertDescription>
+          </Alert>
         ) : null}
 
         <nav className="bay-strip reveal delay-3 mt-12" aria-label="Lockers">

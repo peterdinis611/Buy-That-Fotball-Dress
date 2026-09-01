@@ -14,6 +14,8 @@ import {
   useBoardLog,
   type BoardEvent,
 } from "@/lib/realtime/board-log";
+import { ConfirmAct } from "@/components/forms/confirm-act";
+import { Spinner } from "@/components/ui/spinner";
 import { useAuth, useClock, useDeleteAuctionMutation, usePlaceBidMutation, usePlayerSheetQuery, useScratchPeg, useWatchMutation } from "@/hooks";
 
 function sameName(left?: string | null, right?: string | null) {
@@ -291,14 +293,16 @@ function DropOff({ lot }: { lot: Auction }) {
 function ScratchOff({ lot }: { lot: Auction }) {
   const scratch = useScratchPeg();
   return (
-    <OffButton
-      label="Off"
+    <ConfirmAct
+      title={`Scratch ${lot.item.playerName}?`}
+      body="The shirt leaves the wall."
+      confirmLabel="Scratch"
       pending={scratch.isPending}
+      triggerClassName="board-desk-off"
+      triggerLabel="Off"
       ariaLabel={`Scratch ${lot.item.playerName} off the wall`}
-      onRun={async () => {
-        if (!window.confirm(`Scratch ${lot.item.playerName}? The shirt leaves the wall.`)) return;
-        await scratch.mutateAsync(lot.id);
-      }}
+      onTriggerClick={(event) => event.stopPropagation()}
+      onConfirm={() => scratch.mutateAsync(lot.id)}
     />
   );
 }
@@ -306,14 +310,16 @@ function ScratchOff({ lot }: { lot: Auction }) {
 function DownOff({ lot }: { lot: Auction }) {
   const pull = useDeleteAuctionMutation();
   return (
-    <OffButton
-      label="Off"
+    <ConfirmAct
+      title={`Take ${lot.item.playerName} off the rail?`}
+      body="The listing comes down."
+      confirmLabel="Take it down"
       pending={pull.isPending}
+      triggerClassName="board-desk-off"
+      triggerLabel="Off"
       ariaLabel={`Take ${lot.item.playerName} off the rail`}
-      onRun={async () => {
-        if (!window.confirm(`Take ${lot.item.playerName} off the rail?`)) return;
-        await pull.mutateAsync(lot.id);
-      }}
+      onTriggerClick={(event) => event.stopPropagation()}
+      onConfirm={() => pull.mutateAsync(lot.id)}
     />
   );
 }
@@ -340,7 +346,7 @@ function OffButton({
         void onRun();
       }}
     >
-      {pending ? "…" : label}
+      {pending ? <Spinner className="size-3.5" /> : label}
     </button>
   );
 }

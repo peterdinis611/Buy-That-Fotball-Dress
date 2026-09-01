@@ -1,6 +1,8 @@
 import { type ComponentProps } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect as UiNativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { cn } from "@/lib/utils";
 
 export type BoundStringField = {
@@ -113,7 +115,7 @@ export function NativeSelect({
       <Label htmlFor={name} className="font-[family-name:var(--font-display)] text-lg tracking-[0.16em] uppercase">
         {label}
       </Label>
-      <select
+      <UiNativeSelect
         id={name}
         name={name}
         value={value}
@@ -121,16 +123,16 @@ export function NativeSelect({
         onChange={(event) => onChange?.(event.target.value)}
         aria-invalid={Boolean(error)}
         className={cn(
-          "h-11 rounded-none border border-[var(--border)] bg-[#0c0c0c] px-2.5 font-[family-name:var(--font-display)] text-xl text-[#f3f1ec] [-webkit-text-fill-color:#f3f1ec]",
-          error && "border-[var(--cardinal)]",
+          "w-full [&_[data-slot=native-select]]:h-11 [&_[data-slot=native-select]]:border-[var(--border)] [&_[data-slot=native-select]]:bg-[#0c0c0c] [&_[data-slot=native-select]]:text-xl [&_[data-slot=native-select]]:text-[#f3f1ec] [&_[data-slot=native-select]]:[-webkit-text-fill-color:#f3f1ec]",
+          error && "[&_[data-slot=native-select]]:border-[var(--cardinal)]",
         )}
       >
         {options.map((option) => (
-          <option key={option} value={option} className="bg-[var(--pitch)]">
+          <NativeSelectOption key={option} value={option} className="bg-[var(--pitch)]">
             {option}
-          </option>
+          </NativeSelectOption>
         ))}
-      </select>
+      </UiNativeSelect>
       {error ? <p className="text-sm text-[var(--cardinal)]">{error}</p> : null}
     </div>
   );
@@ -161,6 +163,8 @@ export function SelectField({
 export function FormBanner({ message }: { message?: string | null }) {
   if (!message) return null;
   return (
-    <p className="mt-4 border border-[var(--cardinal)] px-3 py-2 text-sm text-[var(--cardinal)]">{message}</p>
+    <Alert variant="destructive" className="mt-4 border-[var(--cardinal)] bg-transparent px-3 py-2">
+      <AlertDescription className="text-sm text-[var(--cardinal)]">{message}</AlertDescription>
+    </Alert>
   );
 }

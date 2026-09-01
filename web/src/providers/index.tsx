@@ -7,6 +7,7 @@ import { BoardToaster } from "@/features/pitch/board-toast";
 import { useLiveBoard } from "@/hooks/use-live-board";
 import { setClientAccessToken } from "@/lib/auth";
 import { getQueryClient } from "@/lib/query/client";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 function AccessTokenBridge() {
   const { data } = useSession();
@@ -26,9 +27,11 @@ export function Providers({ children }: { children: ReactNode }) {
     <SessionProvider>
       <AccessTokenBridge />
       <QueryClientProvider client={queryClient}>
-        <LiveBoard />
-        <BoardToaster />
-        {children}
+        <TooltipProvider delay={280}>
+          <LiveBoard />
+          <BoardToaster />
+          {children}
+        </TooltipProvider>
       </QueryClientProvider>
     </SessionProvider>
   );

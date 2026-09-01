@@ -7,6 +7,7 @@ import { WornStamp } from "./worn-stamp";
 import { StewardMark } from "./steward-mark";
 import { formatMoney } from "@/lib/format";
 import type { KitListing } from "@/lib/types";
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 
 export function KitPeg({ listing, index = 0 }: { listing: KitListing; index?: number }) {
   const number = listing.playerNumber?.toString().padStart(2, "0") ?? "00";
@@ -48,9 +49,12 @@ export function KitPeg({ listing, index = 0 }: { listing: KitListing; index?: nu
 export function PegWall({ listings, empty }: { listings: KitListing[]; empty?: string }) {
   if (listings.length === 0) {
     return empty ? (
-      <p className="border border-dashed border-[var(--ink)]/20 bg-[var(--tape)] px-5 py-12 text-center text-[var(--ink)]/60">
-        {empty}
-      </p>
+      <Empty className="min-h-56 border border-dashed border-[var(--ink)]/20 bg-[var(--tape)]">
+        <EmptyHeader>
+          <EmptyTitle className="text-2xl text-[var(--ink)]">Empty rail</EmptyTitle>
+          <EmptyDescription className="text-[var(--ink)]/60">{empty}</EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     ) : null;
   }
 

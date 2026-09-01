@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useDropPeg } from "@/hooks";
 import { formatMoney } from "@/lib/format";
 import type { SavedPeg } from "@/lib/types";
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
+import { SlipSkeleton } from "@/components/ui/skeleton";
 
 function tapeLine(peg: SavedPeg) {
   const bits = [
@@ -34,18 +36,19 @@ export function TapeRail({ rows, loading }: { rows: SavedPeg[]; loading: boolean
   const drop = useDropPeg();
 
   if (loading) {
-    return (
-      <p className="border border-dashed border-[var(--ink)]/18 bg-[var(--tape)] px-5 py-12 text-center text-[var(--ink)]/50">
-        Loading tape…
-      </p>
-    );
+    return <SlipSkeleton label="Loading tape" />;
   }
 
   if (rows.length === 0) {
     return (
-      <p className="border border-dashed border-[var(--ink)]/18 bg-[var(--tape)] px-5 py-12 text-center text-[var(--ink)]/60">
-        No tape hung. Filter the search rail and hang it — a letter lands when a matching shirt is listed.
-      </p>
+      <Empty className="min-h-56 border border-dashed border-[var(--ink)]/18 bg-[var(--tape)]">
+        <EmptyHeader>
+          <EmptyTitle className="text-2xl text-[var(--ink)]">No tape hung</EmptyTitle>
+          <EmptyDescription className="text-[var(--ink)]/60">
+            Filter the search rail and hang it — a letter lands when a matching shirt is listed.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     );
   }
 

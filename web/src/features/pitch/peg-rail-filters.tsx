@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { PegWall } from "./kit-peg";
 import type { KitListing } from "@/lib/types";
+import { Toggle } from "@/components/ui/toggle";
 
 export const railLeagues = ["Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1", "MLS", "World Cup", "Niké Liga"];
 export const railSizes = ["XS", "S", "M", "L", "XL", "XXL"];
@@ -69,14 +70,13 @@ export function FilteredPegWall({ listings, empty }: { listings: KitListing[]; e
             onChange={(event) => set("maxPrice", event.target.value.replace(/[^\d]/g, ""))}
           />
         </label>
-        <button
-          type="button"
-          className={`rail-chip rail-chip-btn ${filter.soon ? "rail-chip-lit" : ""}`}
-          aria-pressed={filter.soon}
-          onClick={() => set("soon", !filter.soon)}
+        <Toggle
+          pressed={filter.soon}
+          onPressedChange={(pressed) => set("soon", pressed)}
+          className={`rail-chip rail-chip-btn grid h-auto min-w-[6.5rem] rounded-none border-0 bg-[var(--tape)] px-[0.65rem] py-[0.35rem] shadow-none hover:bg-[var(--tape)] hover:text-[var(--ink)] data-[state=on]:bg-[var(--tape)] data-[state=on]:text-[var(--ink)] ${filter.soon ? "rail-chip-lit" : ""}`}
         >
           Ends in 2h
-        </button>
+        </Toggle>
         {lit ? (
           <button type="button" className="rail-chip-clear" onClick={() => setFilter(blank)}>
             Clear

@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Kbd } from "@/components/ui/kbd";
 import type { SearchQuery } from "@/lib/types";
 
 const sizes = ["", "XS", "S", "M", "L", "XL", "XXL"].map((value) => ({
@@ -73,7 +74,13 @@ export function SearchFilters({ query }: { query: SearchQuery }) {
     <form className="board-slam mb-10 overflow-hidden" onSubmit={(event) => event.preventDefault()}>
       <div className="sub-board">
         <div className="sub-board-bib flex items-center justify-between gap-4 px-5 py-2 text-lg">
-          <span>Filter the rail</span>
+          <span className="flex items-center gap-3">
+            <span>Filter the rail</span>
+            <span className="hidden items-center gap-2 font-[family-name:var(--font-display)] text-base tracking-[0.12em] uppercase sm:flex">
+              <Kbd className="bg-[var(--stud)] text-[var(--bib)]">Enter</Kbd>
+              clips Find
+            </span>
+          </span>
           {active ? (
             <button
               type="button"

@@ -5,6 +5,8 @@ import { JerseyBack } from "@/features/pitch";
 import { WornStamp } from "@/features/pitch/worn-stamp";
 import { formatMoney } from "@/lib/format";
 import type { KitListing } from "@/lib/types";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
+import { PegSkeleton } from "@/components/ui/skeleton";
 
 function sameName(left?: string | null, right?: string | null) {
   return Boolean(left && right && left.toLowerCase() === right.toLowerCase());
@@ -87,23 +89,24 @@ export function LockerRail({
   loading: boolean;
 }) {
   if (loading) {
-    return (
-      <p className="border border-dashed border-[var(--ink)]/18 bg-[var(--tape)] px-5 py-12 text-center text-[var(--ink)]/50">
-        Loading lots…
-      </p>
-    );
+    return <PegSkeleton />;
   }
 
   if (listings.length === 0) {
     return (
-      <div className="flex min-h-56 flex-col items-center justify-center border border-dashed border-[var(--ink)]/18 bg-[var(--tape)] px-5 py-12">
-        <p className="max-w-sm text-center text-[var(--ink)]/65">{empty}</p>
+      <Empty className="min-h-56 border border-dashed border-[var(--ink)]/18 bg-[var(--tape)]">
+        <EmptyHeader>
+          <EmptyTitle className="text-2xl text-[var(--ink)]">Empty locker</EmptyTitle>
+          <EmptyDescription className="text-[var(--ink)]/65">{empty}</EmptyDescription>
+        </EmptyHeader>
         {emptyHref && emptyCta ? (
-          <Link href={emptyHref} className="banner-cta mt-6 text-2xl">
-            {emptyCta}
-          </Link>
+          <EmptyContent>
+            <Link href={emptyHref} className="banner-cta mt-2 text-2xl">
+              {emptyCta}
+            </Link>
+          </EmptyContent>
         ) : null}
-      </div>
+      </Empty>
     );
   }
 

@@ -25,6 +25,9 @@ import { StatusPill } from "./status-pill";
 import { DeskSlip } from "@/features/profile/desk-slip";
 import type { Auction, AuctionItem, Bid } from "@/lib/types";
 import { bidFieldsSchema } from "@/lib/validation";
+import { ConfirmAct } from "@/components/forms/confirm-act";
+import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 
 function sameName(left?: string | null, right?: string | null) {
   return Boolean(left && right && left.toLowerCase() === right.toLowerCase());
@@ -101,6 +104,7 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
           {lot.winner ? <TicketLine label="Winner" value={lot.winner} /> : null}
           {lot.soldAmount ? <TicketLine label="Sold for" value={formatMoney(lot.soldAmount)} punch /> : null}
 
+          <Separator className="mt-6 bg-white/12" />
           <dl className="lot-board-spec mt-6">
             {specs.map(([label, value]) => (
               <div key={label}>
@@ -234,7 +238,6 @@ function WatchToggle({ auction, watching }: { auction: Auction; watching: boolea
 function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
   const router = useRouter();
   const takeDown = useDeleteAuctionMutation();
-  const [confirm, setConfirm] = useState(false);
   const [banner, setBanner] = useState<string | null>(null);
 
   async function remove() {
@@ -245,7 +248,6 @@ function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
       router.refresh();
     } catch (err) {
       setBanner(err instanceof Error ? err.message : "Could not take this shirt down.");
-      setConfirm(false);
     }
   }
 
@@ -262,38 +264,20 @@ function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
           >
             Edit listing
           </Link>
-          {confirm ? (
-            <button
-              type="button"
-              disabled={takeDown.isPending}
-              onClick={() => void remove()}
-              className="inline-flex h-11 items-center bg-[var(--led)] px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-white uppercase"
-            >
-              {takeDown.isPending ? "Taking down…" : "Take it down"}
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setConfirm(true)}
-              className="inline-flex h-11 items-center border border-white/25 px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--chalk)] uppercase"
-            >
-              Take down
-            </button>
-          )}
+          <ConfirmAct
+            title={`Take ${auction.item.playerName} off the rail?`}
+            body="The listing comes down. Bids on this lot are void."
+            confirmLabel="Take it down"
+            pending={takeDown.isPending}
+            triggerClassName="inline-flex h-11 items-center border border-white/25 px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--chalk)] uppercase"
+            triggerLabel="Take down"
+            onConfirm={remove}
+          />
         </div>
       ) : (
         <p className="mt-3 text-[var(--muted-foreground)]">The clock has run out. This lot stays on your sheet.</p>
       )}
       <DeskSlip auction={auction} />
-      {confirm && live ? (
-        <button
-          type="button"
-          onClick={() => setConfirm(false)}
-          className="mt-3 text-sm text-[var(--muted-foreground)] underline-offset-4 hover:underline"
-        >
-          Keep it on the rail
-        </button>
-      ) : null}
       <FormBanner message={banner} />
     </div>
   );
@@ -373,7 +357,14 @@ function BidForm({ auction }: { auction: Auction }) {
             disabled={!canSubmit || isSubmitting || bid.isPending}
             className="mt-5 h-12 w-full rounded-none border-0 bg-[var(--stud)] font-[family-name:var(--font-display)] text-2xl tracking-[0.08em] text-[var(--bib)] uppercase hover:bg-[#0c0c0c]"
           >
-            {isSubmitting || bid.isPending ? "Placing bid…" : "Place bid"}
+            {isSubmitting || bid.isPending ? (
+              <span className="inline-flex items-center gap-2">
+                <Spinner className="size-4" />
+                Placing bid…
+              </span>
+            ) : (
+              "Place bid"
+            )}
           </Button>
         )}
       </form.Subscribe>

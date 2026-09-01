@@ -13,6 +13,10 @@ import {
 } from "@/hooks";
 import { formatMoney } from "@/lib/format";
 import type { Auction, DeskStatus, Settlement } from "@/lib/types";
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
+import { SlipSkeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
+import { Textarea } from "@/components/ui/textarea";
 
 function sameName(left?: string | null, right?: string | null) {
   return Boolean(left && right && left.toLowerCase() === right.toLowerCase());
@@ -115,7 +119,14 @@ function Till({ row, buyer, seller }: { row: Settlement; buyer: boolean; seller:
             onClick={() => void run(() => pay.mutateAsync(row.id))}
             className="till-pay"
           >
-            {pay.isPending ? "Charging…" : "Pay by card"}
+            {pay.isPending ? (
+              <span className="inline-flex items-center gap-2">
+                <Spinner className="size-4" />
+                Charging…
+              </span>
+            ) : (
+              "Pay by card"
+            )}
           </button>
         ) : null}
 
@@ -167,7 +178,7 @@ function Till({ row, buyer, seller }: { row: Settlement; buyer: boolean; seller:
             >
               <label className="till-field">
                 <span>Why</span>
-                <textarea
+                <Textarea
                   value={reason}
                   onChange={(event) => setReason(event.target.value)}
                   placeholder="What went wrong"
@@ -175,6 +186,7 @@ function Till({ row, buyer, seller }: { row: Settlement; buyer: boolean; seller:
                   maxLength={400}
                   rows={3}
                   required
+                  className="min-h-20 rounded-none border-0 bg-transparent px-0 py-0 shadow-none focus-visible:ring-0"
                 />
               </label>
               <div className="flex flex-wrap gap-3">
@@ -200,18 +212,19 @@ function Till({ row, buyer, seller }: { row: Settlement; buyer: boolean; seller:
 
 export function DeskRail({ rows, loading }: { rows: Settlement[]; loading: boolean }) {
   if (loading) {
-    return (
-      <p className="border border-dashed border-[var(--ink)]/18 bg-[var(--tape)] px-5 py-12 text-center text-[var(--ink)]/50">
-        Loading desk…
-      </p>
-    );
+    return <SlipSkeleton label="Loading desk" />;
   }
 
   if (rows.length === 0) {
     return (
-      <p className="border border-dashed border-[var(--ink)]/18 bg-[var(--tape)] px-5 py-12 text-center text-[var(--ink)]/60">
-        No desks yet. When a lot sells, it opens here.
-      </p>
+      <Empty className="min-h-56 border border-dashed border-[var(--ink)]/18 bg-[var(--tape)]">
+        <EmptyHeader>
+          <EmptyTitle className="text-2xl text-[var(--ink)]">No desks yet</EmptyTitle>
+          <EmptyDescription className="text-[var(--ink)]/60">
+            When a lot sells, it opens here.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     );
   }
 
