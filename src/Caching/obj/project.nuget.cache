@@ -1,18 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "pBz18RsoGaU=",
+  "dgSpecHash": "4NWSF5RQMaY=",
   "success": true,
   "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/Caching.csproj",
   "expectedPackageFiles": [
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.extensions.caching.abstractions/10.0.3/microsoft.extensions.caching.abstractions.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.extensions.caching.memory/10.0.3/microsoft.extensions.caching.memory.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.extensions.configuration.abstractions/10.0.3/microsoft.extensions.configuration.abstractions.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.extensions.dependencyinjection.abstractions/10.0.3/microsoft.extensions.dependencyinjection.abstractions.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.extensions.logging.abstractions/10.0.3/microsoft.extensions.logging.abstractions.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.extensions.options/10.0.3/microsoft.extensions.options.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.extensions.primitives/10.0.3/microsoft.extensions.primitives.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/pipelines.sockets.unofficial/2.2.8/pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/stackexchange.redis/2.8.58/stackexchange.redis.2.8.58.nupkg.sha512"
+    "/Users/peterdinis/.nuget/packages/microsoft.extensions.caching.abstractions/10.0.3/microsoft.extensions.caching.abstractions.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.extensions.caching.memory/10.0.3/microsoft.extensions.caching.memory.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.extensions.configuration.abstractions/10.0.3/microsoft.extensions.configuration.abstractions.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.3/microsoft.extensions.dependencyinjection.abstractions.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.extensions.logging.abstractions/10.0.3/microsoft.extensions.logging.abstractions.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.extensions.options/10.0.3/microsoft.extensions.options.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.extensions.primitives/10.0.3/microsoft.extensions.primitives.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/pipelines.sockets.unofficial/2.2.8/pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/stackexchange.redis/2.8.58/stackexchange.redis.2.8.58.nupkg.sha512"
   ],
   "logs": []
 }

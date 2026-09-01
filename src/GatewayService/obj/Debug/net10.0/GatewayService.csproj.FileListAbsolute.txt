@@ -31,3 +31,4 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/obj/Debug/net10.0/GatewayService.pdb
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/obj/Debug/net10.0/GatewayService.genruntimeconfig.cache
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/obj/Debug/net10.0/ref/GatewayService.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/bin/Debug/net10.0/Microsoft.OpenApi.dll

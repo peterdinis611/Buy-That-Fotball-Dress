@@ -1,0 +1,21 @@
+<Project>
+  <!-- Direct pins so NuGet does not restore vulnerable transitive packages
+       (NU1902 / NU1903 from Microsoft.OpenApi, SQLitePCLRaw, MailKit/MimeKit). -->
+  <PropertyGroup>
+    <KitVaultPinsOpenApi Condition="'$(UsingMicrosoftNETSdkWeb)' == 'true' Or '$(MSBuildProjectName)' == 'KitVault.Tests'">true</KitVaultPinsOpenApi>
+    <KitVaultPinsSqlite Condition="
+      '$(MSBuildProjectName)' == 'AdminService'
+      Or '$(MSBuildProjectName)' == 'AuctionService'
+      Or '$(MSBuildProjectName)' == 'BidService'
+      Or '$(MSBuildProjectName)' == 'IdentityService'
+      Or '$(MSBuildProjectName)' == 'PaymentService'
+      Or '$(MSBuildProjectName)' == 'SearchService'
+      Or '$(MSBuildProjectName)' == 'SettlementService'
+      Or '$(MSBuildProjectName)' == 'KitVault.Tests'">true</KitVaultPinsSqlite>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.OpenApi" Version="2.7.5" Condition="'$(KitVaultPinsOpenApi)' == 'true'" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" Condition="'$(KitVaultPinsSqlite)' == 'true'" />
+  </ItemGroup>
+</Project>

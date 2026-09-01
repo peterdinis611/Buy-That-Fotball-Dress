@@ -1,60 +1,35 @@
 {
   "version": 2,
-  "dgSpecHash": "I79V5aFgrtk=",
+  "dgSpecHash": "OC8YTI9ELZM=",
   "success": true,
   "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SettlementService/SettlementService.csproj",
   "expectedPackageFiles": [
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/masstransit/8.3.6/masstransit.8.3.6.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/masstransit.abstractions/8.3.6/masstransit.abstractions.8.3.6.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/masstransit.rabbitmq/8.3.6/masstransit.rabbitmq.8.3.6.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.aspnetcore.authentication.jwtbearer/10.0.3/microsoft.aspnetcore.authentication.jwtbearer.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.data.sqlite.core/10.0.3/microsoft.data.sqlite.core.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.entityframeworkcore/10.0.3/microsoft.entityframeworkcore.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.entityframeworkcore.abstractions/10.0.3/microsoft.entityframeworkcore.abstractions.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.entityframeworkcore.analyzers/10.0.3/microsoft.entityframeworkcore.analyzers.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.entityframeworkcore.relational/10.0.3/microsoft.entityframeworkcore.relational.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.entityframeworkcore.sqlite/10.0.3/microsoft.entityframeworkcore.sqlite.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.entityframeworkcore.sqlite.core/10.0.3/microsoft.entityframeworkcore.sqlite.core.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.extensions.dependencymodel/10.0.3/microsoft.extensions.dependencymodel.10.0.3.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.identitymodel.abstractions/8.0.1/microsoft.identitymodel.abstractions.8.0.1.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.identitymodel.jsonwebtokens/8.0.1/microsoft.identitymodel.jsonwebtokens.8.0.1.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.identitymodel.logging/8.0.1/microsoft.identitymodel.logging.8.0.1.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.identitymodel.protocols/8.0.1/microsoft.identitymodel.protocols.8.0.1.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.identitymodel.protocols.openidconnect/8.0.1/microsoft.identitymodel.protocols.openidconnect.8.0.1.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.identitymodel.tokens/8.0.1/microsoft.identitymodel.tokens.8.0.1.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/rabbitmq.client/7.0.0/rabbitmq.client.7.0.0.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/sqlitepclraw.bundle_e_sqlite3/2.1.11/sqlitepclraw.bundle_e_sqlite3.2.1.11.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/sqlitepclraw.core/2.1.11/sqlitepclraw.core.2.1.11.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/sqlitepclraw.lib.e_sqlite3/2.1.11/sqlitepclraw.lib.e_sqlite3.2.1.11.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/sqlitepclraw.provider.e_sqlite3/2.1.11/sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512",
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget/system.identitymodel.tokens.jwt/8.0.1/system.identitymodel.tokens.jwt.8.0.1.nupkg.sha512"
+    "/Users/peterdinis/.nuget/packages/masstransit/8.3.6/masstransit.8.3.6.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/masstransit.abstractions/8.3.6/masstransit.abstractions.8.3.6.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/masstransit.rabbitmq/8.3.6/masstransit.rabbitmq.8.3.6.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/10.0.3/microsoft.aspnetcore.authentication.jwtbearer.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.data.sqlite.core/10.0.3/microsoft.data.sqlite.core.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.entityframeworkcore/10.0.3/microsoft.entityframeworkcore.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.entityframeworkcore.abstractions/10.0.3/microsoft.entityframeworkcore.abstractions.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.entityframeworkcore.analyzers/10.0.3/microsoft.entityframeworkcore.analyzers.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.entityframeworkcore.relational/10.0.3/microsoft.entityframeworkcore.relational.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.entityframeworkcore.sqlite/10.0.3/microsoft.entityframeworkcore.sqlite.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.entityframeworkcore.sqlite.core/10.0.3/microsoft.entityframeworkcore.sqlite.core.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.extensions.dependencymodel/10.0.3/microsoft.extensions.dependencymodel.10.0.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.identitymodel.abstractions/8.0.1/microsoft.identitymodel.abstractions.8.0.1.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.identitymodel.jsonwebtokens/8.0.1/microsoft.identitymodel.jsonwebtokens.8.0.1.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.identitymodel.logging/8.0.1/microsoft.identitymodel.logging.8.0.1.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.identitymodel.protocols/8.0.1/microsoft.identitymodel.protocols.8.0.1.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.identitymodel.protocols.openidconnect/8.0.1/microsoft.identitymodel.protocols.openidconnect.8.0.1.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.identitymodel.tokens/8.0.1/microsoft.identitymodel.tokens.8.0.1.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/microsoft.openapi/2.7.5/microsoft.openapi.2.7.5.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/rabbitmq.client/7.0.0/rabbitmq.client.7.0.0.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/sqlitepclraw.bundle_e_sqlite3/2.1.11/sqlitepclraw.bundle_e_sqlite3.2.1.11.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/sqlitepclraw.core/2.1.11/sqlitepclraw.core.2.1.11.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/sqlitepclraw.lib.e_sqlite3/3.53.3/sqlitepclraw.lib.e_sqlite3.3.53.3.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/sqlitepclraw.provider.e_sqlite3/2.1.11/sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/system.identitymodel.tokens.jwt/8.0.1/system.identitymodel.tokens.jwt.8.0.1.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
-      "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SettlementService/SettlementService.csproj",
-      "warningLevel": 1,
-      "filePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SettlementService/SettlementService.csproj",
-      "libraryId": "Microsoft.OpenApi",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "Package 'SQLitePCLRaw.lib.e_sqlite3' 2.1.11 has a known high severity vulnerability, https://github.com/advisories/GHSA-2m69-gcr7-jv3q",
-      "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SettlementService/SettlementService.csproj",
-      "warningLevel": 1,
-      "filePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SettlementService/SettlementService.csproj",
-      "libraryId": "SQLitePCLRaw.lib.e_sqlite3",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  "logs": []
 }

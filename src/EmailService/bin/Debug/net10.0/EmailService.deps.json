@@ -9,30 +9,31 @@
       "EmailService/1.0.0": {
         "dependencies": {
           "Contracts": "1.0.0",
-          "MailKit": "4.11.0",
+          "MailKit": "4.16.0",
           "MassTransit.RabbitMQ": "8.3.6",
-          "Microsoft.AspNetCore.OpenApi": "10.0.3"
+          "Microsoft.AspNetCore.OpenApi": "10.0.3",
+          "Microsoft.OpenApi": "2.7.5"
         },
         "runtime": {
           "EmailService.dll": {}
         }
       },
-      "BouncyCastle.Cryptography/2.5.1": {
+      "BouncyCastle.Cryptography/2.6.2": {
         "runtime": {
           "lib/net6.0/BouncyCastle.Cryptography.dll": {
             "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.5.1.28965"
+            "fileVersion": "2.6.2.46322"
           }
         }
       },
-      "MailKit/4.11.0": {
+      "MailKit/4.16.0": {
         "dependencies": {
-          "MimeKit": "4.11.0"
+          "MimeKit": "4.16.0"
         },
         "runtime": {
-          "lib/net8.0/MailKit.dll": {
-            "assemblyVersion": "4.11.0.0",
-            "fileVersion": "4.11.0.0"
+          "lib/net10.0/MailKit.dll": {
+            "assemblyVersion": "4.16.0.0",
+            "fileVersion": "4.16.0.0"
           }
         }
       },
@@ -69,7 +70,7 @@
       },
       "Microsoft.AspNetCore.OpenApi/10.0.3": {
         "dependencies": {
-          "Microsoft.OpenApi": "2.0.0"
+          "Microsoft.OpenApi": "2.7.5"
         },
         "runtime": {
           "lib/net10.0/Microsoft.AspNetCore.OpenApi.dll": {
@@ -78,22 +79,22 @@
           }
         }
       },
-      "Microsoft.OpenApi/2.0.0": {
+      "Microsoft.OpenApi/2.7.5": {
         "runtime": {
           "lib/net8.0/Microsoft.OpenApi.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.0.0.0"
+            "assemblyVersion": "2.7.5.0",
+            "fileVersion": "2.7.5.0"
           }
         }
       },
-      "MimeKit/4.11.0": {
+      "MimeKit/4.16.0": {
         "dependencies": {
-          "BouncyCastle.Cryptography": "2.5.1"
+          "BouncyCastle.Cryptography": "2.6.2"
         },
         "runtime": {
-          "lib/net8.0/MimeKit.dll": {
-            "assemblyVersion": "4.11.0.0",
-            "fileVersion": "4.11.0.0"
+          "lib/net10.0/MimeKit.dll": {
+            "assemblyVersion": "4.16.0.0",
+            "fileVersion": "4.16.0.0"
           }
         }
       },
@@ -121,19 +122,19 @@
       "serviceable": false,
       "sha512": ""
     },
-    "BouncyCastle.Cryptography/2.5.1": {
+    "BouncyCastle.Cryptography/2.6.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-zy8TMeTP+1FH2NrLaNZtdRbBdq7u5MI+NFZQOBSM69u5RFkciinwzV2eveY6Kjf5MzgsYvvl6kTStsj3JrXqkg==",
-      "path": "bouncycastle.cryptography/2.5.1",
-      "hashPath": "bouncycastle.cryptography.2.5.1.nupkg.sha512"
+      "sha512": "sha512-7oWOcvnntmMKNzDLsdxAYqApt+AjpRpP2CShjMfIa3umZ42UQMvH0tl1qAliYPNYO6vTdcGMqnRrCPmsfzTI1w==",
+      "path": "bouncycastle.cryptography/2.6.2",
+      "hashPath": "bouncycastle.cryptography.2.6.2.nupkg.sha512"
     },
-    "MailKit/4.11.0": {
+    "MailKit/4.16.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-JVoRxJ+QRqFMRtEM4veStj3pMLBPRulQGV+iZm6Tq1pnr66Dy6dFYOW9Uw02nxAVzdZAN8G+y3BsUPtgZcKXhA==",
-      "path": "mailkit/4.11.0",
-      "hashPath": "mailkit.4.11.0.nupkg.sha512"
+      "sha512": "sha512-trJ82DOpAmo8i1jO1vNE+dGn4mPRyeYfy4swRcAGgMJhPoI1Kohf4OFJJf0+YIj4iUxgxPn8W+ht7e7KiYzSjg==",
+      "path": "mailkit/4.16.0",
+      "hashPath": "mailkit.4.16.0.nupkg.sha512"
     },
     "MassTransit/8.3.6": {
       "type": "package",
@@ -163,19 +164,19 @@
       "path": "microsoft.aspnetcore.openapi/10.0.3",
       "hashPath": "microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512"
     },
-    "Microsoft.OpenApi/2.0.0": {
+    "Microsoft.OpenApi/2.7.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-GGYLfzV/G/ct80OZ45JxnWP7NvMX1BCugn/lX7TH5o0lcVaviavsLMTxmFV2AybXWjbi3h6FF1vgZiTK6PXndw==",
-      "path": "microsoft.openapi/2.0.0",
-      "hashPath": "microsoft.openapi.2.0.0.nupkg.sha512"
+      "sha512": "sha512-0FA67RSnRM4tcBKqiqVu/HPdZ9+QOKbmeRjxRUGTCjPU4C0bmUhd97Dso7Yild5P7nOV6GxJ2xrK0Kv/O9xp0w==",
+      "path": "microsoft.openapi/2.7.5",
+      "hashPath": "microsoft.openapi.2.7.5.nupkg.sha512"
     },
-    "MimeKit/4.11.0": {
+    "MimeKit/4.16.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-6p0RC1qwBGBHxf7hvzuR1GngzigF+Q6HQUTbD2RbmDrnS2m1qO2rgqOhYtn8n8JH7WGZ+7RthS8lfMuMzeg8AA==",
-      "path": "mimekit/4.11.0",
-      "hashPath": "mimekit.4.11.0.nupkg.sha512"
+      "sha512": "sha512-X0LFxeM4gPRIhODyY/HYS9b+zRZ7y//v59rFzgS6wLxcPuZThnMtNZHtrr0fjLyRRkg3gqJBtvW36XfUzZ7Djw==",
+      "path": "mimekit/4.16.0",
+      "hashPath": "mimekit.4.16.0.nupkg.sha512"
     },
     "RabbitMQ.Client/7.0.0": {
       "type": "package",

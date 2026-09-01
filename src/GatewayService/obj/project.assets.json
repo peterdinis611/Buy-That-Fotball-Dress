@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     "net10.0": {
+      "Microsoft.OpenApi/2.7.5": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Microsoft.OpenApi.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.OpenApi.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "System.IO.Hashing/8.0.0": {
         "type": "package",
         "compile": {
@@ -43,6 +56,24 @@
     }
   },
   "libraries": {
+    "Microsoft.OpenApi/2.7.5": {
+      "sha512": "0FA67RSnRM4tcBKqiqVu/HPdZ9+QOKbmeRjxRUGTCjPU4C0bmUhd97Dso7Yild5P7nOV6GxJ2xrK0Kv/O9xp0w==",
+      "type": "package",
+      "path": "microsoft.openapi/2.7.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net8.0/Microsoft.OpenApi.dll",
+        "lib/net8.0/Microsoft.OpenApi.pdb",
+        "lib/net8.0/Microsoft.OpenApi.xml",
+        "lib/netstandard2.0/Microsoft.OpenApi.dll",
+        "lib/netstandard2.0/Microsoft.OpenApi.pdb",
+        "lib/netstandard2.0/Microsoft.OpenApi.xml",
+        "microsoft.openapi.2.7.5.nupkg.sha512",
+        "microsoft.openapi.nuspec"
+      ]
+    },
     "System.IO.Hashing/8.0.0": {
       "sha512": "ne1843evDugl0md7Fjzy6QjJrzsjh46ZKbhf8GwBXb5f/gw97J4bxMs0NQKifDuThh/f0bZ0e62NPl1jzTuRqA==",
       "type": "package",
@@ -99,11 +130,12 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "Microsoft.OpenApi >= 2.7.5",
       "Yarp.ReverseProxy >= 2.3.0"
     ]
   },
   "packageFolders": {
-    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget": {}
+    "/Users/peterdinis/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -111,7 +143,7 @@
       "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/GatewayService.csproj",
       "projectName": "GatewayService",
       "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/GatewayService.csproj",
-      "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget",
+      "packagesPath": "/Users/peterdinis/.nuget/packages/",
       "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/GatewayService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
@@ -145,6 +177,10 @@
       "net10.0": {
         "targetAlias": "net10.0",
         "dependencies": {
+          "Microsoft.OpenApi": {
+            "target": "Package",
+            "version": "[2.7.5, )"
+          },
           "Yarp.ReverseProxy": {
             "target": "Package",
             "version": "[2.3.0, )"
