@@ -88,7 +88,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning className={`${display.variable} ${karla.variable} h-full`}>
-      <body className="relative flex min-h-full flex-col">
+      <body className="relative flex min-h-full flex-col" suppressHydrationWarning>
         <div id="kit-boot" className="kit-boot" role="status" aria-label="Loading Kit Vault">
           <div className="kit-boot-spot">
             <PitchBall />

@@ -121,6 +121,11 @@ start_dotnet "Email           :5032" "src/EmailService/EmailService.csproj"
 start_dotnet "Admin           :5033" "src/AdminService/AdminService.csproj"
 start_dotnet "Payment         :5034" "src/PaymentService/PaymentService.csproj"
 
+echo "Waiting for Gateway on :5027…"
+wait_for "Gateway" 40 bash -c 'nc -z 127.0.0.1 5027'
+echo "Waiting for Live hub on :5030…"
+wait_for "Notifications" 40 bash -c 'nc -z 127.0.0.1 5030'
+
 if [[ "$WITH_WEB" == "1" ]]; then
   echo "→ web             :3000"
   (cd "$ROOT/web" && npm run dev) &

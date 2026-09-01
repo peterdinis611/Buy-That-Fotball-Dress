@@ -21,6 +21,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 app.UseCors("frontend");
+app.UseWebSockets();
 app.MapReverseProxy();
 
 app.Run();
