@@ -44,6 +44,17 @@ export async function scratchPeg(id: string) {
   if (!response.ok) throw new Error(await readError(response));
 }
 
+export async function verifyPeg(id: string) {
+  const response = await fetch(`${apiBase()}/api/admin/pegs/${id}/verify`, {
+    method: "POST",
+    headers: authHeaders(),
+  });
+
+  if (response.status === 401) throw new Error("Sign in first.");
+  if (response.status === 403) throw new Error("This tunnel is for match officials.");
+  if (!response.ok) throw new Error(await readError(response));
+}
+
 export async function whistleTill(id: string) {
   const response = await fetch(`${apiBase()}/api/admin/tills/${id}/whistle`, {
     method: "POST",

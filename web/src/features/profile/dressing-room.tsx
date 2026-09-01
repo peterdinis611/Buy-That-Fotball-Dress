@@ -3,11 +3,12 @@
 import { useState, type CSSProperties } from "react";
 import { JerseyBack } from "@/features/pitch";
 import { fromAuction, type AuthUser } from "@/lib/types";
-import { useMySettlementsQuery, usePlayerSheetQuery } from "@/hooks";
+import { useMySettlementsQuery, usePlayerSheetQuery, useSavedPegsQuery } from "@/hooks";
 import { DeskRail } from "./desk-slip";
+import { TapeRail } from "./tape-rail";
 import { LockerRail, type HookKind } from "./locker-hook";
 
-type RackId = HookKind | "desk";
+type RackId = HookKind | "desk" | "tape";
 
 function squadNumber(name: string) {
   let n = 0;
@@ -18,6 +19,7 @@ function squadNumber(name: string) {
 export function DressingRoom({ user }: { user: AuthUser }) {
   const sheet = usePlayerSheetQuery(true);
   const desks = useMySettlementsQuery(true);
+  const tape = useSavedPegsQuery(true);
   const number = squadNumber(user.username);
   const listed = (sheet.data?.listed ?? []).map(fromAuction);
   const chasing = (sheet.data?.chasing ?? []).map(fromAuction);
@@ -136,10 +138,31 @@ export function DressingRoom({ user }: { user: AuthUser }) {
               <span className="bay-tab-name">Desk</span>
               <span className="bay-tab-count">{desks.data?.length ?? 0}</span>
             </button>
+            <button
+              type="button"
+              data-open={open === "tape"}
+              onClick={() => setPicked("tape")}
+              className="bay-tab"
+            >
+              <span className="bay-tab-no">06</span>
+              <span className="bay-tab-name">Tape</span>
+              <span className="bay-tab-count">{tape.data?.length ?? 0}</span>
+            </button>
         </nav>
 
         <section className="mt-10" aria-live="polite">
-          {open === "desk" || !active ? (
+          {open === "tape" ? (
+            <>
+              <div className="mb-4 flex items-end justify-between gap-4">
+                <h2 className="text-5xl leading-none text-[var(--ink)] md:text-6xl">Tape</h2>
+                <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
+                  {tape.data?.length ?? 0} hung
+                </p>
+              </div>
+              <div className="peg-rail" />
+              <TapeRail rows={tape.data ?? []} loading={tape.isLoading} />
+            </>
+          ) : open === "desk" || !active ? (
             <>
               <div className="mb-4 flex items-end justify-between gap-4">
                 <h2 className="text-5xl leading-none text-[var(--ink)] md:text-6xl">Desk</h2>
@@ -161,7 +184,7 @@ export function DressingRoom({ user }: { user: AuthUser }) {
               <div className="peg-rail" />
               <LockerRail
                 listings={active.listings}
-                kind={active.id}
+                kind={active.id as HookKind}
                 username={user.username}
                 empty={active.empty}
                 emptyHref={active.emptyHref}

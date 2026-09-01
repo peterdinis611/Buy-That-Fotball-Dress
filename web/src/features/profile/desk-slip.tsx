@@ -18,6 +18,12 @@ function sameName(left?: string | null, right?: string | null) {
   return Boolean(left && right && left.toLowerCase() === right.toLowerCase());
 }
 
+function cardSlip(ref?: string | null) {
+  if (!ref) return "";
+  if (ref.startsWith("pi_") || ref.startsWith("CARD-")) return `Card · ${ref}`;
+  return ref;
+}
+
 function tillStamp(status: DeskStatus) {
   if (status === "Opened") return { paid: false, label: "Unpaid" };
   if (status === "Disputed") return { paid: false, label: "Disputed" };
@@ -71,12 +77,12 @@ function Till({ row, buyer, seller }: { row: Settlement; buyer: boolean; seller:
       <p className="till-amount">{formatMoney(row.amount)}</p>
       <p className="till-meta">
         {row.buyer} buys from {row.seller}
-        {row.paymentRef ? ` · ${row.paymentRef}` : ""}
+        {row.paymentRef ? ` · ${cardSlip(row.paymentRef)}` : ""}
         {row.tracking ? ` · ${row.tracking}` : ""}
       </p>
 
       {row.status === "Opened" && buyer ? (
-        <p className="till-hint">Pay at this till. The seller ships after the slip is marked paid.</p>
+        <p className="till-hint">Pay by card. The seller ships after the slip is marked paid.</p>
       ) : null}
       {row.status === "Opened" && seller ? (
         <p className="till-hint">Waiting for {row.buyer} to pay.</p>
@@ -109,7 +115,7 @@ function Till({ row, buyer, seller }: { row: Settlement; buyer: boolean; seller:
             onClick={() => void run(() => pay.mutateAsync(row.id))}
             className="till-pay"
           >
-            {pay.isPending ? "Paying…" : `Pay ${formatMoney(row.amount)}`}
+            {pay.isPending ? "Charging…" : "Pay by card"}
           </button>
         ) : null}
 
@@ -226,7 +232,7 @@ export function DeskRail({ rows, loading }: { rows: Settlement[]; loading: boole
                 <p className="text-2xl text-[var(--ink)]">{row.playerName}</p>
                 <p className="text-sm text-[var(--ink)]/60">
                   {row.club} · {row.buyer} / {row.seller}
-                  {row.paymentRef ? ` · ${row.paymentRef}` : ""}
+                  {row.paymentRef ? ` · ${cardSlip(row.paymentRef)}` : ""}
                   {row.tracking ? ` · ${row.tracking}` : ""}
                 </p>
               </div>

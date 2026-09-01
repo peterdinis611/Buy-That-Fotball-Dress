@@ -190,3 +190,6 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/PaymentService
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/PaymentService.dll
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/PaymentService.pdb
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/Stripe.net.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/System.Configuration.ConfigurationManager.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/bin/Debug/net10.0/System.Security.Cryptography.ProtectedData.dll

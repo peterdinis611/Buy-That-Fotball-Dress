@@ -15,6 +15,7 @@ export const queryKeys = {
   search: {
     all: ["search"] as const,
     items: (query: SearchQuery) => [...queryKeys.search.all, "items", query] as const,
+    pegs: () => [...queryKeys.search.all, "pegs"] as const,
   },
   bids: {
     all: ["bids"] as const,

@@ -1,5 +1,6 @@
 export { PitchBoard } from "./pitch-board";
 export { PegWall } from "./kit-peg";
+export { FilteredPegWall } from "./peg-rail-filters";
 export { JerseyBack } from "./jersey-back";
 export { FeaturedHero } from "./featured-hero";
 export { HomeView } from "./home-view";
@@ -12,3 +13,4 @@ export { StatusScreen } from "./status-screen";
 export { BoardToaster, pushBoardToast } from "./board-toast";
 export { BoardDrop } from "./board-drop";
 export { WornStamp, hasWornStamp } from "./worn-stamp";
+export { StewardMark } from "./steward-mark";

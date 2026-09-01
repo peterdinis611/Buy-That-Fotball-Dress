@@ -20,6 +20,9 @@ export {
   useWatchMutation,
   useHangLotMutation,
   useSearchQuery,
+  useSavedPegsQuery,
+  useHangPeg,
+  useDropPeg,
   useMySettlementsQuery,
   useSettlementQuery,
   usePaySettlement,
@@ -31,5 +34,6 @@ export {
   useOfficePegsQuery,
   useOfficeTillsQuery,
   useScratchPeg,
+  useVerifyPeg,
   useWhistleTill,
 } from "./queries";

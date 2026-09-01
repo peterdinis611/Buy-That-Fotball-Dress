@@ -60,7 +60,8 @@ export function usePlaceBidMutation(auctionId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (amount: number) => placeBid(auctionId, amount),
+    mutationFn: (input: { amount: number; maxAmount?: number }) =>
+      placeBid(auctionId, input.amount, input.maxAmount),
     onSuccess: (bid: Bid) => {
       queryClient.setQueryData(queryKeys.auctions.detail(auctionId), (current: Auction | undefined) =>
         current

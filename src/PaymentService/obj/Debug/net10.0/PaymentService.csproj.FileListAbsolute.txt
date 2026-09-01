@@ -78,3 +78,7 @@
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/obj/Debug/net10.0/PaymentService.pdb
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/obj/Debug/net10.0/PaymentService.genruntimeconfig.cache
 /Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/obj/Debug/net10.0/ref/PaymentService.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/bin/Debug/net10.0/Newtonsoft.Json.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/bin/Debug/net10.0/Stripe.net.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/bin/Debug/net10.0/System.Configuration.ConfigurationManager.dll
+/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/bin/Debug/net10.0/System.Security.Cryptography.ProtectedData.dll

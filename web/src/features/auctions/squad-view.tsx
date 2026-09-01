@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { PegWall } from "@/features/pitch";
+import { FilteredPegWall } from "@/features/pitch";
 import { useAuctionsQuery } from "@/hooks";
 import { fromAuction, isOpenLot, type Auction } from "@/lib/types";
 
@@ -35,7 +35,7 @@ export function SquadView({ auctions }: { auctions: Auction[] }) {
       ) : (
         <div className="mx-auto max-w-[1400px] px-5 pb-16 md:px-8">
           <div className="peg-rail" />
-          <PegWall listings={listings} />
+          <FilteredPegWall listings={listings} />
         </div>
       )}
     </div>

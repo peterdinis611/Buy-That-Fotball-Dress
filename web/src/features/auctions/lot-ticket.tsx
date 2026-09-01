@@ -8,6 +8,7 @@ import { FormBanner, TextField, bindStringField } from "@/components/forms/field
 import { Button } from "@/components/ui/button";
 import { JerseyBack } from "@/features/pitch";
 import { WornStamp } from "@/features/pitch/worn-stamp";
+import { StewardMark } from "@/features/pitch/steward-mark";
 import { formatDate, formatMatchDay, formatMoney, pad } from "@/lib/format";
 import {
   useAuctionQuery,
@@ -22,7 +23,7 @@ import {
 import { BidTape } from "./bid-tape";
 import { StatusPill } from "./status-pill";
 import { DeskSlip } from "@/features/profile/desk-slip";
-import type { Auction, Bid } from "@/lib/types";
+import type { Auction, AuctionItem, Bid } from "@/lib/types";
 import { bidFieldsSchema } from "@/lib/validation";
 
 function sameName(left?: string | null, right?: string | null) {
@@ -76,6 +77,7 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
             style={{ "--hang": "-5deg" } as CSSProperties}
           />
           <WornStamp row={item} className="worn-stamp-lot" />
+          <StewardMark by={item.verifiedBy} at={item.verifiedAt} className="steward-mark-lot" />
         </div>
 
         <div>
@@ -119,6 +121,7 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
               </figcaption>
             </figure>
           ) : null}
+          <ProofStrip item={item} />
         </div>
       </div>
 
@@ -302,15 +305,21 @@ function BidForm({ auction }: { auction: Auction }) {
   const floor = nextFloor(auction);
 
   const form = useForm({
-    defaultValues: { amount: String(floor) },
+    defaultValues: { amount: String(floor), maxAmount: "" },
     validators: {
       onChange: bidFieldsSchema,
       onSubmit: bidFieldsSchema,
     },
     onSubmit: async ({ value }) => {
       setBanner(null);
+      const amount = Number(value.amount);
+      const max = value.maxAmount?.trim() ? Number(value.maxAmount) : undefined;
+      if (max != null && max < amount) {
+        setBanner("Your snag has to sit at or above this bid.");
+        return;
+      }
       try {
-        await bid.mutateAsync(Number(value.amount));
+        await bid.mutateAsync({ amount, maxAmount: max });
       } catch (err) {
         setBanner(err instanceof Error ? err.message : "That bid did not go through.");
       }
@@ -342,6 +351,20 @@ function BidForm({ auction }: { auction: Auction }) {
       <p className="bid-slip-hint mt-2 text-sm">
         Bid at least {formatMoney(floor)}. If nobody bids higher before time runs out, you win.
       </p>
+      <form.Field name="maxAmount">
+        {(field) => (
+          <TextField
+            field={bindStringField(field)}
+            label="Snag to (optional)"
+            className="mt-4"
+            inputMode="numeric"
+            placeholder="Leave blank"
+          />
+        )}
+      </form.Field>
+      <p className="bid-slip-hint mt-2 text-sm">
+        Set a ceiling. The book taps +1 € for you until someone goes past it.
+      </p>
       <FormBanner message={banner} />
       <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting] as const}>
         {([canSubmit, isSubmitting]) => (
@@ -355,6 +378,34 @@ function BidForm({ auction }: { auction: Auction }) {
         )}
       </form.Subscribe>
     </form>
+  );
+}
+
+function ProofStrip({ item }: { item: AuctionItem }) {
+  const shots = [
+    item.collarPhotoUrl ? { src: item.collarPhotoUrl, label: "Collar" } : null,
+    item.washPhotoUrl ? { src: item.washPhotoUrl, label: "Wash" } : null,
+    item.labelPhotoUrl ? { src: item.labelPhotoUrl, label: "Label" } : null,
+    item.coaUrl ? { src: item.coaUrl, label: "COA" } : null,
+  ].filter((shot): shot is { src: string; label: string } => Boolean(shot));
+
+  if (shots.length === 0) return null;
+
+  return (
+    <div className="proof-strip mt-6">
+      <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.14em] text-[var(--muted-foreground)] uppercase">
+        Proof
+      </p>
+      <ul>
+        {shots.map((shot) => (
+          <li key={shot.label}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={shot.src} alt="" />
+            <span>{shot.label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

@@ -4,6 +4,7 @@ import { Countdown } from "@/features/auctions/countdown";
 import { StatusPill } from "@/features/auctions/status-pill";
 import { JerseyBack } from "./jersey-back";
 import { WornStamp } from "./worn-stamp";
+import { StewardMark } from "./steward-mark";
 import { formatMoney } from "@/lib/format";
 import type { KitListing } from "@/lib/types";
 
@@ -21,6 +22,7 @@ export function KitPeg({ listing, index = 0 }: { listing: KitListing; index?: nu
       <span className="relative">
         <JerseyBack number={number} color={listing.color} className="peg-sway h-28 w-24 shrink-0" />
         <WornStamp row={listing} compact className="worn-stamp-peg" />
+        <StewardMark by={listing.verifiedBy} className="steward-mark-peg" />
       </span>
       <p className="mt-4 w-full truncate text-center font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--bib)]">
         {listing.club}

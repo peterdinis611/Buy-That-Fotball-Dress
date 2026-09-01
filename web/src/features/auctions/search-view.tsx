@@ -1,6 +1,7 @@
 "use client";
 
 import { SearchFilters } from "./search-filters";
+import { HangTape } from "./hang-tape";
 import { PegWall } from "@/features/pitch";
 import { useSearchQuery } from "@/hooks";
 import { fuseListings } from "@/lib/search/fuse";
@@ -28,6 +29,7 @@ export function SearchView({
       </div>
 
       <SearchFilters query={query} />
+      <HangTape query={query} />
 
       <p className="mb-6 font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
         {listings.length} shirts

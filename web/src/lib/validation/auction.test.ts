@@ -27,6 +27,10 @@ function shirt(overrides: Partial<SellFields> = {}): SellFields {
     matchDate: "",
     opponent: "",
     pitchPhotoUrl: "",
+    collarPhotoUrl: "",
+    washPhotoUrl: "",
+    labelPhotoUrl: "",
+    coaUrl: "",
     ...overrides,
   };
 }
@@ -109,9 +113,9 @@ describe("toSellFields", () => {
 
 describe("bidFieldsSchema", () => {
   it("wants a whole euro over nothing", () => {
-    expect(v.safeParse(bidFieldsSchema, { amount: "620" }).success).toBe(true);
-    expect(v.safeParse(bidFieldsSchema, { amount: "0" }).success).toBe(false);
-    expect(v.safeParse(bidFieldsSchema, { amount: "12.5" }).success).toBe(false);
-    expect(v.safeParse(bidFieldsSchema, { amount: "" }).success).toBe(false);
+    expect(v.safeParse(bidFieldsSchema, { amount: "620", maxAmount: "" }).success).toBe(true);
+    expect(v.safeParse(bidFieldsSchema, { amount: "0", maxAmount: "" }).success).toBe(false);
+    expect(v.safeParse(bidFieldsSchema, { amount: "12.5", maxAmount: "" }).success).toBe(false);
+    expect(v.safeParse(bidFieldsSchema, { amount: "", maxAmount: "" }).success).toBe(false);
   });
 });

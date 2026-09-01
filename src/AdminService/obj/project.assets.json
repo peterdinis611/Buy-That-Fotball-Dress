@@ -896,7 +896,7 @@
     ]
   },
   "packageFolders": {
-    "/Users/peterdinis/.nuget/packages/": {}
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget": {}
   },
   "project": {
     "version": "1.0.0",
@@ -904,7 +904,7 @@
       "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AdminService/AdminService.csproj",
       "projectName": "AdminService",
       "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AdminService/AdminService.csproj",
-      "packagesPath": "/Users/peterdinis/.nuget/packages/",
+      "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/396cb2f936cfdca13ed983cacfef9f2d/nuget",
       "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AdminService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [

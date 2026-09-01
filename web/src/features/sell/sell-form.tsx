@@ -53,6 +53,10 @@ export function SellForm({ auction }: { auction?: Auction }) {
           matchDate: "",
           opponent: "",
           pitchPhotoUrl: "",
+          collarPhotoUrl: "",
+          washPhotoUrl: "",
+          labelPhotoUrl: "",
+          coaUrl: "",
         }) as SellFields,
     validators: {
       onChange: sellFieldsSchema,
@@ -148,6 +152,24 @@ export function SellForm({ auction }: { auction?: Auction }) {
           {(field) => (
             <TextField field={bindStringField(field)} label="Pitch photo" placeholder="https://" />
           )}
+        </form.Field>
+        <p className="md:col-span-2 mt-2 font-[family-name:var(--font-display)] text-xl tracking-[0.12em] text-[var(--bib)]">
+          Proof
+        </p>
+        <p className="md:col-span-2 -mt-2 text-sm text-[var(--ink)]/60">
+          Collar, wash, and label photos let a buyer check the shirt. COA is optional. A steward can stamp the lot verified in the office.
+        </p>
+        <form.Field name="collarPhotoUrl">
+          {(field) => <TextField field={bindStringField(field)} label="Collar" placeholder="https://" />}
+        </form.Field>
+        <form.Field name="washPhotoUrl">
+          {(field) => <TextField field={bindStringField(field)} label="Wash tag" placeholder="https://" />}
+        </form.Field>
+        <form.Field name="labelPhotoUrl">
+          {(field) => <TextField field={bindStringField(field)} label="Label" placeholder="https://" />}
+        </form.Field>
+        <form.Field name="coaUrl">
+          {(field) => <TextField field={bindStringField(field)} label="COA" placeholder="https://" />}
         </form.Field>
       </div>
 

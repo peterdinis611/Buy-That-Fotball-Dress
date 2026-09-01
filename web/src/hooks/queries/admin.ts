@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getOfficeBoard, getOfficePegs, getOfficeSquad, getOfficeTills, scratchPeg, whistleTill } from "@/lib/api";
+import { getOfficeBoard, getOfficePegs, getOfficeSquad, getOfficeTills, scratchPeg, verifyPeg, whistleTill } from "@/lib/api";
 import { queryKeys } from "@/lib/query";
 
 export function useOfficeBoardQuery(enabled: boolean) {
@@ -44,6 +44,17 @@ export function useScratchPeg() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: scratchPeg,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.office.all });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.all });
+    },
+  });
+}
+
+export function useVerifyPeg() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: verifyPeg,
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.office.all });
       void queryClient.invalidateQueries({ queryKey: queryKeys.auctions.all });

@@ -126,6 +126,9 @@ public sealed class BidsService(
             .ThenBy(x => x.First)
             .ToList();
 
+        if (ceilings.Count < 2)
+            return null;
+
         var winner = ceilings[0];
         var runnerMax = ceilings.Count > 1 ? ceilings[1].Max : 0;
         var high = bids.Max(x => x.Amount);

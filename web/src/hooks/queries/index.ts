@@ -14,7 +14,7 @@ export {
   useWatchMutation,
   useHangLotMutation,
 } from "./auctions";
-export { useSearchQuery } from "./search";
+export { useSearchQuery, useSavedPegsQuery, useHangPeg, useDropPeg } from "./search";
 export {
   useMySettlementsQuery,
   useSettlementQuery,
@@ -29,5 +29,6 @@ export {
   useOfficePegsQuery,
   useOfficeTillsQuery,
   useScratchPeg,
+  useVerifyPeg,
   useWhistleTill,
 } from "./admin";

@@ -27,6 +27,12 @@ export type LiveAuctionUpdated = {
   matchDate?: string;
   opponent?: string;
   pitchPhotoUrl?: string;
+  collarPhotoUrl?: string;
+  washPhotoUrl?: string;
+  labelPhotoUrl?: string;
+  coaUrl?: string;
+  verifiedBy?: string;
+  verifiedAt?: string;
 };
 
 export type LiveAuctionDeleted = {
@@ -248,6 +254,12 @@ export function applyLiveAuctionUpdated(queryClient: QueryClient, update: LiveAu
               matchDate: update.matchDate ?? item.matchDate,
               opponent: update.opponent ?? item.opponent,
               pitchPhotoUrl: update.pitchPhotoUrl ?? item.pitchPhotoUrl,
+              collarPhotoUrl: update.collarPhotoUrl ?? item.collarPhotoUrl,
+              washPhotoUrl: update.washPhotoUrl ?? item.washPhotoUrl,
+              labelPhotoUrl: update.labelPhotoUrl ?? item.labelPhotoUrl,
+              coaUrl: update.coaUrl ?? item.coaUrl,
+              verifiedBy: update.verifiedBy ?? item.verifiedBy,
+              verifiedAt: update.verifiedAt ?? item.verifiedAt,
             }
           : item,
       ),
@@ -281,6 +293,12 @@ function withLiveUpdate(auction: Auction, update: LiveAuctionUpdated): Auction {
       matchDate: update.matchDate ?? auction.item.matchDate,
       opponent: update.opponent ?? auction.item.opponent,
       pitchPhotoUrl: update.pitchPhotoUrl ?? auction.item.pitchPhotoUrl,
+      collarPhotoUrl: update.collarPhotoUrl ?? auction.item.collarPhotoUrl,
+      washPhotoUrl: update.washPhotoUrl ?? auction.item.washPhotoUrl,
+      labelPhotoUrl: update.labelPhotoUrl ?? auction.item.labelPhotoUrl,
+      coaUrl: update.coaUrl ?? auction.item.coaUrl,
+      verifiedBy: update.verifiedBy ?? auction.item.verifiedBy,
+      verifiedAt: update.verifiedAt ?? auction.item.verifiedAt,
     },
   };
 }

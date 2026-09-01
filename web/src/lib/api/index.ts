@@ -18,7 +18,7 @@ export {
   receiveSettlement,
   disputeSettlement,
 } from "./settlements";
-export { searchItems } from "./search";
+export { searchItems, getSavedPegs, hangPeg, dropPeg } from "./search";
 export { login, register, getMe } from "./auth";
 export {
   getOfficeBoard,
@@ -27,5 +27,6 @@ export {
   getOfficeTills,
   getOfficeClip,
   scratchPeg,
+  verifyPeg,
   whistleTill,
 } from "./admin";

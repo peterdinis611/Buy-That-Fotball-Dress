@@ -42,6 +42,8 @@ export function BidTape({ auctionId, initial }: { auctionId: string; initial?: B
                   </p>
                   <p className="mt-1 text-[11px] tracking-[0.08em] text-[var(--muted-foreground)] uppercase">
                     {formatDate(bid.createdAt)}
+                    {bid.snag ? " · snag" : ""}
+                    {bid.maxAmount && bid.maxAmount > bid.amount ? ` · to ${formatMoney(bid.maxAmount)}` : ""}
                   </p>
                 </div>
                 <span className="book-mark" data-kind={leading ? "in" : "out"}>

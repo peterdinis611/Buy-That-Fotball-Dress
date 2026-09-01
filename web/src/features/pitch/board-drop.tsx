@@ -349,6 +349,7 @@ function BoardBidSlip({ lot }: { lot: Auction }) {
   const floor = nextFloor(lot);
   const place = usePlaceBidMutation(lot.id);
   const [amount, setAmount] = useState(String(floor));
+  const [snag, setSnag] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [landed, setLanded] = useState(false);
   const input = useRef<HTMLInputElement>(null);
@@ -365,15 +366,21 @@ function BoardBidSlip({ lot }: { lot: Auction }) {
   async function submit(event: FormEvent) {
     event.preventDefault();
     const value = Number(amount);
+    const ceiling = snag.trim() ? Number(snag) : undefined;
     if (!/^\d+$/.test(amount.trim()) || !Number.isFinite(value) || value < floor) {
       setError(`At least ${formatMoney(floor)}. Whole euros only.`);
+      setLanded(false);
+      return;
+    }
+    if (ceiling != null && (!Number.isFinite(ceiling) || ceiling < value)) {
+      setError("Snag has to sit at or above this bid.");
       setLanded(false);
       return;
     }
 
     setError(null);
     try {
-      await place.mutateAsync(value);
+      await place.mutateAsync({ amount: value, maxAmount: ceiling });
       setLanded(true);
     } catch (err) {
       setLanded(false);
@@ -401,6 +408,21 @@ function BoardBidSlip({ lot }: { lot: Auction }) {
           {place.isPending ? "…" : "Place"}
         </button>
       </div>
+      <label className="board-desk-snag">
+        <span>Snag to</span>
+        <input
+          className="board-desk-input"
+          inputMode="numeric"
+          autoComplete="off"
+          aria-label="Snag ceiling"
+          placeholder="optional"
+          value={snag}
+          onChange={(event) => {
+            setSnag(event.target.value.replace(/[^\d]/g, ""));
+            setLanded(false);
+          }}
+        />
+      </label>
       {error ? <p className="board-desk-slip-err">{error}</p> : null}
       {landed ? <p className="board-desk-slip-ok">You're on the board</p> : null}
     </form>

@@ -22,7 +22,7 @@ Backends only: `./dev.sh --no-web`. After you change a service DLL, stop and run
 dotnet test
 ```
 
-SQLite in memory, no RabbitMQ. Covers lot provenance, bid floor, desk till / tracking / dispute, house till slips, search rules, and squad-name validation.
+SQLite in memory, no RabbitMQ. Covers lot provenance, bid floor, snag ceilings, desk till / tracking / dispute, card slips, search rules, hung tape, and squad-name validation.
 
 Frontend:
 
@@ -69,7 +69,7 @@ The browser talks to the **gateway**. Direct service ports are for debugging.
 
 1. Bids go to BidService while the lot is Live.
 2. When the clock hits zero with a winner, SettlementService opens a **desk** and publishes `SettlementOpened`. PaymentService opens a **Held** till for that desk.
-3. Buyer pays (`POST /api/settlements/{id}/pay`) → Settlement asks PaymentService to capture. The house till stamps `TILL-…`, publishes `PaymentCaptured`, and Settlement marks the desk **Paid**. Swap `HouseTillDrawer` when a card processor lands.
+3. Buyer pays (`POST /api/settlements/{id}/pay`) → Settlement asks PaymentService to capture. The till stamps a **card slip** (`CARD-…` locally, or a Stripe `pi_…` when `Stripe:SecretKey` is set), publishes `PaymentCaptured`, and Settlement marks the desk **Paid**.
 4. Seller enters a **tracking** number and marks shipped.
 5. Buyer confirms **shirt received**. Either side can **dispute** with a written reason before that.
 
@@ -96,6 +96,7 @@ All mutating routes need a JWT from Identity.
 Sign in as `steward` / `PitchSide!1` and open **Office** (`/office`). AdminService sits behind the gateway at `/api/admin`. The steward can:
 
 - Read the squad sheet, every peg, and every till
+- **Verify** a lot (steward stamp on collar / wash / label / COA)
 - **Scratch** a live lot off the wall (sold desks stay)
 - **Whistle** a disputed desk back to the last honest step (paid / shipped / opened)
 
@@ -113,7 +114,11 @@ The same events show as LED toasts and Board tape when you are signed in as the 
 
 ## Provenance
 
-A lot can carry the **match**, the **date**, the **opponent**, and a **photo from the grass**. Fill match, opponent, and date and the shirt gets a **Worn** stamp on the peg and the lot board. The pitch photo is optional and sits on the ticket. That is KIT VAULT, not a generic listing.
+A lot can carry the **match**, the **date**, the **opponent**, a **photo from the grass**, plus **collar / wash / label** shots and an optional **COA**. Fill match, opponent, and date and the shirt gets a **Worn** stamp. A steward can **verify** the lot in the office. That is KIT VAULT, not a generic listing.
+
+Bids can carry a **snag** (max). BidService jumps the book +1 € against the runner until a ceiling loses.
+
+The search rail and the live wall filter by league, size, kit, price, and “ends in 2h”. Sign in and **hang this filter** — SearchService writes a tape peg and publishes `LetterRequested` when a matching shirt hangs.
 
 ## Layout
 

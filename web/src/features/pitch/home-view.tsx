@@ -5,7 +5,7 @@ import { ConcoursePulse } from "./concourse-pulse";
 import { FeaturedHero } from "./featured-hero";
 import { HouseRules } from "./house-rules";
 import { HowItWorks } from "./how-it-works";
-import { PegWall } from "./kit-peg";
+import { FilteredPegWall } from "./peg-rail-filters";
 import { PitchFaq } from "./pitch-faq";
 import { TunnelCta } from "./tunnel-cta";
 import { useAuctionsQuery } from "@/hooks";
@@ -58,7 +58,7 @@ export function HomeView({ auctions }: { auctions: Auction[] }) {
             </Link>
           </div>
           <div className="peg-rail mb-0" />
-          <PegWall listings={rest} />
+          <FilteredPegWall listings={rest} />
         </section>
       ) : null}
 
