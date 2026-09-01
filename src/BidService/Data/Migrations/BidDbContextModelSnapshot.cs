@@ -66,6 +66,12 @@ namespace BidService.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("MaxAmount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Snag")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Bidder");

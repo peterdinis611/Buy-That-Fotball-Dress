@@ -131,6 +131,22 @@ public class AuctionsController(IAuctionsService auctionsService) : ControllerBa
         return NoContent();
     }
 
+    [Authorize(Roles = SquadRoles.Steward)]
+    [HttpPost("{id:guid}/verify")]
+    [ProducesResponseType(typeof(AuctionDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<AuctionDto>> Verify(Guid id, CancellationToken cancellationToken)
+    {
+        var steward = CurrentUsername();
+        if (steward is null)
+            return Unauthorized();
+
+        var result = await auctionsService.VerifyAsync(id, steward, cancellationToken);
+        return ToActionResult(result);
+    }
+
     [Authorize]
     [HttpPost("{id:guid}/watch")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

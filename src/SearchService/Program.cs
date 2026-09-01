@@ -1,8 +1,11 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using Caching;
 using FluentValidation;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SearchService.Consumers;
 using SearchService.Data;
 using SearchService.Validation;
@@ -33,6 +36,28 @@ builder.Services.AddHttpClient("AuctionService", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["AuctionService:BaseUrl"] ?? "http://localhost:5025");
 });
+
+var jwt = builder.Configuration.GetSection("Jwt");
+var signingKey = jwt["Key"] ?? throw new InvalidOperationException("Jwt:Key is missing.");
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwt["Issuer"],
+            ValidAudience = jwt["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey)),
+            NameClaimType = System.Security.Claims.ClaimTypes.Name,
+            ClockSkew = TimeSpan.FromMinutes(1)
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -75,6 +100,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

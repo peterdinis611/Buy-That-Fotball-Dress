@@ -16,6 +16,12 @@ export type AuctionItem = {
   matchDate?: string;
   opponent?: string;
   pitchPhotoUrl?: string;
+  collarPhotoUrl?: string;
+  washPhotoUrl?: string;
+  labelPhotoUrl?: string;
+  coaUrl?: string;
+  verifiedBy?: string;
+  verifiedAt?: string;
 };
 
 export type Auction = {
@@ -39,6 +45,8 @@ export type Bid = {
   bidder: string;
   previousBidder?: string;
   amount: number;
+  maxAmount?: number;
+  snag?: boolean;
   createdAt: string;
 };
 
@@ -67,6 +75,12 @@ export type SearchItem = {
   matchDate?: string;
   opponent?: string;
   pitchPhotoUrl?: string;
+  collarPhotoUrl?: string;
+  washPhotoUrl?: string;
+  labelPhotoUrl?: string;
+  coaUrl?: string;
+  verifiedBy?: string;
+  verifiedAt?: string;
 };
 
 export type PagedResult<T> = {
@@ -108,6 +122,12 @@ export type KitListing = {
   matchDate?: string;
   opponent?: string;
   pitchPhotoUrl?: string;
+  collarPhotoUrl?: string;
+  washPhotoUrl?: string;
+  labelPhotoUrl?: string;
+  coaUrl?: string;
+  verifiedBy?: string;
+  verifiedAt?: string;
 };
 
 export type SearchQuery = {
@@ -145,6 +165,10 @@ export type CreateAuctionPayload = {
     matchDate?: string;
     opponent?: string;
     pitchPhotoUrl?: string;
+    collarPhotoUrl?: string;
+    washPhotoUrl?: string;
+    labelPhotoUrl?: string;
+    coaUrl?: string;
   };
 };
 
@@ -165,6 +189,10 @@ export type UpdateAuctionPayload = {
   matchDate?: string;
   opponent?: string;
   pitchPhotoUrl?: string;
+  collarPhotoUrl?: string;
+  washPhotoUrl?: string;
+  labelPhotoUrl?: string;
+  coaUrl?: string;
 };
 
 export function fromAuction(auction: Auction): KitListing {
@@ -192,6 +220,12 @@ export function fromAuction(auction: Auction): KitListing {
     matchDate: auction.item.matchDate,
     opponent: auction.item.opponent,
     pitchPhotoUrl: auction.item.pitchPhotoUrl,
+    collarPhotoUrl: auction.item.collarPhotoUrl,
+    washPhotoUrl: auction.item.washPhotoUrl,
+    labelPhotoUrl: auction.item.labelPhotoUrl,
+    coaUrl: auction.item.coaUrl,
+    verifiedBy: auction.item.verifiedBy,
+    verifiedAt: auction.item.verifiedAt,
   };
 }
 
@@ -202,3 +236,16 @@ export function fromSearchItem(item: SearchItem): KitListing {
 export function isOpenLot(listing: { status: AuctionStatus; auctionEnd: string }) {
   return listing.status === "Live" && new Date(listing.auctionEnd).getTime() > Date.now();
 }
+
+export type SavedPeg = {
+  id: string;
+  username: string;
+  club?: string;
+  league?: string;
+  size?: string;
+  kitType?: string;
+  status?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  hungAt: string;
+};

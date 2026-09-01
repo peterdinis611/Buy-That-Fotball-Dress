@@ -38,7 +38,13 @@ public static class AuctionMapper
         Match = item.Match,
         MatchDate = item.MatchDate,
         Opponent = item.Opponent,
-        PitchPhotoUrl = item.PitchPhotoUrl
+        PitchPhotoUrl = item.PitchPhotoUrl,
+        CollarPhotoUrl = item.CollarPhotoUrl,
+        WashPhotoUrl = item.WashPhotoUrl,
+        LabelPhotoUrl = item.LabelPhotoUrl,
+        CoaUrl = item.CoaUrl,
+        VerifiedBy = item.VerifiedBy,
+        VerifiedAt = item.VerifiedAt
     };
 
     public static Auction ToEntity(this CreateAuctionDto dto)
@@ -70,7 +76,11 @@ public static class AuctionMapper
                 Match = BlankToNull(dto.Item.Match),
                 MatchDate = dto.Item.MatchDate?.ToUniversalTime(),
                 Opponent = BlankToNull(dto.Item.Opponent),
-                PitchPhotoUrl = BlankToNull(dto.Item.PitchPhotoUrl)
+                PitchPhotoUrl = BlankToNull(dto.Item.PitchPhotoUrl),
+                CollarPhotoUrl = BlankToNull(dto.Item.CollarPhotoUrl),
+                WashPhotoUrl = BlankToNull(dto.Item.WashPhotoUrl),
+                LabelPhotoUrl = BlankToNull(dto.Item.LabelPhotoUrl),
+                CoaUrl = BlankToNull(dto.Item.CoaUrl)
             }
         };
     }
@@ -125,6 +135,18 @@ public static class AuctionMapper
         if (dto.PitchPhotoUrl is not null)
             auction.Item.PitchPhotoUrl = BlankToNull(dto.PitchPhotoUrl);
 
+        if (dto.CollarPhotoUrl is not null)
+            auction.Item.CollarPhotoUrl = BlankToNull(dto.CollarPhotoUrl);
+
+        if (dto.WashPhotoUrl is not null)
+            auction.Item.WashPhotoUrl = BlankToNull(dto.WashPhotoUrl);
+
+        if (dto.LabelPhotoUrl is not null)
+            auction.Item.LabelPhotoUrl = BlankToNull(dto.LabelPhotoUrl);
+
+        if (dto.CoaUrl is not null)
+            auction.Item.CoaUrl = BlankToNull(dto.CoaUrl);
+
         auction.UpdatedAt = DateTime.UtcNow;
     }
 
@@ -153,7 +175,13 @@ public static class AuctionMapper
         Match = auction.Item.Match,
         MatchDate = auction.Item.MatchDate,
         Opponent = auction.Item.Opponent,
-        PitchPhotoUrl = auction.Item.PitchPhotoUrl
+        PitchPhotoUrl = auction.Item.PitchPhotoUrl,
+        CollarPhotoUrl = auction.Item.CollarPhotoUrl,
+        WashPhotoUrl = auction.Item.WashPhotoUrl,
+        LabelPhotoUrl = auction.Item.LabelPhotoUrl,
+        CoaUrl = auction.Item.CoaUrl,
+        VerifiedBy = auction.Item.VerifiedBy,
+        VerifiedAt = auction.Item.VerifiedAt
     };
 
     public static AuctionUpdated ToAuctionUpdated(this Auction auction) => new()
@@ -181,7 +209,13 @@ public static class AuctionMapper
         Match = auction.Item.Match,
         MatchDate = auction.Item.MatchDate,
         Opponent = auction.Item.Opponent,
-        PitchPhotoUrl = auction.Item.PitchPhotoUrl
+        PitchPhotoUrl = auction.Item.PitchPhotoUrl,
+        CollarPhotoUrl = auction.Item.CollarPhotoUrl,
+        WashPhotoUrl = auction.Item.WashPhotoUrl,
+        LabelPhotoUrl = auction.Item.LabelPhotoUrl,
+        CoaUrl = auction.Item.CoaUrl,
+        VerifiedBy = auction.Item.VerifiedBy,
+        VerifiedAt = auction.Item.VerifiedAt
     };
 
     private static string? BlankToNull(string? value) =>

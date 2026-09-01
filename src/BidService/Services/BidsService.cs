@@ -38,10 +38,15 @@ public sealed class BidsService(
         Guid auctionId,
         string bidder,
         int amount,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        int? maxAmount = null)
     {
         if (amount <= 0)
             return Result<BidDto>.BadRequest("A bid has to be more than nothing.");
+
+        var ceiling = maxAmount ?? amount;
+        if (ceiling < amount)
+            return Result<BidDto>.BadRequest("Your snag has to sit at or above this bid.");
 
         var lot = await db.Lots.FirstOrDefaultAsync(x => x.Id == auctionId, cancellationToken)
             ?? await TryHydrateLotAsync(auctionId, cancellationToken);
@@ -79,6 +84,7 @@ public sealed class BidsService(
             AuctionId = auctionId,
             Bidder = bidder,
             Amount = amount,
+            MaxAmount = ceiling,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -90,9 +96,69 @@ public sealed class BidsService(
         var outbid = previousBidder is not null
             && !string.Equals(previousBidder, bidder, StringComparison.OrdinalIgnoreCase);
         await publishEndpoint.Publish(bid.ToBidPlaced(outbid ? previousBidder : null), cancellationToken);
+
+        var snag = await ResolveSnagAsync(lot, cancellationToken);
         await cache.RemoveAsync(CacheKeys.Bids(auctionId), cancellationToken);
 
-        return Result<BidDto>.Success(bid.ToDto());
+        var shown = snag is not null
+            && string.Equals(snag.Bidder, bidder, StringComparison.OrdinalIgnoreCase)
+                ? snag
+                : bid;
+
+        return Result<BidDto>.Success(shown.ToDto());
+    }
+
+    private async Task<Bid?> ResolveSnagAsync(AuctionLot lot, CancellationToken cancellationToken)
+    {
+        var bids = await db.Bids.Where(x => x.AuctionId == lot.Id).ToListAsync(cancellationToken);
+        if (bids.Count == 0)
+            return null;
+
+        var ceilings = bids
+            .GroupBy(x => x.Bidder, StringComparer.OrdinalIgnoreCase)
+            .Select(group => new
+            {
+                Bidder = group.Key,
+                Max = group.Max(x => x.MaxAmount ?? x.Amount),
+                First = group.Min(x => x.CreatedAt)
+            })
+            .OrderByDescending(x => x.Max)
+            .ThenBy(x => x.First)
+            .ToList();
+
+        var winner = ceilings[0];
+        var runnerMax = ceilings.Count > 1 ? ceilings[1].Max : 0;
+        var high = bids.Max(x => x.Amount);
+        var price = ceilings.Count > 1 ? Math.Min(winner.Max, runnerMax + 1) : winner.Max;
+        price = Math.Max(price, high);
+
+        if (price <= high)
+            return null;
+
+        var previous = bids
+            .OrderByDescending(x => x.Amount)
+            .ThenBy(x => x.CreatedAt)
+            .Select(x => x.Bidder)
+            .First();
+
+        var snag = new Bid
+        {
+            Id = Guid.NewGuid(),
+            AuctionId = lot.Id,
+            Bidder = winner.Bidder,
+            Amount = price,
+            MaxAmount = winner.Max,
+            Snag = true,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        db.Bids.Add(snag);
+        lot.CurrentHighBid = price;
+        await db.SaveChangesAsync(cancellationToken);
+
+        var knocked = !string.Equals(previous, winner.Bidder, StringComparison.OrdinalIgnoreCase);
+        await publishEndpoint.Publish(snag.ToBidPlaced(knocked ? previous : null), cancellationToken);
+        return snag;
     }
 
     private async Task<AuctionLot?> TryHydrateLotAsync(Guid auctionId, CancellationToken cancellationToken)

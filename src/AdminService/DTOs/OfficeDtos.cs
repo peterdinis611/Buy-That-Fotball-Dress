@@ -44,6 +44,7 @@ public class PegItemDto
     public string Club { get; set; } = string.Empty;
     public string PlayerName { get; set; } = string.Empty;
     public string Season { get; set; } = string.Empty;
+    public string? VerifiedBy { get; set; }
 }
 
 public class TillCardDto

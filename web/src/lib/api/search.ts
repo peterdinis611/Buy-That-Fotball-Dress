@@ -1,5 +1,4 @@
-import type { PagedResult, SearchItem, SearchQuery } from "@/lib/types";
-import { apiBase } from "./client";
+export async function searchItems(params: SearchQuery = {}) {
 
 export async function searchItems(params: SearchQuery = {}) {
   const query = new URLSearchParams();

@@ -205,7 +205,13 @@ public static class DbInitializer
                     Match = "World Cup final",
                     MatchDate = new DateTime(2002, 6, 30, 12, 0, 0, DateTimeKind.Utc),
                     Opponent = "Germany",
-                    PitchPhotoUrl = "https://placehold.co/800x500/1a5c2a/ffdf00?text=Yokohama+2002"
+                    PitchPhotoUrl = "https://placehold.co/800x500/1a5c2a/ffdf00?text=Yokohama+2002",
+                    CollarPhotoUrl = "https://placehold.co/800x500/1a1208/ffdf00?text=Collar",
+                    WashPhotoUrl = "https://placehold.co/800x500/1a1208/e8eadc?text=Wash+tag",
+                    LabelPhotoUrl = "https://placehold.co/800x500/1a1208/ffdf00?text=Label",
+                    CoaUrl = "https://placehold.co/800x1100/f3f1ec/1a1208?text=COA",
+                    VerifiedBy = "steward",
+                    VerifiedAt = now.AddDays(-8)
                 }
             },
             new()
@@ -309,25 +315,44 @@ public static class DbInitializer
         ILogger logger,
         CancellationToken cancellationToken)
     {
-        var shots = new (Guid Id, string Match, DateTime Date, string Opponent, string Pitch)[]
+        var shots = new (Guid Id, string Match, DateTime Date, string Opponent, string Pitch, string Collar, string Wash, string Label, string Coa, string Steward)[]
         {
-            (Guid.Parse("c3a1f4d2-8b6e-4c91-9f20-1a7b5e3d8c44"), "El Clasico", new DateTime(2024, 4, 21, 12, 0, 0, DateTimeKind.Utc), "Barcelona", "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass"),
-            (Guid.Parse("0f6c8a21-5e44-4b7d-9c18-2d3a91e5b860"), "Premier League", new DateTime(2024, 3, 10, 12, 0, 0, DateTimeKind.Utc), "Manchester City", "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass"),
-            (Guid.Parse("1a8d3f62-9e47-4c05-b2d8-7f13e6a90c55"), "FA Cup final", new DateTime(1996, 5, 11, 12, 0, 0, DateTimeKind.Utc), "Liverpool", "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass"),
-            (Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466"), "World Cup final", new DateTime(2002, 6, 30, 12, 0, 0, DateTimeKind.Utc), "Germany", "https://placehold.co/800x500/1a5c2a/ffdf00?text=Yokohama+2002"),
+            (Guid.Parse("c3a1f4d2-8b6e-4c91-9f20-1a7b5e3d8c44"), "El Clasico", new DateTime(2024, 4, 21, 12, 0, 0, DateTimeKind.Utc), "Barcelona", "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass", "", "", "", "", ""),
+            (Guid.Parse("0f6c8a21-5e44-4b7d-9c18-2d3a91e5b860"), "Premier League", new DateTime(2024, 3, 10, 12, 0, 0, DateTimeKind.Utc), "Manchester City", "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass", "", "", "", "", ""),
+            (Guid.Parse("1a8d3f62-9e47-4c05-b2d8-7f13e6a90c55"), "FA Cup final", new DateTime(1996, 5, 11, 12, 0, 0, DateTimeKind.Utc), "Liverpool", "https://placehold.co/800x500/1a5c2a/e8eadc?text=On+the+grass", "", "", "", "", ""),
+            (Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466"), "World Cup final", new DateTime(2002, 6, 30, 12, 0, 0, DateTimeKind.Utc), "Germany", "https://placehold.co/800x500/1a5c2a/ffdf00?text=Yokohama+2002", "https://placehold.co/800x500/1a1208/ffdf00?text=Collar", "https://placehold.co/800x500/1a1208/e8eadc?text=Wash+tag", "https://placehold.co/800x500/1a1208/ffdf00?text=Label", "https://placehold.co/800x1100/f3f1ec/1a1208?text=COA", "steward"),
         };
 
         var touched = new List<Auction>();
         foreach (var shot in shots)
         {
             var auction = await context.Auctions.Include(x => x.Item).FirstOrDefaultAsync(x => x.Id == shot.Id, cancellationToken);
-            if (auction?.Item is null || !string.IsNullOrWhiteSpace(auction.Item.Match))
+            if (auction?.Item is null)
                 continue;
 
-            auction.Item.Match = shot.Match;
-            auction.Item.MatchDate = shot.Date;
-            auction.Item.Opponent = shot.Opponent;
-            auction.Item.PitchPhotoUrl = shot.Pitch;
+            var missingGrass = string.IsNullOrWhiteSpace(auction.Item.Match);
+            var missingProof = shot.Steward != "" && string.IsNullOrWhiteSpace(auction.Item.VerifiedBy);
+            if (!missingGrass && !missingProof)
+                continue;
+
+            if (missingGrass)
+            {
+                auction.Item.Match = shot.Match;
+                auction.Item.MatchDate = shot.Date;
+                auction.Item.Opponent = shot.Opponent;
+                auction.Item.PitchPhotoUrl = shot.Pitch;
+            }
+
+            if (missingProof)
+            {
+                auction.Item.CollarPhotoUrl = shot.Collar;
+                auction.Item.WashPhotoUrl = shot.Wash;
+                auction.Item.LabelPhotoUrl = shot.Label;
+                auction.Item.CoaUrl = shot.Coa;
+                auction.Item.VerifiedBy = shot.Steward;
+                auction.Item.VerifiedAt = DateTime.UtcNow.AddDays(-8);
+            }
+
             auction.UpdatedAt = DateTime.UtcNow;
             touched.Add(auction);
         }

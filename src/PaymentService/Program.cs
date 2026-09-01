@@ -23,7 +23,12 @@ builder.Services.AddDbContext<PaymentDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddSingleton<ITillDrawer, HouseTillDrawer>();
+builder.Services.Configure<StripeOptions>(builder.Configuration.GetSection("Stripe"));
+var stripeKey = builder.Configuration["Stripe:SecretKey"];
+if (!string.IsNullOrWhiteSpace(stripeKey))
+    builder.Services.AddSingleton<ITillDrawer, StripeTillDrawer>();
+else
+    builder.Services.AddSingleton<ITillDrawer, HouseTillDrawer>();
 builder.Services.AddScoped<ITillsService, TillsService>();
 
 var jwt = builder.Configuration.GetSection("Jwt");

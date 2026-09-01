@@ -40,7 +40,7 @@ public class BidsController(IBidsService bids) : ControllerBase
         if (bidder is null)
             return Unauthorized();
 
-        var result = await bids.PlaceAsync(auctionId, bidder, dto.Amount, cancellationToken);
+        var result = await bids.PlaceAsync(auctionId, bidder, dto.Amount, cancellationToken, dto.MaxAmount);
         if (!result.IsSuccess)
             return Problem(title: result.Error, statusCode: result.StatusCode);
 

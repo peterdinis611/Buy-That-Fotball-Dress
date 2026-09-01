@@ -142,6 +142,25 @@ public sealed class AuctionsService(
         return await PullLotAsync(auction, cancellationToken);
     }
 
+    public async Task<Result<AuctionDto>> VerifyAsync(Guid id, string steward, CancellationToken cancellationToken)
+    {
+        var auction = await db.Auctions
+            .Include(x => x.Item)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (auction is null)
+            return Result<AuctionDto>.NotFound($"Auction '{id}' was not found.");
+
+        auction.Item.VerifiedBy = steward.Trim();
+        auction.Item.VerifiedAt = DateTime.UtcNow;
+        auction.UpdatedAt = DateTime.UtcNow;
+        await db.SaveChangesAsync(cancellationToken);
+        await publishEndpoint.Publish(auction.ToAuctionUpdated(), cancellationToken);
+        await InvalidateLotAsync(id, cancellationToken);
+
+        return Result<AuctionDto>.Success(auction.ToDto());
+    }
+
     private async Task<Result> PullLotAsync(Auction auction, CancellationToken cancellationToken)
     {
         var id = auction.Id;

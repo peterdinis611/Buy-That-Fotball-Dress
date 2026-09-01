@@ -56,6 +56,24 @@ public class AdminController(IOfficeService office) : ControllerBase
         }
     }
 
+    [HttpPost("pegs/{id:guid}/verify")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Verify(Guid id, CancellationToken cancellationToken)
+    {
+        var steward = UserName();
+        if (steward is null) return Unauthorized();
+
+        try
+        {
+            await office.VerifyPegAsync(id, steward, cancellationToken);
+            return NoContent();
+        }
+        catch (OfficeException ex)
+        {
+            return Problem(title: ex.Message, statusCode: ex.StatusCode);
+        }
+    }
+
     [HttpPost("tills/{id:guid}/whistle")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Whistle(Guid id, CancellationToken cancellationToken)

@@ -134,6 +134,84 @@ public class BidsServiceTests
         Assert.Equal("Live", lot.Status);
     }
 
+    [Fact]
+    public async Task Snag_lifts_the_earlier_ceiling_by_one()
+    {
+        await using var sqlite = SqliteHarness.Bid();
+        var lot = Lots.BidLot(reserve: 400);
+        sqlite.Db.Lots.Add(lot);
+        sqlite.Db.Bids.Add(new Bid
+        {
+            Id = Guid.NewGuid(),
+            AuctionId = lot.Id,
+            Lot = lot,
+            Bidder = "jerseyhunter",
+            Amount = 400,
+            MaxAmount = 500,
+            CreatedAt = DateTime.UtcNow.AddMinutes(-2)
+        });
+        lot.CurrentHighBid = 400;
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var service = NewService(sqlite, publish);
+
+        var result = await service.PlaceAsync(lot.Id, "kitvault", 410, default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(410, result.Value!.Amount);
+        var high = sqlite.Db.Bids.OrderByDescending(x => x.Amount).First();
+        Assert.Equal("jerseyhunter", high.Bidder);
+        Assert.Equal(411, high.Amount);
+        Assert.True(high.Snag);
+        Assert.Equal(411, sqlite.Db.Lots.Single().CurrentHighBid);
+        await publish.Received().Publish(
+            Arg.Is<BidPlaced>(x => x.Bidder == "jerseyhunter" && x.Amount == 411 && x.PreviousBidder == "kitvault"),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Higher_snag_jumps_past_the_runner()
+    {
+        await using var sqlite = SqliteHarness.Bid();
+        var lot = Lots.BidLot(reserve: 400);
+        sqlite.Db.Lots.Add(lot);
+        sqlite.Db.Bids.Add(new Bid
+        {
+            Id = Guid.NewGuid(),
+            AuctionId = lot.Id,
+            Lot = lot,
+            Bidder = "jerseyhunter",
+            Amount = 400,
+            MaxAmount = 500,
+            CreatedAt = DateTime.UtcNow.AddMinutes(-2)
+        });
+        lot.CurrentHighBid = 400;
+        await sqlite.Db.SaveChangesAsync();
+        var service = NewService(sqlite);
+
+        var result = await service.PlaceAsync(lot.Id, "kitvault", 410, default, 600);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal("kitvault", result.Value!.Bidder);
+        Assert.Equal(501, result.Value.Amount);
+        Assert.True(result.Value.Snag);
+        Assert.Equal(501, sqlite.Db.Lots.Single().CurrentHighBid);
+    }
+
+    [Fact]
+    public async Task Snag_below_the_shot_is_rejected()
+    {
+        await using var sqlite = SqliteHarness.Bid();
+        var lot = Lots.BidLot(reserve: 400);
+        sqlite.Db.Lots.Add(lot);
+        await sqlite.Db.SaveChangesAsync();
+        var service = NewService(sqlite);
+
+        var result = await service.PlaceAsync(lot.Id, "kitvault", 400, default, 390);
+
+        Assert.Equal(400, result.StatusCode);
+    }
+
     private static BidsService NewService(SqliteHarness<BidService.Data.BidDbContext> sqlite, IPublishEndpoint? publish = null) =>
         new(sqlite.Db, publish ?? Substitute.For<IPublishEndpoint>(), Substitute.For<IHttpClientFactory>(), new MemoryPitchCache());
 }

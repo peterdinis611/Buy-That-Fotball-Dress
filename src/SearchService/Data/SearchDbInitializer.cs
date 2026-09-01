@@ -33,8 +33,11 @@ public sealed class SearchDbInitializer(
         var missingProvenance = indexedCount > 0 && await db.Items.AnyAsync(
             x => SeededProvenanceLots.Contains(x.Id) && x.Match == null,
             cancellationToken);
+        var missingProof = indexedCount > 0 && await db.Items.AnyAsync(
+            x => x.Id == Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466") && x.VerifiedBy == null,
+            cancellationToken);
 
-        if (indexedCount > 0 && !missingProvenance)
+        if (indexedCount > 0 && !missingProvenance && !missingProof)
         {
             logger.LogInformation("Search database already contains items, skipping HTTP sync.");
             return;
@@ -42,6 +45,8 @@ public sealed class SearchDbInitializer(
 
         if (missingProvenance)
             logger.LogInformation("Search index is missing provenance, refreshing from AuctionService.");
+        if (missingProof)
+            logger.LogInformation("Search index is missing kit proof, refreshing from AuctionService.");
 
         try
         {

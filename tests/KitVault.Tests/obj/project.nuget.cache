@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DugxGziVtTc=",
+  "dgSpecHash": "Qx1r7z+6x6M=",
   "success": true,
   "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/KitVault.Tests.csproj",
   "expectedPackageFiles": [
@@ -41,7 +41,10 @@
     "/Users/peterdinis/.nuget/packages/sqlitepclraw.lib.e_sqlite3/2.1.11/sqlitepclraw.lib.e_sqlite3.2.1.11.nupkg.sha512",
     "/Users/peterdinis/.nuget/packages/sqlitepclraw.provider.e_sqlite3/2.1.11/sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512",
     "/Users/peterdinis/.nuget/packages/stackexchange.redis/2.8.58/stackexchange.redis.2.8.58.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/stripe.net/48.5.0/stripe.net.48.5.0.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/system.configuration.configurationmanager/8.0.0/system.configuration.configurationmanager.8.0.0.nupkg.sha512",
     "/Users/peterdinis/.nuget/packages/system.identitymodel.tokens.jwt/8.0.1/system.identitymodel.tokens.jwt.8.0.1.nupkg.sha512",
+    "/Users/peterdinis/.nuget/packages/system.security.cryptography.protecteddata/8.0.0/system.security.cryptography.protecteddata.8.0.0.nupkg.sha512",
     "/Users/peterdinis/.nuget/packages/xunit/2.9.3/xunit.2.9.3.nupkg.sha512",
     "/Users/peterdinis/.nuget/packages/xunit.abstractions/2.0.3/xunit.abstractions.2.0.3.nupkg.sha512",
     "/Users/peterdinis/.nuget/packages/xunit.analyzers/1.18.0/xunit.analyzers.1.18.0.nupkg.sha512",

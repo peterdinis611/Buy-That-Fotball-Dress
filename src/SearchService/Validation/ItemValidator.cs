@@ -107,6 +107,34 @@ public class ItemValidator : AbstractValidator<Item>
             .Must(BeHttpsUrl)
             .When(x => !string.IsNullOrWhiteSpace(x.PitchPhotoUrl))
             .WithMessage("Pitch photo URL must be an HTTPS URL.");
+
+        RuleFor(x => x.CollarPhotoUrl)
+            .MaximumLength(JerseyRules.MaxImageUrlLength)
+            .Must(BeHttpsUrl)
+            .When(x => !string.IsNullOrWhiteSpace(x.CollarPhotoUrl))
+            .WithMessage("Collar photo URL must be an HTTPS URL.");
+
+        RuleFor(x => x.WashPhotoUrl)
+            .MaximumLength(JerseyRules.MaxImageUrlLength)
+            .Must(BeHttpsUrl)
+            .When(x => !string.IsNullOrWhiteSpace(x.WashPhotoUrl))
+            .WithMessage("Wash photo URL must be an HTTPS URL.");
+
+        RuleFor(x => x.LabelPhotoUrl)
+            .MaximumLength(JerseyRules.MaxImageUrlLength)
+            .Must(BeHttpsUrl)
+            .When(x => !string.IsNullOrWhiteSpace(x.LabelPhotoUrl))
+            .WithMessage("Label photo URL must be an HTTPS URL.");
+
+        RuleFor(x => x.CoaUrl)
+            .MaximumLength(JerseyRules.MaxImageUrlLength)
+            .Must(BeHttpsUrl)
+            .When(x => !string.IsNullOrWhiteSpace(x.CoaUrl))
+            .WithMessage("COA URL must be an HTTPS URL.");
+
+        RuleFor(x => x.VerifiedBy)
+            .MaximumLength(JerseyRules.MaxNameLength)
+            .When(x => x.VerifiedBy is not null);
     }
 
     private static bool NotContainControlChars(string value) =>

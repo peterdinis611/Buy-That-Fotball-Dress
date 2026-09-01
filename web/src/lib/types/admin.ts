@@ -34,6 +34,7 @@ export type PegCard = {
     club: string;
     playerName: string;
     season: string;
+    verifiedBy?: string;
   };
 };
 

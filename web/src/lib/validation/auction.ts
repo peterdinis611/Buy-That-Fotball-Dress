@@ -5,6 +5,13 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"] as const;
 const kits = ["Home", "Away", "Third", "Goalkeeper", "Special"] as const;
 const conditions = ["New", "NewWithTags", "Used", "Vintage"] as const;
 
+const photoUrl = v.pipe(
+  v.string(),
+  v.trim(),
+  v.maxLength(500, "Photo URL is too long."),
+  v.check((value) => value === "" || /^https?:\/\/.+/i.test(value), "Photo must be a URL."),
+);
+
 export const sellFieldsSchema = v.object({
   club: v.pipe(
     v.string(),
@@ -67,12 +74,11 @@ export const sellFieldsSchema = v.object({
     v.check((value) => value === "" || !Number.isNaN(new Date(value).getTime()), "Enter a valid match date."),
   ),
   opponent: v.pipe(v.string(), v.trim(), v.maxLength(100, "Opponent is too long.")),
-  pitchPhotoUrl: v.pipe(
-    v.string(),
-    v.trim(),
-    v.maxLength(500, "Pitch photo URL is too long."),
-    v.check((value) => value === "" || /^https?:\/\/.+/i.test(value), "Pitch photo must be a URL."),
-  ),
+  pitchPhotoUrl: photoUrl,
+  collarPhotoUrl: photoUrl,
+  washPhotoUrl: photoUrl,
+  labelPhotoUrl: photoUrl,
+  coaUrl: photoUrl,
 });
 
 export type SellFields = v.InferOutput<typeof sellFieldsSchema>;
@@ -96,6 +102,10 @@ export function toCreateAuctionPayload(fields: SellFields): CreateAuctionPayload
       matchDate: fields.matchDate ? `${fields.matchDate}T12:00:00.000Z` : undefined,
       opponent: fields.opponent || undefined,
       pitchPhotoUrl: fields.pitchPhotoUrl || undefined,
+      collarPhotoUrl: fields.collarPhotoUrl || undefined,
+      washPhotoUrl: fields.washPhotoUrl || undefined,
+      labelPhotoUrl: fields.labelPhotoUrl || undefined,
+      coaUrl: fields.coaUrl || undefined,
     },
   };
 }
@@ -118,6 +128,10 @@ export function toUpdateAuctionPayload(fields: SellFields): UpdateAuctionPayload
     matchDate: fields.matchDate ? `${fields.matchDate}T12:00:00.000Z` : undefined,
     opponent: fields.opponent || undefined,
     pitchPhotoUrl: fields.pitchPhotoUrl || undefined,
+    collarPhotoUrl: fields.collarPhotoUrl || undefined,
+    washPhotoUrl: fields.washPhotoUrl || undefined,
+    labelPhotoUrl: fields.labelPhotoUrl || undefined,
+    coaUrl: fields.coaUrl || undefined,
   };
 }
 
@@ -141,6 +155,10 @@ export function toSellFields(auction: Auction): SellFields {
     matchDate: auction.item.matchDate ? auction.item.matchDate.slice(0, 10) : "",
     opponent: auction.item.opponent ?? "",
     pitchPhotoUrl: auction.item.pitchPhotoUrl ?? "",
+    collarPhotoUrl: auction.item.collarPhotoUrl ?? "",
+    washPhotoUrl: auction.item.washPhotoUrl ?? "",
+    labelPhotoUrl: auction.item.labelPhotoUrl ?? "",
+    coaUrl: auction.item.coaUrl ?? "",
   };
 }
 
@@ -153,6 +171,11 @@ export const bidFieldsSchema = v.object({
     v.nonEmpty("Put a number on the shot."),
     v.check((value) => /^\d+$/.test(value), "Whole euros only."),
     v.check((value) => Number(value) > 0, "A shot has to be more than nothing."),
+  ),
+  maxAmount: v.pipe(
+    v.string(),
+    v.trim(),
+    v.check((value) => value === "" || /^\d+$/.test(value), "Whole euros only."),
   ),
 });
 

@@ -6,6 +6,7 @@ namespace SearchService.Data;
 public class SearchDbContext(DbContextOptions<SearchDbContext> options) : DbContext(options)
 {
     public DbSet<Item> Items { get; set; }
+    public DbSet<SavedPeg> SavedPegs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,6 +26,13 @@ public class SearchDbContext(DbContextOptions<SearchDbContext> options) : DbCont
             entity.Property(x => x.Color).IsRequired();
             entity.Property(x => x.KitType).IsRequired();
             entity.Property(x => x.Condition).IsRequired();
+        });
+
+        modelBuilder.Entity<SavedPeg>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+            entity.HasIndex(x => x.Username);
+            entity.Property(x => x.Username).IsRequired();
         });
     }
 }

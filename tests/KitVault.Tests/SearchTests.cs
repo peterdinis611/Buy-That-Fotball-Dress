@@ -80,6 +80,26 @@ public class SearchTests
     }
 
     [Fact]
+    public void Tape_matches_club_and_ceiling()
+    {
+        var peg = new SearchService.Models.SavedPeg
+        {
+            Username = "kitvault",
+            Club = "Bayern",
+            MaxPrice = 200,
+            Status = "Live"
+        };
+
+        var hit = Lots.SearchItem(club: "Bayern Munich", reserve: 150);
+        var missClub = Lots.SearchItem(club: "Brazil", reserve: 150);
+        var missPrice = Lots.SearchItem(club: "Bayern Munich", reserve: 400);
+
+        Assert.True(peg.Matches(hit));
+        Assert.False(peg.Matches(missClub));
+        Assert.False(peg.Matches(missPrice));
+    }
+
+    [Fact]
     public async Task Repository_finds_a_club_and_skips_the_rest()
     {
         await using var sqlite = SqliteHarness.Search();

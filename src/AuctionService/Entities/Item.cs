@@ -17,6 +17,12 @@ public class Item
     public DateTime? MatchDate { get; set; }
     public string? Opponent { get; set; }
     public string? PitchPhotoUrl { get; set; }
+    public string? CollarPhotoUrl { get; set; }
+    public string? WashPhotoUrl { get; set; }
+    public string? LabelPhotoUrl { get; set; }
+    public string? CoaUrl { get; set; }
+    public string? VerifiedBy { get; set; }
+    public DateTime? VerifiedAt { get; set; }
 
     public Auction Auction { get; set; } = null!;
     public Guid AuctionId { get; set; }

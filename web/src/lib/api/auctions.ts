@@ -60,11 +60,11 @@ export async function getPlayerSheet() {
   return (await response.json()) as PlayerSheet;
 }
 
-export async function placeBid(id: string, amount: number) {
+export async function placeBid(id: string, amount: number, maxAmount?: number) {
   const response = await fetch(`${apiBase()}/api/auctions/${id}/bids`, {
     method: "POST",
     headers: authHeaders(true),
-    body: JSON.stringify({ amount }),
+    body: JSON.stringify({ amount, maxAmount: maxAmount && maxAmount > 0 ? maxAmount : undefined }),
   });
 
   if (response.status === 401) throw new Error("Sign in first.");

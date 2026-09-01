@@ -10,6 +10,7 @@ export type {
   PlayerSheet,
   SearchItem,
   SearchQuery,
+  SavedPeg,
 } from "./auction";
 export { fromAuction, fromSearchItem, isOpenLot } from "./auction";
 export type { AuthUser, RegisterPayload } from "./auth";

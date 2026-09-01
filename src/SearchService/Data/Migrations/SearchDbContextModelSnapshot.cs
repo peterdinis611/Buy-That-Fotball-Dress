@@ -66,6 +66,24 @@ namespace SearchService.Data.Migrations
                     b.Property<string>("PitchPhotoUrl")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("CollarPhotoUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WashPhotoUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LabelPhotoUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CoaUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VerifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("VerifiedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("PlayerName")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -108,6 +126,47 @@ namespace SearchService.Data.Migrations
                     b.HasIndex("PlayerName");
 
                     b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("SearchService.Models.SavedPeg", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Club")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("HungAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("KitType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("League")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("MaxPrice")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MinPrice")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username");
+
+                    b.ToTable("SavedPegs");
                 });
 #pragma warning restore 612, 618
         }

@@ -43,7 +43,7 @@ public class PaymentsServiceTests
 
         Assert.True(result.IsSuccess);
         Assert.Equal(TillStatus.Captured, result.Value!.Status);
-        Assert.StartsWith("TILL-", result.Value.Slip);
+        Assert.StartsWith("CARD-", result.Value.Slip);
         await publish.Received(1).Publish(
             Arg.Is<PaymentCaptured>(x => x.Buyer == "kitvault" && x.SettlementId == till.SettlementId),
             Arg.Any<CancellationToken>());

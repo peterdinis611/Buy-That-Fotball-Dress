@@ -72,6 +72,16 @@ public sealed class OfficeService(IHttpClientFactory http, OfficeDbContext db) :
         await MarkAsync(steward, "scratch", ShirtLine(peg), peg?.Seller ?? id.ToString(), cancellationToken);
     }
 
+    public async Task VerifyPegAsync(Guid id, string steward, CancellationToken cancellationToken)
+    {
+        var pegs = await GetPegsAsync(cancellationToken);
+        var peg = pegs.FirstOrDefault(x => x.Id == id);
+        var client = http.CreateClient("Auction");
+        using var response = await client.PostAsync($"/api/auctions/{id}/verify", null, cancellationToken);
+        await EnsureOk(response, "Could not verify that peg.");
+        await MarkAsync(steward, "verify", ShirtLine(peg), peg?.Seller ?? id.ToString(), cancellationToken);
+    }
+
     public async Task WhistleTillAsync(Guid id, string steward, CancellationToken cancellationToken)
     {
         var tills = await GetTillsAsync(cancellationToken);

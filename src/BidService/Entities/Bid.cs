@@ -7,5 +7,7 @@ public class Bid
     public AuctionLot Lot { get; set; } = null!;
     public required string Bidder { get; set; }
     public int Amount { get; set; }
+    public int? MaxAmount { get; set; }
+    public bool Snag { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

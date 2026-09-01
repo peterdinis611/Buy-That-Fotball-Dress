@@ -147,6 +147,24 @@ namespace AuctionService.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("VerifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("VerifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CollarPhotoUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WashPhotoUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LabelPhotoUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CoaUrl")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuctionId")

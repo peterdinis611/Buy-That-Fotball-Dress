@@ -10,5 +10,6 @@ public interface IOfficeService
     Task<IReadOnlyList<TillCardDto>> GetTillsAsync(CancellationToken cancellationToken);
     Task<IReadOnlyList<ClipMarkDto>> GetClipAsync(CancellationToken cancellationToken);
     Task ScratchPegAsync(Guid id, string steward, CancellationToken cancellationToken);
+    Task VerifyPegAsync(Guid id, string steward, CancellationToken cancellationToken);
     Task WhistleTillAsync(Guid id, string steward, CancellationToken cancellationToken);
 }

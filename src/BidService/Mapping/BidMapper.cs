@@ -12,6 +12,8 @@ public static class BidMapper
         AuctionId = bid.AuctionId,
         Bidder = bid.Bidder,
         Amount = bid.Amount,
+        MaxAmount = bid.MaxAmount,
+        Snag = bid.Snag,
         CreatedAt = bid.CreatedAt
     };
 

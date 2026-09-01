@@ -44,4 +44,16 @@ public class CreateItemDto
 
     [Url, MaxLength(500)]
     public string? PitchPhotoUrl { get; set; }
+
+    [Url, MaxLength(500)]
+    public string? CollarPhotoUrl { get; set; }
+
+    [Url, MaxLength(500)]
+    public string? WashPhotoUrl { get; set; }
+
+    [Url, MaxLength(500)]
+    public string? LabelPhotoUrl { get; set; }
+
+    [Url, MaxLength(500)]
+    public string? CoaUrl { get; set; }
 }
