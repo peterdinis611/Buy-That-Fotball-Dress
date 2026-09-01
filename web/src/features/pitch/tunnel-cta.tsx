@@ -13,10 +13,10 @@ export function TunnelCta() {
           <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.22em] text-[var(--bib)]">
             Got a shirt at home?
           </p>
-          <h2 className="mt-2 max-w-[14ch] text-6xl leading-[0.86] text-[var(--tape)] md:text-8xl">
+          <h2 className="tunnel-head mt-2 max-w-[14ch] text-6xl leading-[0.86] md:text-8xl">
             Hang it on the rail. Let people bid.
           </h2>
-          <p className="mt-5 max-w-md text-lg text-[var(--tape)]/75">
+          <p className="tunnel-copy mt-5 max-w-md text-lg">
             Set a starting price and an end time. Buyers bid up from there. Match-worn only.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -25,7 +25,7 @@ export function TunnelCta() {
             </Link>
             <Link
               href="/auctions"
-              className="nav-line font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--tape)] uppercase"
+              className="nav-line tunnel-browse font-[family-name:var(--font-display)] text-xl tracking-[0.08em] uppercase"
             >
               Browse live lots
             </Link>
