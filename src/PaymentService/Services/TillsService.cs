@@ -63,12 +63,28 @@ public sealed class TillsService(
         if (desk is not null && desk.Amount > 0 && desk.Amount != row.Amount)
             return Result<TillDto>.Conflict("The amount on the desk does not match this till.");
 
-        var slip = await drawer.CaptureAsync(row, cancellationToken);
-        if (string.IsNullOrWhiteSpace(slip))
+        TillStamp stamp;
+        try
+        {
+            stamp = await drawer.CaptureAsync(row, desk, cancellationToken);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Result<TillDto>.Conflict(ex.Message);
+        }
+
+        if (!string.IsNullOrWhiteSpace(stamp.CheckoutUrl))
+        {
+            var waiting = row.ToDto();
+            waiting.CheckoutUrl = stamp.CheckoutUrl;
+            return Result<TillDto>.Success(waiting);
+        }
+
+        if (string.IsNullOrWhiteSpace(stamp.Slip))
             return Result<TillDto>.Fail("The till did not stamp a slip.", StatusCodes.Status502BadGateway);
 
         row.Status = TillStatus.Captured;
-        row.Slip = slip;
+        row.Slip = stamp.Slip;
         row.CapturedAt = DateTime.UtcNow;
         await db.SaveChangesAsync(cancellationToken);
 

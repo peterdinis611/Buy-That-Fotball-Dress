@@ -11,12 +11,16 @@ public class Item
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime AuctionEnd { get; set; }
+    public bool Injury { get; set; }
     public required string Status { get; set; }
     public required string Club { get; set; }
     public required string PlayerName { get; set; }
     public int? PlayerNumber { get; set; }
     public required string Season { get; set; }
     public required string Size { get; set; }
+    public int? PitToPit { get; set; }
+    public int? BackLength { get; set; }
+    public int? BackNumber { get; set; }
     public required string Color { get; set; }
     public required string KitType { get; set; }
     public required string Condition { get; set; }

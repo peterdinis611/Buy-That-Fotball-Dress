@@ -490,7 +490,7 @@
     ]
   },
   "packageFolders": {
-    "/Users/peterdinis/.nuget/packages/": {}
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget": {}
   },
   "project": {
     "version": "1.0.0",
@@ -498,7 +498,7 @@
       "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/Caching.csproj",
       "projectName": "Caching",
       "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/Caching.csproj",
-      "packagesPath": "/Users/peterdinis/.nuget/packages/",
+      "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget",
       "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [

@@ -41,21 +41,37 @@ public sealed class SettlementsService(
         return row?.ToDto();
     }
 
-    public async Task<Result<SettlementDto>> PayAsync(Guid id, string username, CancellationToken cancellationToken)
+    public async Task<Result<SettlementDto>> PayAsync(
+        Guid id,
+        string username,
+        CancellationToken cancellationToken,
+        PayDeskDto? pay = null)
     {
         var row = await db.Settlements.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (row is null) return Result<SettlementDto>.NotFound("Desk not found.");
         if (!Same(username, row.Buyer)) return Result<SettlementDto>.Forbidden("Only the buyer can pay.");
         if (row.Status != DeskStatus.Opened) return Result<SettlementDto>.Conflict("This desk is not waiting for payment.");
 
-        var charge = await till.ChargeAsync(row, username, cancellationToken);
+        var charge = await till.ChargeAsync(row, username, pay, cancellationToken);
         if (!charge.IsSuccess)
             return Result<SettlementDto>.Fail(charge.Error ?? "The till refused that charge.", charge.StatusCode);
 
+        if (!string.IsNullOrWhiteSpace(charge.Value?.CheckoutUrl))
+        {
+            var waiting = row.ToDto();
+            waiting.CheckoutUrl = charge.Value.CheckoutUrl;
+            return Result<SettlementDto>.Success(waiting);
+        }
+
+        var slip = charge.Value?.Slip;
+        if (string.IsNullOrWhiteSpace(slip))
+            return Result<SettlementDto>.Fail("The till did not stamp a slip.", StatusCodes.Status502BadGateway);
+
         row.Status = DeskStatus.Paid;
         row.PaidAt = DateTime.UtcNow;
-        row.PaymentRef = charge.Value;
+        row.PaymentRef = slip;
         await db.SaveChangesAsync(cancellationToken);
+        var hammer = row.Hammer > 0 ? row.Hammer : row.Amount;
         await publishEndpoint.Publish(new SettlementPaid
         {
             Id = row.Id,
@@ -63,6 +79,7 @@ public sealed class SettlementsService(
             Seller = row.Seller,
             Buyer = row.Buyer,
             Amount = row.Amount,
+            Hammer = hammer,
             Club = row.Club,
             PlayerName = row.PlayerName,
             PaymentRef = row.PaymentRef,

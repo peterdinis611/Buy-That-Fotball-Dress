@@ -198,4 +198,88 @@ public class AuctionsServiceTests
         Assert.Equal(409, result.StatusCode);
         Assert.Single(sqlite.Db.Auctions);
     }
+
+    [Fact]
+    public async Task Late_bid_adds_injury_time()
+    {
+        await using var sqlite = SqliteHarness.Auction();
+        var auction = Lots.LiveAuction(ends: DateTime.UtcNow.AddMinutes(2), highBid: 500, highBidder: "jerseyhunter");
+        sqlite.Db.Auctions.Add(auction);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var consumer = new BidPlacedConsumer(sqlite.Db, publish, new MemoryPitchCache(), NullLogger<BidPlacedConsumer>.Instance);
+        var context = Substitute.For<ConsumeContext<BidPlaced>>();
+        context.Message.Returns(new BidPlaced
+        {
+            Id = Guid.NewGuid(),
+            AuctionId = auction.Id,
+            Bidder = "kitvault",
+            Amount = 620,
+            CreatedAt = DateTime.UtcNow
+        });
+        context.CancellationToken.Returns(CancellationToken.None);
+
+        var before = DateTime.UtcNow;
+        await consumer.Consume(context);
+
+        Assert.True(auction.Injury);
+        Assert.True(auction.AuctionEnd > before.AddMinutes(2));
+        Assert.True(auction.AuctionEnd <= before.AddMinutes(4));
+        await publish.Received().Publish(Arg.Is<AuctionUpdated>(x => x.Injury), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Close_skips_a_lot_still_in_injury_time()
+    {
+        await using var sqlite = SqliteHarness.Auction();
+        var auction = Lots.LiveAuction(ends: DateTime.UtcNow.AddMinutes(2), highBid: 620, highBidder: "kitvault");
+        auction.Injury = true;
+        sqlite.Db.Auctions.Add(auction);
+        await sqlite.Db.SaveChangesAsync();
+        var service = new AuctionsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new MemoryPitchCache());
+
+        var closed = await service.CloseExpiredAsync(default);
+
+        Assert.Equal(0, closed);
+        Assert.Equal(Status.Live, auction.Status);
+    }
+
+    [Fact]
+    public async Task Relist_hangs_an_unsold_lot()
+    {
+        await using var sqlite = SqliteHarness.Auction();
+        var auction = Lots.LiveAuction();
+        auction.Status = Status.ReserveNotMet;
+        auction.CurrentHighBid = 100;
+        auction.HighBidder = "kitvault";
+        sqlite.Db.Auctions.Add(auction);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var service = new AuctionsService(sqlite.Db, publish, new MemoryPitchCache());
+        var ends = DateTime.UtcNow.AddDays(7);
+
+        var result = await service.RelistAsync(auction.Id, ends, auction.Seller, default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(Status.Live, result.Value!.Status);
+        Assert.False(result.Value.Injury);
+        Assert.Null(result.Value.CurrentHighBid);
+        Assert.Null(result.Value.HighBidder);
+        await publish.Received(1).Publish(Arg.Is<AuctionUpdated>(x => x.Status == "Live"), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Relist_rejects_a_sold_lot()
+    {
+        await using var sqlite = SqliteHarness.Auction();
+        var auction = Lots.LiveAuction();
+        auction.Status = Status.Finished;
+        sqlite.Db.Auctions.Add(auction);
+        await sqlite.Db.SaveChangesAsync();
+        var service = new AuctionsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new MemoryPitchCache());
+
+        var result = await service.RelistAsync(auction.Id, DateTime.UtcNow.AddDays(7), auction.Seller, default);
+
+        Assert.Equal(409, result.StatusCode);
+    }
 }

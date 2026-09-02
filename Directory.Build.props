@@ -7,6 +7,7 @@
       '$(MSBuildProjectName)' == 'AdminService'
       Or '$(MSBuildProjectName)' == 'AuctionService'
       Or '$(MSBuildProjectName)' == 'BidService'
+      Or '$(MSBuildProjectName)' == 'EmailService'
       Or '$(MSBuildProjectName)' == 'IdentityService'
       Or '$(MSBuildProjectName)' == 'PaymentService'
       Or '$(MSBuildProjectName)' == 'SearchService'

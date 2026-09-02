@@ -18,6 +18,7 @@ import {
   useLiveAuction,
   usePlaceBidMutation,
   usePlayerSheetQuery,
+  useRelistAuctionMutation,
   useWatchMutation,
 } from "@/hooks";
 import { BidTape } from "./bid-tape";
@@ -51,6 +52,9 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
   const specs = [
     ["Number", number],
     ["Size", item.size],
+    ...(item.pitToPit ? ([["Pit-to-pit", `${item.pitToPit} cm`]] as const) : []),
+    ...(item.backLength ? ([["Back length", `${item.backLength} cm`]] as const) : []),
+    ...(item.backNumber ? ([["Number on back", `${item.backNumber} cm`]] as const) : []),
     ["Kit", item.kitType],
     ["Color", item.color],
     ["Competition", item.league ?? "—"],
@@ -98,7 +102,7 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
             <p className="text-sm text-[var(--muted-foreground)]">
               Starts at {formatMoney(lot.reservePrice)} · Ends {formatDate(lot.auctionEnd)}
             </p>
-            <LedClock endsAt={lot.auctionEnd} />
+            <LedClock endsAt={lot.auctionEnd} injury={lot.injury} />
           </div>
           {lot.highBidder ? <TicketLine label="Highest bidder" value={lot.highBidder} /> : null}
           {lot.winner ? <TicketLine label="Winner" value={lot.winner} /> : null}
@@ -137,7 +141,7 @@ export function LotTicket({ auction: initial, bids }: { auction: Auction; bids?:
   );
 }
 
-function LedClock({ endsAt }: { endsAt: string }) {
+function LedClock({ endsAt, injury }: { endsAt: string; injury?: boolean }) {
   const { remaining, ready } = useCountdown(endsAt);
 
   if (!ready) {
@@ -156,15 +160,22 @@ function LedClock({ endsAt }: { endsAt: string }) {
   ].filter((cell): cell is { value: number; unit: string } => Boolean(cell));
 
   return (
-    <div className="led-clock" aria-label="Time left">
-      {cells.map((cell) => (
-        <span key={cell.unit} className="led-cell">
-          <span key={`${cell.unit}-${cell.value}`} className="led-cell-value digit-tick">
-            {cell.unit === "d" ? cell.value : pad(cell.value)}
+    <div className="flex items-end gap-3">
+      <div className="led-clock" aria-label="Time left">
+        {cells.map((cell) => (
+          <span key={cell.unit} className="led-cell">
+            <span key={`${cell.unit}-${cell.value}`} className="led-cell-value digit-tick">
+              {cell.unit === "d" ? cell.value : pad(cell.value)}
+            </span>
+            <span className="led-cell-unit">{cell.unit}</span>
           </span>
-          <span className="led-cell-unit">{cell.unit}</span>
+        ))}
+      </div>
+      {injury ? (
+        <span className="font-[family-name:var(--font-display)] text-lg tracking-[0.14em] text-[var(--led)] uppercase">
+          +3 min
         </span>
-      ))}
+      ) : null}
     </div>
   );
 }
@@ -238,7 +249,9 @@ function WatchToggle({ auction, watching }: { auction: Auction; watching: boolea
 function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
   const router = useRouter();
   const takeDown = useDeleteAuctionMutation();
+  const hangAgain = useRelistAuctionMutation(auction.id);
   const [banner, setBanner] = useState<string | null>(null);
+  const unsold = auction.status === "ReserveNotMet";
 
   async function remove() {
     setBanner(null);
@@ -248,6 +261,18 @@ function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
       router.refresh();
     } catch (err) {
       setBanner(err instanceof Error ? err.message : "Could not take this shirt down.");
+    }
+  }
+
+  async function relist() {
+    setBanner(null);
+    const end = new Date();
+    end.setDate(end.getDate() + 7);
+    try {
+      await hangAgain.mutateAsync(end.toISOString());
+      router.refresh();
+    } catch (err) {
+      setBanner(err instanceof Error ? err.message : "Could not hang this shirt again.");
     }
   }
 
@@ -272,6 +297,19 @@ function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
             triggerClassName="inline-flex h-11 items-center border border-white/25 px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--chalk)] uppercase"
             triggerLabel="Take down"
             onConfirm={remove}
+          />
+        </div>
+      ) : unsold ? (
+        <div className="mt-4">
+          <p className="text-[var(--muted-foreground)]">Reserve not met. Hang it again with a new clock.</p>
+          <ConfirmAct
+            title={`Hang ${auction.item.playerName} again?`}
+            body="Same shirt, new clock. Seven days from now. Old bids come off the book."
+            confirmLabel="Hang again"
+            pending={hangAgain.isPending}
+            triggerClassName="mt-4 inline-flex h-11 items-center bg-[var(--bib)] px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--stud)] uppercase"
+            triggerLabel="Hang again"
+            onConfirm={relist}
           />
         </div>
       ) : (

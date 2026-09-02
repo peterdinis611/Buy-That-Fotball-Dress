@@ -37,11 +37,24 @@ public class SettlementsController(ISettlementsService desks) : ControllerBase
 
     [Authorize]
     [HttpPost("{id:guid}/pay")]
-    public async Task<IActionResult> Pay(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> Pay(Guid id, [FromBody] PayDeskDto? dto, CancellationToken cancellationToken)
     {
         var name = UserName();
         if (name is null) return Unauthorized();
-        var result = await desks.PayAsync(id, name, cancellationToken);
+
+        dto ??= new PayDeskDto();
+        var origin = Request.Headers.Origin.FirstOrDefault()
+            ?? Request.Headers.Referer.FirstOrDefault()
+            ?? "http://localhost:3000";
+        if (Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+            origin = $"{uri.Scheme}://{uri.Authority}";
+        else
+            origin = "http://localhost:3000";
+
+        dto.SuccessUrl ??= $"{origin}/profile?desk={id:D}&session_id={{CHECKOUT_SESSION_ID}}";
+        dto.CancelUrl ??= $"{origin}/profile?desk={id:D}";
+
+        var result = await desks.PayAsync(id, name, cancellationToken, dto);
         return From(result);
     }
 

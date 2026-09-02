@@ -80,16 +80,21 @@ function Till({ row, buyer, seller }: { row: Settlement; buyer: boolean; seller:
 
       <p className="till-amount">{formatMoney(row.amount)}</p>
       <p className="till-meta">
+        Hammer {formatMoney(row.hammer || row.amount)}
+        {row.desk > 0 ? ` · Desk ${formatMoney(row.desk)}` : ""}
+        {` · Due ${formatMoney(row.amount)}`}
+      </p>
+      <p className="till-meta">
         {row.buyer} buys from {row.seller}
         {row.paymentRef ? ` · ${cardSlip(row.paymentRef)}` : ""}
         {row.tracking ? ` · ${row.tracking}` : ""}
       </p>
 
       {row.status === "Opened" && buyer ? (
-        <p className="till-hint">Pay by card. The seller ships after the slip is marked paid.</p>
+        <p className="till-hint">Pay hammer plus desk by card. The seller takes the hammer.</p>
       ) : null}
       {row.status === "Opened" && seller ? (
-        <p className="till-hint">Waiting for {row.buyer} to pay.</p>
+        <p className="till-hint">Waiting for {row.buyer} to pay. You take the hammer; desk is house.</p>
       ) : null}
       {row.status === "Paid" && seller ? (
         <p className="till-hint">Paid. Add a tracking number, then mark it shipped.</p>
@@ -245,6 +250,9 @@ export function DeskRail({ rows, loading }: { rows: Settlement[]; loading: boole
                 <p className="text-2xl text-[var(--ink)]">{row.playerName}</p>
                 <p className="text-sm text-[var(--ink)]/60">
                   {row.club} · {row.buyer} / {row.seller}
+                  {row.desk > 0
+                    ? ` · Hammer ${formatMoney(row.hammer || row.amount - row.desk)} · Desk ${formatMoney(row.desk)}`
+                    : ""}
                   {row.paymentRef ? ` · ${cardSlip(row.paymentRef)}` : ""}
                   {row.tracking ? ` · ${row.tracking}` : ""}
                 </p>

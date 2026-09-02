@@ -41,8 +41,21 @@ export function useSettlementQuery(auctionId: string, enabled = true) {
 export function usePaySettlement(auctionId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => paySettlement(id),
-    ...rememberDesk(queryClient, auctionId),
+    mutationFn: (id: string) => {
+      const origin = window.location.origin;
+      return paySettlement(id, {
+        successUrl: `${origin}/profile?desk=${id}&session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${origin}/profile?desk=${id}`,
+      });
+    },
+    onSuccess: (row: Settlement) => {
+      if (row.checkoutUrl) {
+        window.location.href = row.checkoutUrl;
+        return;
+      }
+      queryClient.setQueryData(queryKeys.settlements.auction(auctionId), row);
+      void queryClient.invalidateQueries({ queryKey: queryKeys.settlements.mine() });
+    },
   });
 }
 

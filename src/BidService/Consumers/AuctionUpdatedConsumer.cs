@@ -18,7 +18,16 @@ public class AuctionUpdatedConsumer(BidDbContext db, ILogger<AuctionUpdatedConsu
         }
         else
         {
+            var wasLive = string.Equals(lot.Status, "Live", StringComparison.OrdinalIgnoreCase);
             lot.Apply(context.Message);
+            var nowLive = string.Equals(lot.Status, "Live", StringComparison.OrdinalIgnoreCase);
+            if (!wasLive && nowLive)
+            {
+                var old = await db.Bids
+                    .Where(x => x.AuctionId == lot.Id)
+                    .ToListAsync(context.CancellationToken);
+                db.Bids.RemoveRange(old);
+            }
         }
 
         await db.SaveChangesAsync(context.CancellationToken);

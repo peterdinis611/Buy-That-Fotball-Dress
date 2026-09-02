@@ -4,6 +4,7 @@ export {
   createAuction,
   updateAuction,
   deleteAuction,
+  relistAuction,
   getPlayerSheet,
   placeBid,
   getBids,
@@ -19,6 +20,7 @@ export {
   disputeSettlement,
 } from "./settlements";
 export { searchItems, getSavedPegs, hangPeg, dropPeg } from "./search";
+export { getMyLetters } from "./letters";
 export { login, register, getMe } from "./auth";
 export {
   getOfficeBoard,

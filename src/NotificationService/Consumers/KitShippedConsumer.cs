@@ -35,7 +35,8 @@ public class KitShippedConsumer(
                 new Letter(
                     message.Buyer,
                     $"{player} is on the way",
-                    $"Tracking {tracking}. Confirm at the desk when it arrives.\n{href}"),
+                    $"Tracking {tracking}. Confirm at the desk when it arrives.\n{href}",
+                    "shipped"),
                 context.CancellationToken);
         }
 

@@ -44,6 +44,9 @@ namespace SearchService.Data.Migrations
                     b.Property<int?>("CurrentHighBid")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("Injury")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("TEXT");
 
@@ -105,6 +108,15 @@ namespace SearchService.Data.Migrations
                     b.Property<string>("Size")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("PitToPit")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("BackLength")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("BackNumber")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("SoldAmount")
                         .HasColumnType("INTEGER");

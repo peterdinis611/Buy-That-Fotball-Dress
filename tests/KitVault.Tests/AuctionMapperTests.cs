@@ -67,5 +67,6 @@ public class AuctionMapperTests
         Assert.Equal("Germany", created.Opponent);
         Assert.Equal("https://placehold.co/grass.png", created.PitchPhotoUrl);
         Assert.Equal("Ronaldo Nazário", created.PlayerName);
+        Assert.False(created.Injury);
     }
 }

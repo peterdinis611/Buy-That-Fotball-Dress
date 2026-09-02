@@ -17,6 +17,12 @@ const rules = [
     title: "You cannot bid on your listing",
     copy: "Sign in to bid. The person who listed the shirt cannot bid on it.",
   },
+  {
+    card: "Desk cut",
+    tone: "yellow" as const,
+    title: "Hammer plus desk",
+    copy: "The bid board is hammer. Buyer pays hammer plus 10% desk. Seller takes hammer. House keeps desk.",
+  },
 ];
 
 const toneClass = {
@@ -37,7 +43,7 @@ export function HouseRules() {
             Same rules as a real auction, written for a shirt.
           </h2>
           <p className="mt-5 max-w-sm text-lg text-[var(--ink)]/75">
-            No mystery fees in the copy. What you see on the bid board is the price you have to beat.
+            No mystery fees on the board. The price you beat is hammer. Desk (10%) is shown at the till.
           </p>
         </div>
 

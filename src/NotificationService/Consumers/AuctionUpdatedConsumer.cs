@@ -30,12 +30,13 @@ public class AuctionUpdatedConsumer(
                     message.Winner,
                     "You won",
                     player,
-                    $"Pay {amount} at the desk",
+                    $"Pay {amount} plus desk at the till",
                     href),
                 new Letter(
                     message.Winner,
                     $"You won {player}",
-                    $"Highest bid when the clock hit zero. Pay {amount} at the desk.\n{href}"),
+                    $"Highest bid when the clock hit zero. Pay {amount} plus desk at the till.\n{href}",
+                    "won"),
                 context.CancellationToken);
         }
 

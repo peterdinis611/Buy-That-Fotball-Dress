@@ -63,6 +63,25 @@ public class SettlementsServiceTests
     }
 
     [Fact]
+    public async Task Pay_returns_a_checkout_url_without_marking_paid()
+    {
+        await using var sqlite = SqliteHarness.Settlement();
+        var desk = OpenDesk();
+        sqlite.Db.Settlements.Add(desk);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var till = new FakeTillClient { CheckoutUrl = "https://checkout.stripe.test/cs_test" };
+        var service = new SettlementsService(sqlite.Db, publish, till);
+
+        var result = await service.PayAsync(desk.Id, "kitvault", default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal("https://checkout.stripe.test/cs_test", result.Value!.CheckoutUrl);
+        Assert.Equal(DeskStatus.Opened, sqlite.Db.Settlements.Single().Status);
+        await publish.DidNotReceive().Publish(Arg.Any<SettlementPaid>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task Ship_waits_for_pay()
     {
         await using var sqlite = SqliteHarness.Settlement();
@@ -171,7 +190,9 @@ public class SettlementsServiceTests
         Assert.Equal(1, sqlite.Db.Settlements.Count());
         var desk = sqlite.Db.Settlements.Single();
         Assert.Equal("kitvault", desk.Buyer);
-        Assert.Equal(620, desk.Amount);
+        Assert.Equal(620, desk.Hammer);
+        Assert.Equal(62, desk.Desk);
+        Assert.Equal(682, desk.Amount);
         await publish.Received(1).Publish(Arg.Any<SettlementOpened>(), Arg.Any<CancellationToken>());
     }
 

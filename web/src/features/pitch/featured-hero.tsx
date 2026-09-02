@@ -283,7 +283,7 @@ export function FeaturedHero({ lots }: { lots: Auction[] }) {
               {formatMoney(bid)}
             </p>
             <p className="mt-6 text-sm tracking-[0.16em] text-[var(--muted-foreground)] uppercase">Time left</p>
-            <Countdown key={listing.id} endsAt={listing.auctionEnd} className="led-num mt-1 block text-5xl" />
+            <Countdown key={listing.id} endsAt={listing.auctionEnd} injury={listing.injury} className="led-num mt-1 block text-5xl" />
             <Link href={`/auctions/${listing.id}`} className="banner-cta mt-8 w-full justify-center text-2xl">
               Bid on this shirt
             </Link>
@@ -375,7 +375,7 @@ function RailDone({
               <p className="mt-5 text-sm tracking-[0.16em] text-[var(--muted-foreground)] uppercase">Current bid</p>
               <p className="led-num bid-punch mt-1 text-6xl leading-none">{formatMoney(bid)}</p>
               <p className="mt-6 text-sm tracking-[0.16em] text-[var(--muted-foreground)] uppercase">Time left</p>
-              <Countdown endsAt={listing.auctionEnd} className="led-num mt-1 block text-5xl" />
+              <Countdown endsAt={listing.auctionEnd} injury={listing.injury} className="led-num mt-1 block text-5xl" />
               <Link href={`/auctions/${listing.id}`} className="banner-cta mt-8 w-full justify-center text-2xl">
                 Bid on this shirt
               </Link>
@@ -414,7 +414,7 @@ function RailDone({
                       <span className="block font-[family-name:var(--font-display)] text-2xl leading-none text-[var(--ink)]">
                         {formatMoney(price)}
                       </span>
-                      <Countdown endsAt={row.auctionEnd} className="mt-1 block text-sm text-[var(--led)]" />
+                      <Countdown endsAt={row.auctionEnd} injury={row.injury} className="mt-1 block text-sm text-[var(--led)]" />
                     </span>
                     <button type="button" className="rail-back-btn" onClick={() => onPutBack(lot.id)}>
                       Put back

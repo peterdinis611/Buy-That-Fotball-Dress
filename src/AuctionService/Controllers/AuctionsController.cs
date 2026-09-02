@@ -148,6 +148,27 @@ public class AuctionsController(IAuctionsService auctionsService) : ControllerBa
     }
 
     [Authorize]
+    [HttpPost("{id:guid}/relist")]
+    [ProducesResponseType(typeof(AuctionDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<AuctionDto>> Relist(
+        Guid id,
+        RelistAuctionDto dto,
+        CancellationToken cancellationToken)
+    {
+        var seller = CurrentUsername();
+        if (seller is null)
+            return Unauthorized();
+
+        var result = await auctionsService.RelistAsync(id, dto.AuctionEnd, seller, cancellationToken);
+        return ToActionResult(result);
+    }
+
+    [Authorize]
     [HttpPost("{id:guid}/watch")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

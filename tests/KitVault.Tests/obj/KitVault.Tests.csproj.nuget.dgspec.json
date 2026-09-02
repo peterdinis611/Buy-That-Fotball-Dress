@@ -10,7 +10,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/AuctionService.csproj",
         "projectName": "AuctionService",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/AuctionService.csproj",
-        "packagesPath": "/Users/peterdinis/.nuget/packages/",
+        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/AuctionService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -529,7 +529,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/BidService/BidService.csproj",
         "projectName": "BidService",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/BidService/BidService.csproj",
-        "packagesPath": "/Users/peterdinis/.nuget/packages/",
+        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/BidService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -1048,7 +1048,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/Caching.csproj",
         "projectName": "Caching",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/Caching.csproj",
-        "packagesPath": "/Users/peterdinis/.nuget/packages/",
+        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Caching/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -1403,7 +1403,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/Contracts.csproj",
         "projectName": "Contracts",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/Contracts.csproj",
-        "packagesPath": "/Users/peterdinis/.nuget/packages/",
+        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/Contracts/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -1736,7 +1736,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/IdentityService.csproj",
         "projectName": "IdentityService",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/IdentityService.csproj",
-        "packagesPath": "/Users/peterdinis/.nuget/packages/",
+        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/IdentityService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -2267,7 +2267,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/PaymentService.csproj",
         "projectName": "PaymentService",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/PaymentService.csproj",
-        "packagesPath": "/Users/peterdinis/.nuget/packages/",
+        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/PaymentService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -2781,7 +2781,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/SearchService.csproj",
         "projectName": "SearchService",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/SearchService.csproj",
-        "packagesPath": "/Users/peterdinis/.nuget/packages/",
+        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SearchService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -3308,7 +3308,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SettlementService/SettlementService.csproj",
         "projectName": "SettlementService",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SettlementService/SettlementService.csproj",
-        "packagesPath": "/Users/peterdinis/.nuget/packages/",
+        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/SettlementService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -3818,7 +3818,7 @@
         "projectUniqueName": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/KitVault.Tests.csproj",
         "projectName": "KitVault.Tests",
         "projectPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/KitVault.Tests.csproj",
-        "packagesPath": "/Users/peterdinis/.nuget/packages/",
+        "packagesPath": "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget",
         "outputPath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/tests/KitVault.Tests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [

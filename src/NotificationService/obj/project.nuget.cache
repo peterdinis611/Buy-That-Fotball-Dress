@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "V/ik9bXQxhE=",
+  "dgSpecHash": "W6aQXEXvfbA=",
   "success": true,
   "projectFilePath": "/Users/peterdinis/Desktop/work/buy-that-fotball-dress/src/NotificationService/NotificationService.csproj",
   "expectedPackageFiles": [
-    "/Users/peterdinis/.nuget/packages/masstransit/8.3.6/masstransit.8.3.6.nupkg.sha512",
-    "/Users/peterdinis/.nuget/packages/masstransit.abstractions/8.3.6/masstransit.abstractions.8.3.6.nupkg.sha512",
-    "/Users/peterdinis/.nuget/packages/masstransit.rabbitmq/8.3.6/masstransit.rabbitmq.8.3.6.nupkg.sha512",
-    "/Users/peterdinis/.nuget/packages/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
-    "/Users/peterdinis/.nuget/packages/microsoft.openapi/2.7.5/microsoft.openapi.2.7.5.nupkg.sha512",
-    "/Users/peterdinis/.nuget/packages/rabbitmq.client/7.0.0/rabbitmq.client.7.0.0.nupkg.sha512"
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget/masstransit/8.3.6/masstransit.8.3.6.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget/masstransit.abstractions/8.3.6/masstransit.abstractions.8.3.6.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget/masstransit.rabbitmq/8.3.6/masstransit.rabbitmq.8.3.6.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget/microsoft.openapi/2.7.5/microsoft.openapi.2.7.5.nupkg.sha512",
+    "/var/folders/xb/vrgmk5s507z8kxzn4b2c_3tr0000gn/T/cursor-sandbox-cache/970ab5002ea49238886ea9a4e486345a/nuget/rabbitmq.client/7.0.0/rabbitmq.client.7.0.0.nupkg.sha512"
   ],
   "logs": []
 }

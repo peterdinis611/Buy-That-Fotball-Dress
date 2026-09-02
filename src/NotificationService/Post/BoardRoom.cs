@@ -20,7 +20,8 @@ public sealed class BoardRoom(
         {
             ToUsername = letter.ToUsername,
             Subject = letter.Subject,
-            Body = letter.Body
+            Body = letter.Body,
+            Kind = letter.Kind
         }, cancellationToken);
     }
 }

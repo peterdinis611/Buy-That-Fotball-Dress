@@ -43,6 +43,9 @@ export function SellForm({ auction }: { auction?: Auction }) {
           season: "",
           color: "",
           size: "M",
+          pitToPit: "",
+          backLength: "",
+          backNumber: "",
           kitType: "Home",
           condition: "Used",
           reservePrice: "",
@@ -112,6 +115,21 @@ export function SellForm({ auction }: { auction?: Auction }) {
         </form.Field>
         <form.Field name="size">
           {(field) => <SelectField field={bindStringField(field)} label="Size" options={[...sizes]} />}
+        </form.Field>
+        <form.Field name="pitToPit">
+          {(field) => (
+            <TextField field={bindStringField(field)} label="Pit-to-pit cm" placeholder="52" inputMode="numeric" />
+          )}
+        </form.Field>
+        <form.Field name="backLength">
+          {(field) => (
+            <TextField field={bindStringField(field)} label="Back length cm" placeholder="72" inputMode="numeric" />
+          )}
+        </form.Field>
+        <form.Field name="backNumber">
+          {(field) => (
+            <TextField field={bindStringField(field)} label="Number on back cm" placeholder="25" inputMode="numeric" />
+          )}
         </form.Field>
         <form.Field name="kitType">
           {(field) => <SelectField field={bindStringField(field)} label="Kit" options={[...kits]} />}

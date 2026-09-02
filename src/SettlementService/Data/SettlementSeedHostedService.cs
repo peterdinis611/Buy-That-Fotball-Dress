@@ -14,6 +14,7 @@ public sealed class SettlementSeedHostedService(
         var db = scope.ServiceProvider.GetRequiredService<SettlementDbContext>();
         await db.Database.EnsureCreatedAsync(cancellationToken);
         await TryAddPaymentRefAsync(db, cancellationToken);
+        await TryAddCutColumnsAsync(db, cancellationToken);
 
         var auctionId = Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466");
         if (await db.Settlements.AnyAsync(x => x.AuctionId == auctionId, cancellationToken))
@@ -25,7 +26,9 @@ public sealed class SettlementSeedHostedService(
             AuctionId = auctionId,
             Seller = "selecao.archive",
             Buyer = "kitvault",
-            Amount = 620,
+            Hammer = 620,
+            Desk = HouseCut.Desk(620),
+            Amount = HouseCut.Due(620),
             Club = "Brazil",
             PlayerName = "Ronaldo Nazário",
             Status = DeskStatus.Opened,
@@ -48,6 +51,31 @@ public sealed class SettlementSeedHostedService(
         catch
         {
             // Column already exists on a fresh EnsureCreated database.
+        }
+    }
+
+    private static async Task TryAddCutColumnsAsync(SettlementDbContext db, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync(
+                "ALTER TABLE Settlements ADD COLUMN Hammer INTEGER NOT NULL DEFAULT 0",
+                cancellationToken);
+        }
+        catch
+        {
+            // Column already exists.
+        }
+
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync(
+                "ALTER TABLE Settlements ADD COLUMN Desk INTEGER NOT NULL DEFAULT 0",
+                cancellationToken);
+        }
+        catch
+        {
+            // Column already exists.
         }
     }
 }

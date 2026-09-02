@@ -32,7 +32,8 @@ public class BidPlacedConsumer(
                 new Letter(
                     message.PreviousBidder,
                     "Outbid",
-                    $"{message.Bidder} went to {message.Amount}. The lot is still live. Bid again if you want the shirt.\n{href}"),
+                    $"{message.Bidder} went to {message.Amount}. The lot is still live. Bid again if you want the shirt.\n{href}",
+                    "outbid"),
                 context.CancellationToken);
         }
 

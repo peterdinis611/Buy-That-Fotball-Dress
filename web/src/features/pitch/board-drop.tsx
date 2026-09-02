@@ -246,7 +246,7 @@ function LotRow({
         </span>
         <span className="board-desk-stats">
           <span className="board-desk-bid">{formatMoney(bid)}</span>
-          <Countdown endsAt={lot.auctionEnd} className="board-desk-clock" />
+          <Countdown endsAt={lot.auctionEnd} injury={lot.injury} className="board-desk-clock" />
         </span>
         <span className="board-desk-acts">
           {offKind ? <BoardOff key="off" lot={lot} kind={offKind} /> : null}

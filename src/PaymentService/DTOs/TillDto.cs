@@ -14,6 +14,7 @@ public class TillDto
     public string PlayerName { get; set; } = string.Empty;
     public TillStatus Status { get; set; }
     public string? Slip { get; set; }
+    public string? CheckoutUrl { get; set; }
     public DateTime OpenedAt { get; set; }
     public DateTime? CapturedAt { get; set; }
 }
@@ -26,4 +27,7 @@ public class ChargeDeskDto
     public int Amount { get; set; }
     public string Club { get; set; } = string.Empty;
     public string PlayerName { get; set; } = string.Empty;
+    public string? SessionId { get; set; }
+    public string? SuccessUrl { get; set; }
+    public string? CancelUrl { get; set; }
 }

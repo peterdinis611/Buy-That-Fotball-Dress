@@ -26,6 +26,10 @@ export const queryKeys = {
     mine: () => [...queryKeys.settlements.all, "mine"] as const,
     auction: (id: string) => [...queryKeys.settlements.all, "auction", id] as const,
   },
+  letters: {
+    all: ["letters"] as const,
+    mine: () => [...queryKeys.letters.all, "mine"] as const,
+  },
   office: {
     all: ["office"] as const,
     board: () => [...queryKeys.office.all, "board"] as const,

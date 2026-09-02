@@ -23,13 +23,17 @@ public class AuctionUpdatedConsumer(
         if (exists) return;
 
         var now = DateTime.UtcNow;
+        var hammer = message.SoldAmount.Value;
+        var desk = HouseCut.Desk(hammer);
         var row = new Settlement
         {
             Id = Guid.NewGuid(),
             AuctionId = message.Id,
             Seller = message.Seller,
             Buyer = message.Winner,
-            Amount = message.SoldAmount.Value,
+            Hammer = hammer,
+            Desk = desk,
+            Amount = HouseCut.Due(hammer),
             Club = message.Club,
             PlayerName = message.PlayerName,
             Status = DeskStatus.Opened,

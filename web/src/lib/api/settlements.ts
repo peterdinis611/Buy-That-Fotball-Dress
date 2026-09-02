@@ -34,8 +34,8 @@ async function postDesk(path: string, body?: unknown) {
   return (await response.json()) as Settlement;
 }
 
-export function paySettlement(id: string) {
-  return postDesk(`/api/settlements/${id}/pay`);
+export function paySettlement(id: string, pay?: { sessionId?: string; successUrl?: string; cancelUrl?: string }) {
+  return postDesk(`/api/settlements/${id}/pay`, pay);
 }
 
 export function shipSettlement(id: string, tracking?: string) {

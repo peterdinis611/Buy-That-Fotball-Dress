@@ -11,6 +11,8 @@ public static class SettlementMapper
         AuctionId = row.AuctionId,
         Seller = row.Seller,
         Buyer = row.Buyer,
+        Hammer = row.Hammer > 0 ? row.Hammer : row.Amount,
+        Desk = row.Desk,
         Amount = row.Amount,
         Club = row.Club,
         PlayerName = row.PlayerName,

@@ -65,7 +65,7 @@ export function LockerHook({
       </p>
       <div className="mt-2 flex flex-col items-center gap-1">
         <StatusPill status={listing.status} />
-        <Countdown endsAt={listing.auctionEnd} className="text-sm text-[var(--ink)]/70" />
+        <Countdown endsAt={listing.auctionEnd} injury={listing.injury} className="text-sm text-[var(--ink)]/70" />
       </div>
     </Link>
   );

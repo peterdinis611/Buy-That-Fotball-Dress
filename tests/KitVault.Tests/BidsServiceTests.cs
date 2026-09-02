@@ -212,6 +212,44 @@ public class BidsServiceTests
         Assert.Equal(400, result.StatusCode);
     }
 
+    [Fact]
+    public async Task Relist_wipes_the_old_book()
+    {
+        await using var sqlite = SqliteHarness.Bid();
+        var lot = Lots.BidLot(reserve: 400, high: 500);
+        lot.Status = "ReserveNotMet";
+        sqlite.Db.Lots.Add(lot);
+        sqlite.Db.Bids.Add(new Bid
+        {
+            Id = Guid.NewGuid(),
+            AuctionId = lot.Id,
+            Lot = lot,
+            Bidder = "jerseyhunter",
+            Amount = 500,
+            CreatedAt = DateTime.UtcNow.AddMinutes(-2)
+        });
+        await sqlite.Db.SaveChangesAsync();
+        var consumer = new BidService.Consumers.AuctionUpdatedConsumer(
+            sqlite.Db,
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<BidService.Consumers.AuctionUpdatedConsumer>.Instance);
+        var context = Substitute.For<ConsumeContext<AuctionUpdated>>();
+        context.Message.Returns(new AuctionUpdated
+        {
+            Id = lot.Id,
+            Seller = lot.Seller,
+            ReservePrice = lot.ReservePrice,
+            AuctionEnd = DateTime.UtcNow.AddDays(7),
+            Status = "Live",
+            CurrentHighBid = null
+        });
+        context.CancellationToken.Returns(CancellationToken.None);
+
+        await consumer.Consume(context);
+
+        Assert.Equal("Live", sqlite.Db.Lots.Single().Status);
+        Assert.Empty(sqlite.Db.Bids);
+    }
+
     private static BidsService NewService(SqliteHarness<BidService.Data.BidDbContext> sqlite, IPublishEndpoint? publish = null) =>
         new(sqlite.Db, publish ?? Substitute.For<IPublishEndpoint>(), Substitute.For<IHttpClientFactory>(), new MemoryPitchCache());
 }

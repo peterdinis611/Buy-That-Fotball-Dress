@@ -19,6 +19,7 @@ public class SettlementPaidConsumer(
 
         var player = string.IsNullOrWhiteSpace(message.PlayerName) ? "the shirt" : message.PlayerName;
         var href = $"/auctions/{message.AuctionId:D}";
+        var hammer = message.Hammer > 0 ? message.Hammer : message.Amount;
 
         if (!string.IsNullOrWhiteSpace(message.Seller))
         {
@@ -29,12 +30,13 @@ public class SettlementPaidConsumer(
                     message.Seller,
                     "Paid",
                     player,
-                    $"{message.Buyer} paid {message.Amount}. Ship it.",
+                    $"{message.Buyer} paid. You take {hammer}. Ship it.",
                     href),
                 new Letter(
                     message.Seller,
                     $"Paid · {player}",
-                    $"{message.Buyer} paid {message.Amount} ({message.PaymentRef}). Add a tracking number at the desk and mark it shipped.\n{href}"),
+                    $"{message.Buyer} paid at the till ({message.PaymentRef}). You take {hammer} (hammer). Desk is house. Add a tracking number and mark it shipped.\n{href}",
+                    "paid"),
                 context.CancellationToken);
         }
 

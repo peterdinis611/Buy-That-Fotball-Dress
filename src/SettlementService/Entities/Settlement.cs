@@ -15,6 +15,8 @@ public class Settlement
     public Guid AuctionId { get; set; }
     public required string Seller { get; set; }
     public required string Buyer { get; set; }
+    public int Hammer { get; set; }
+    public int Desk { get; set; }
     public int Amount { get; set; }
     public string Club { get; set; } = string.Empty;
     public string PlayerName { get; set; } = string.Empty;

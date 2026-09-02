@@ -22,7 +22,7 @@ Backends only: `./dev.sh --no-web`. After you change a service DLL, stop and run
 dotnet test
 ```
 
-SQLite in memory, no RabbitMQ. Covers lot provenance, bid floor, snag ceilings, desk till / tracking / dispute, card slips, search rules, hung tape, and squad-name validation.
+SQLite in memory, no RabbitMQ. Covers lot provenance, injury time, relist, house cut, desk till / tracking / dispute, card slips, search rules, hung tape, and squad-name validation.
 
 Frontend:
 
@@ -67,15 +67,17 @@ The browser talks to the **gateway**. Direct service ports are for debugging.
 
 ## How a lot closes
 
-1. Bids go to BidService while the lot is Live.
-2. When the clock hits zero with a winner, SettlementService opens a **desk** and publishes `SettlementOpened`. PaymentService opens a **Held** till for that desk.
-3. Buyer pays (`POST /api/settlements/{id}/pay`) → Settlement asks PaymentService to capture. The till stamps a **card slip** (`CARD-…` locally, or a Stripe `pi_…` when `Stripe:SecretKey` is set), publishes `PaymentCaptured`, and Settlement marks the desk **Paid**.
+1. Bids go to BidService while the lot is Live. A bid in the last **3 minutes** adds injury time: the clock jumps to now + 3 minutes and the board shows **+3 min**.
+2. When the clock hits zero with a winner, SettlementService opens a **desk**. Hammer is the winning bid. **Desk** is 10% house. **Due** is hammer + desk. PaymentService opens a **Held** till for the due amount. Seller takes hammer.
+3. Buyer pays (`POST /api/settlements/{id}/pay`) → Settlement asks PaymentService to capture. Empty `Stripe:SecretKey` stamps a **CARD-…** slip locally. With a secret key, PaymentService opens **Stripe Checkout** in the browser and returns `checkoutUrl`. After Stripe, `/profile?desk={id}&session_id=…` finishes the desk. Then `PaymentCaptured` and the desk is **Paid**.
 4. Seller enters a **tracking** number and marks shipped.
 5. Buyer confirms **shirt received**. Either side can **dispute** with a written reason before that.
 
-Locker → **Desk** lists your open tills. The same till sits on the lot board after Sold for.
+Unsold lots (`ReserveNotMet`) can **Hang again** (`POST /api/auctions/{id}/relist` with a new `auctionEnd`). Same shirt, new clock. Old bids come off the book.
 
-Seeded unpaid desk: Brazil / Ronaldo Nazário, `kitvault` buys from `selecao.archive` for 620. Lot id `9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466`.
+Locker → **Desk** lists your open tills. **Letters** (bay 07) is the in-app shelf for outbid / won / ship it / tape match. Mailpit is still the SMTP tray.
+
+Seeded unpaid desk: Brazil / Ronaldo Nazário, `kitvault` buys from `selecao.archive`. Hammer €620, desk €62, due €682. Lot id `9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466`.
 
 ### Desk API (via gateway)
 
@@ -83,13 +85,15 @@ All mutating routes need a JWT from Identity.
 
 - `GET /api/settlements/mine`
 - `GET /api/settlements/by-auction/{auctionId}`
-- `POST /api/settlements/{id}/pay`
+- `POST /api/settlements/{id}/pay` optional `{ "sessionId", "successUrl", "cancelUrl" }` — returns `checkoutUrl` when Stripe Checkout is on
 - `GET /api/payments/mine`
 - `GET /api/payments/by-settlement/{settlementId}`
 - `POST /api/payments/{settlementId}/charge` (Settlement calls this; you can hit it via the gateway too)
 - `POST /api/settlements/{id}/ship` `{ "tracking": "…" }` (min 4 characters)
 - `POST /api/settlements/{id}/receive`
 - `POST /api/settlements/{id}/dispute` `{ "note": "…" }` (min 8 characters)
+- `POST /api/auctions/{id}/relist` `{ "auctionEnd": "…" }` (seller, unsold lots only)
+- `GET /api/letters` (JWT) — locker letters, newest first
 
 ## Match office
 
@@ -106,9 +110,9 @@ Each scratch and whistle is stamped on the office clip (`office.db`).
 
 NotificationService listens on RabbitMQ and pushes the live board over SignalR. IdentityService is on the same bus: a new squad name publishes `UserCreated`.
 
-Personal letters (outbid, you won, paid / ship it, shirt shipped, you're on the sheet) are composed by NotificationService and published as `LetterRequested`. **EmailService** looks up the mailbox at Identity `GET /api/auth/users/{username}` and sends SMTP.
+Personal letters (outbid, you won, paid / ship it, shirt shipped, tape match, you're on the sheet) are composed by NotificationService and published as `LetterRequested`. **EmailService** shelves every letter in `mail.db` first, then looks up the mailbox at Identity `GET /api/auth/users/{username}` and sends SMTP.
 
-Locally `./dev.sh` starts **Mailpit**. Open [http://localhost:8025](http://localhost:8025) for the inbox (`board@kitvault.test`). Production: set `Smtp:Host` (and optional `Port`, `From`, `Username`, `Password`, `Ssl`) on EmailService. Empty host means the letter stays in the EmailService log.
+Locker bay **07 Letters** (`GET /api/letters`) is that shelf. Locally `./dev.sh` also starts **Mailpit**. Open [http://localhost:8025](http://localhost:8025) for the SMTP inbox (`board@kitvault.test`). Production: set `Smtp:Host` (and optional `Port`, `From`, `Username`, `Password`, `Ssl`) on EmailService. Empty host means SMTP is skipped; the locker still holds the letter.
 
 The same events show as LED toasts and Board tape when you are signed in as the person they are for.
 

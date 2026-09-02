@@ -12,6 +12,7 @@ export type LiveAuctionUpdated = {
   createdAt: string;
   updatedAt: string;
   auctionEnd: string;
+  injury?: boolean;
   status: AuctionStatus;
   club?: string;
   playerName?: string;
@@ -239,6 +240,7 @@ export function applyLiveAuctionUpdated(queryClient: QueryClient, update: LiveAu
               status: update.status,
               updatedAt: update.updatedAt,
               auctionEnd: update.auctionEnd,
+              injury: update.injury ?? item.injury,
               reservePrice: update.reservePrice,
               club: update.club ?? item.club,
               playerName: update.playerName ?? item.playerName,
@@ -276,6 +278,7 @@ function withLiveUpdate(auction: Auction, update: LiveAuctionUpdated): Auction {
     currentHighBid: update.currentHighBid ?? auction.currentHighBid,
     updatedAt: update.updatedAt,
     auctionEnd: update.auctionEnd,
+    injury: update.injury ?? auction.injury,
     status: update.status,
     item: {
       ...auction.item,

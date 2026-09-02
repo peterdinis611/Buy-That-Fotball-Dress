@@ -17,6 +17,9 @@ function shirt(overrides: Partial<SellFields> = {}): SellFields {
     season: "2002",
     color: "Yellow",
     size: "M",
+    pitToPit: "",
+    backLength: "",
+    backNumber: "",
     kitType: "Home",
     condition: "Vintage",
     reservePrice: "400",
@@ -55,6 +58,17 @@ describe("sellFieldsSchema", () => {
     expect(payload.item.opponent).toBe("Germany");
     expect(payload.item.matchDate).toBe("2002-06-30T12:00:00.000Z");
     expect(payload.item.pitchPhotoUrl).toBe("https://placehold.co/grass.png");
+  });
+
+  it("stamps kit tape when the measures are filled", () => {
+    const parsed = v.parse(
+      sellFieldsSchema,
+      shirt({ pitToPit: "52", backLength: "71", backNumber: "25" }),
+    );
+    const payload = toCreateAuctionPayload(parsed);
+    expect(payload.item.pitToPit).toBe(52);
+    expect(payload.item.backLength).toBe(71);
+    expect(payload.item.backNumber).toBe(25);
   });
 
   it("drops blank grass fields", () => {
@@ -108,6 +122,7 @@ describe("toSellFields", () => {
     expect(fields.matchDate).toBe("2002-06-30");
     expect(fields.opponent).toBe("Germany");
     expect(fields.playerNumber).toBe("9");
+    expect(fields.pitToPit).toBe("");
   });
 });
 

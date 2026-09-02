@@ -7,6 +7,9 @@ export type AuctionItem = {
   playerNumber?: number;
   season: string;
   size: string;
+  pitToPit?: number;
+  backLength?: number;
+  backNumber?: number;
   color: string;
   kitType: string;
   condition: string;
@@ -35,6 +38,7 @@ export type Auction = {
   createdAt: string;
   updatedAt: string;
   auctionEnd: string;
+  injury?: boolean;
   status: AuctionStatus;
   item: AuctionItem;
 };
@@ -60,12 +64,16 @@ export type SearchItem = {
   createdAt: string;
   updatedAt: string;
   auctionEnd: string;
+  injury?: boolean;
   status: AuctionStatus;
   club: string;
   playerName: string;
   playerNumber?: number;
   season: string;
   size: string;
+  pitToPit?: number;
+  backLength?: number;
+  backNumber?: number;
   color: string;
   kitType: string;
   condition: string;
@@ -107,12 +115,16 @@ export type KitListing = {
   soldAmount?: number;
   currentHighBid?: number;
   auctionEnd: string;
+  injury?: boolean;
   status: AuctionStatus;
   club: string;
   playerName: string;
   playerNumber?: number;
   season: string;
   size: string;
+  pitToPit?: number;
+  backLength?: number;
+  backNumber?: number;
   color: string;
   kitType: string;
   condition: string;
@@ -156,6 +168,9 @@ export type CreateAuctionPayload = {
     playerNumber?: number;
     season: string;
     size: string;
+    pitToPit?: number;
+    backLength?: number;
+    backNumber?: number;
     color: string;
     kitType: string;
     condition: string;
@@ -180,6 +195,9 @@ export type UpdateAuctionPayload = {
   playerNumber?: number;
   season?: string;
   size?: string;
+  pitToPit?: number;
+  backLength?: number;
+  backNumber?: number;
   color?: string;
   kitType?: string;
   condition?: string;
@@ -205,12 +223,16 @@ export function fromAuction(auction: Auction): KitListing {
     soldAmount: auction.soldAmount,
     currentHighBid: auction.currentHighBid,
     auctionEnd: auction.auctionEnd,
+    injury: auction.injury,
     status: auction.status,
     club: auction.item.club,
     playerName: auction.item.playerName,
     playerNumber: auction.item.playerNumber,
     season: auction.item.season,
     size: auction.item.size,
+    pitToPit: auction.item.pitToPit,
+    backLength: auction.item.backLength,
+    backNumber: auction.item.backNumber,
     color: auction.item.color,
     kitType: auction.item.kitType,
     condition: auction.item.condition,

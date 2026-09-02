@@ -25,7 +25,7 @@ public sealed class PaymentSeedHostedService(
             AuctionId = Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466"),
             Seller = "selecao.archive",
             Buyer = "kitvault",
-            Amount = 620,
+            Amount = 682,
             Club = "Brazil",
             PlayerName = "Ronaldo Nazário",
             Status = TillStatus.Held,

@@ -1,15 +1,20 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { Suspense, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { JerseyBack } from "@/features/pitch";
 import { fromAuction, type AuthUser } from "@/lib/types";
-import { useMySettlementsQuery, usePlayerSheetQuery, useSavedPegsQuery } from "@/hooks";
+import { paySettlement } from "@/lib/api";
+import { queryKeys } from "@/lib/query";
+import { useMyLettersQuery, useMySettlementsQuery, usePlayerSheetQuery, useSavedPegsQuery } from "@/hooks";
 import { DeskRail } from "./desk-slip";
 import { TapeRail } from "./tape-rail";
+import { LetterRail } from "./letter-rail";
 import { LockerRail, type HookKind } from "./locker-hook";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-type RackId = HookKind | "desk" | "tape";
+type RackId = HookKind | "desk" | "tape" | "letters";
 
 function squadNumber(name: string) {
   let n = 0;
@@ -21,6 +26,7 @@ export function DressingRoom({ user }: { user: AuthUser }) {
   const sheet = usePlayerSheetQuery(true);
   const desks = useMySettlementsQuery(true);
   const tape = useSavedPegsQuery(true);
+  const letters = useMyLettersQuery(true);
   const number = squadNumber(user.username);
   const listed = (sheet.data?.listed ?? []).map(fromAuction);
   const chasing = (sheet.data?.chasing ?? []).map(fromAuction);
@@ -72,10 +78,16 @@ export function DressingRoom({ user }: { user: AuthUser }) {
     desks.data?.length ? "desk" : chasing.length ? "chasing" : watching.length ? "watching" : listed.length ? "listed" : won.length ? "won" : "chasing";
   const [picked, setPicked] = useState<RackId | null>(null);
   const open = picked ?? preferred;
-  const active = open === "desk" ? null : (racks.find((rack) => rack.id === open) ?? racks[0]);
+  const active =
+    open === "desk" || open === "tape" || open === "letters"
+      ? null
+      : (racks.find((rack) => rack.id === open) ?? racks[0]);
 
   return (
     <div className="relative overflow-hidden">
+      <Suspense fallback={null}>
+        <DeskReturn />
+      </Suspense>
       <div className="relative mx-auto max-w-[1400px] px-5 py-12 md:px-8 md:py-16">
         <div className="grid items-end gap-10 md:grid-cols-[1fr_auto]">
           <div className="reveal">
@@ -151,10 +163,31 @@ export function DressingRoom({ user }: { user: AuthUser }) {
               <span className="bay-tab-name">Tape</span>
               <span className="bay-tab-count">{tape.data?.length ?? 0}</span>
             </button>
+            <button
+              type="button"
+              data-open={open === "letters"}
+              onClick={() => setPicked("letters")}
+              className="bay-tab"
+            >
+              <span className="bay-tab-no">07</span>
+              <span className="bay-tab-name">Letters</span>
+              <span className="bay-tab-count">{letters.data?.length ?? 0}</span>
+            </button>
         </nav>
 
         <section className="mt-10" aria-live="polite">
-          {open === "tape" ? (
+          {open === "letters" ? (
+            <>
+              <div className="mb-4 flex items-end justify-between gap-4">
+                <h2 className="text-5xl leading-none text-[var(--ink)] md:text-6xl">Letters</h2>
+                <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
+                  {letters.data?.length ?? 0} on the hook
+                </p>
+              </div>
+              <div className="peg-rail" />
+              <LetterRail rows={letters.data ?? []} loading={letters.isLoading} />
+            </>
+          ) : open === "tape" ? (
             <>
               <div className="mb-4 flex items-end justify-between gap-4">
                 <h2 className="text-5xl leading-none text-[var(--ink)] md:text-6xl">Tape</h2>
@@ -200,4 +233,29 @@ export function DressingRoom({ user }: { user: AuthUser }) {
       </div>
     </div>
   );
+}
+
+function DeskReturn() {
+  const params = useSearchParams();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const ran = useRef(false);
+
+  useEffect(() => {
+    const desk = params.get("desk");
+    const session = params.get("session_id");
+    if (!desk || !session || ran.current) return;
+    ran.current = true;
+    void paySettlement(desk, { sessionId: session })
+      .then((row) => {
+        queryClient.setQueryData(queryKeys.settlements.auction(row.auctionId), row);
+        void queryClient.invalidateQueries({ queryKey: queryKeys.settlements.mine() });
+        router.replace("/profile");
+      })
+      .catch(() => {
+        ran.current = false;
+      });
+  }, [params, queryClient, router]);
+
+  return null;
 }

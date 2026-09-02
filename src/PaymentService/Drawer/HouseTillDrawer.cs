@@ -1,3 +1,4 @@
+using PaymentService.DTOs;
 using PaymentService.Entities;
 
 namespace PaymentService.Drawer;
@@ -7,9 +8,9 @@ namespace PaymentService.Drawer;
 /// </summary>
 public sealed class HouseTillDrawer : ITillDrawer
 {
-    public Task<string> CaptureAsync(Till till, CancellationToken cancellationToken)
+    public Task<TillStamp> CaptureAsync(Till till, ChargeDeskDto? desk, CancellationToken cancellationToken)
     {
         var slip = $"CARD-{till.SettlementId.ToString("N")[..8].ToUpperInvariant()}";
-        return Task.FromResult(slip);
+        return Task.FromResult(new TillStamp(slip, null));
     }
 }

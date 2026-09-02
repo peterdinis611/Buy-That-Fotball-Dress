@@ -41,7 +41,7 @@ export function KitPeg({ listing, index = 0 }: { listing: KitListing; index?: nu
         {formatMoney(listing.currentHighBid ?? listing.reservePrice)}
       </p>
       <p className="mt-1 text-[11px] tracking-[0.12em] text-[var(--muted-foreground)] uppercase">Current bid</p>
-      <Countdown endsAt={listing.auctionEnd} className="text-base text-[var(--ink)]/85" />
+      <Countdown endsAt={listing.auctionEnd} injury={listing.injury} className="text-base text-[var(--ink)]/85" />
     </Link>
   );
 }

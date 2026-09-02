@@ -70,6 +70,18 @@ public class ItemValidator : AbstractValidator<Item>
             .Must(size => JerseyRules.Sizes.Contains(size, StringComparer.OrdinalIgnoreCase))
             .WithMessage($"Size must be one of: {string.Join(", ", JerseyRules.Sizes)}.");
 
+        RuleFor(x => x.PitToPit)
+            .InclusiveBetween(1, 120)
+            .When(x => x.PitToPit is not null);
+
+        RuleFor(x => x.BackLength)
+            .InclusiveBetween(1, 120)
+            .When(x => x.BackLength is not null);
+
+        RuleFor(x => x.BackNumber)
+            .InclusiveBetween(1, 80)
+            .When(x => x.BackNumber is not null);
+
         RuleFor(x => x.Color)
             .NotEmpty()
             .Length(JerseyRules.MinNameLength, JerseyRules.MaxColorLength);

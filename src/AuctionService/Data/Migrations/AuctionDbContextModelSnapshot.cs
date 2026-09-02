@@ -35,6 +35,9 @@ namespace AuctionService.Data.Migrations
                     b.Property<string>("HighBidder")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Injury")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ReservePrice")
                         .HasColumnType("INTEGER");
 
@@ -146,6 +149,15 @@ namespace AuctionService.Data.Migrations
                     b.Property<string>("Size")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("PitToPit")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("BackLength")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("BackNumber")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("VerifiedBy")
                         .HasColumnType("TEXT");

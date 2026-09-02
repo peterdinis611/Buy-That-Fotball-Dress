@@ -1,6 +1,6 @@
 namespace NotificationService.Post;
 
-public sealed record Letter(string ToUsername, string Subject, string Body);
+public sealed record Letter(string ToUsername, string Subject, string Body, string Kind = "board");
 
 public sealed record Tape(
     string Id,

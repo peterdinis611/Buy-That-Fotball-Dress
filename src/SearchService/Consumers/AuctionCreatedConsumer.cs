@@ -51,7 +51,8 @@ public class AuctionCreatedConsumer(
             {
                 ToUsername = peg.Username,
                 Subject = $"{item.Club} {item.PlayerName} hung",
-                Body = $"{item.PlayerName} · {item.Club} is on the rail at {price} €. Your tape matched."
+                Body = $"{item.PlayerName} · {item.Club} is on the rail at {price} €. Your tape matched.",
+                Kind = "tape"
             }, cancellationToken);
         }
     }
