@@ -1,6 +1,7 @@
 using AuctionService.Data;
 using AuctionService.Entities;
 using AuctionService.Mapping;
+using AuctionService.Services;
 using Caching;
 using Contracts;
 using MassTransit;
@@ -48,6 +49,8 @@ public class BidPlacedConsumer(
             auction.UpdatedAt = DateTime.UtcNow;
         }
 
+        var injury = InjuryClock.TryAdd(auction, DateTime.UtcNow);
+
         var alreadyChasing = await db.AuctionBidders.AnyAsync(
             x => x.AuctionId == auction.Id && x.Bidder.ToLower() == message.Bidder.ToLower(),
             context.CancellationToken);
@@ -63,7 +66,7 @@ public class BidPlacedConsumer(
 
         await db.SaveChangesAsync(context.CancellationToken);
 
-        if (isNewHigh)
+        if (isNewHigh || injury)
             await publishEndpoint.Publish(auction.ToAuctionUpdated(), context.CancellationToken);
 
         await cache.RemoveAsync(CacheKeys.Auction(auction.Id), context.CancellationToken);

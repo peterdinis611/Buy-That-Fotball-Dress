@@ -14,6 +14,7 @@ public class AuctionDto
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime AuctionEnd { get; set; }
+    public bool Injury { get; set; }
     public Status Status { get; set; }
     public required ItemDto Item { get; set; }
 }

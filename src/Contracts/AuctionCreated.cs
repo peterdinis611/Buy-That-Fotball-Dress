@@ -11,12 +11,16 @@ public class AuctionCreated
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime AuctionEnd { get; set; }
+    public bool Injury { get; set; }
     public string Status { get; set; } = string.Empty;
     public string Club { get; set; } = string.Empty;
     public string PlayerName { get; set; } = string.Empty;
     public int? PlayerNumber { get; set; }
     public string Season { get; set; } = string.Empty;
     public string Size { get; set; } = string.Empty;
+    public int? PitToPit { get; set; }
+    public int? BackLength { get; set; }
+    public int? BackNumber { get; set; }
     public string Color { get; set; } = string.Empty;
     public string KitType { get; set; } = string.Empty;
     public string Condition { get; set; } = string.Empty;

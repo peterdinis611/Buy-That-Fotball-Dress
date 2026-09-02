@@ -8,6 +8,9 @@ public class Item
     public int? PlayerNumber { get; set; }
     public required string Season { get; set; }
     public required string Size { get; set; }
+    public int? PitToPit { get; set; }
+    public int? BackLength { get; set; }
+    public int? BackNumber { get; set; }
     public required string Color { get; set; }
     public required string KitType { get; set; }
     public required string Condition { get; set; }

@@ -113,6 +113,43 @@ public sealed class AuctionsService(
         return Result<AuctionDto>.Success(auction.ToDto());
     }
 
+    public async Task<Result<AuctionDto>> RelistAsync(
+        Guid id,
+        DateTime auctionEnd,
+        string seller,
+        CancellationToken cancellationToken)
+    {
+        var auction = await db.Auctions
+            .Include(x => x.Item)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (auction is null)
+            return Result<AuctionDto>.NotFound($"Auction '{id}' was not found.");
+
+        if (!string.Equals(auction.Seller, seller, StringComparison.OrdinalIgnoreCase))
+            return Result<AuctionDto>.Forbidden("Only the seller can hang this shirt again.");
+
+        if (auction.Status is not Status.ReserveNotMet)
+            return Result<AuctionDto>.Conflict("Only unsold lots can hang again.");
+
+        if (auctionEnd.ToUniversalTime() <= DateTime.UtcNow)
+            return Result<AuctionDto>.BadRequest("Auction end must be in the future.");
+
+        auction.Status = Status.Live;
+        auction.AuctionEnd = auctionEnd.ToUniversalTime();
+        auction.Injury = false;
+        auction.CurrentHighBid = null;
+        auction.HighBidder = null;
+        auction.Winner = null;
+        auction.SoldAmount = null;
+        auction.UpdatedAt = DateTime.UtcNow;
+        await db.SaveChangesAsync(cancellationToken);
+        await publishEndpoint.Publish(auction.ToAuctionUpdated(), cancellationToken);
+        await InvalidateLotAsync(auction.Id, cancellationToken);
+
+        return Result<AuctionDto>.Success(auction.ToDto());
+    }
+
     public async Task<Result> DeleteAsync(Guid id, string seller, CancellationToken cancellationToken)
     {
         var auction = await db.Auctions.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);

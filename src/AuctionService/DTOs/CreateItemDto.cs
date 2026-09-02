@@ -19,6 +19,15 @@ public class CreateItemDto
     [Required, MaxLength(10)]
     public required string Size { get; set; }
 
+    [Range(1, 120)]
+    public int? PitToPit { get; set; }
+
+    [Range(1, 120)]
+    public int? BackLength { get; set; }
+
+    [Range(1, 80)]
+    public int? BackNumber { get; set; }
+
     [Required, MaxLength(50)]
     public required string Color { get; set; }
 

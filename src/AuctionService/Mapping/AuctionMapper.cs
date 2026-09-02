@@ -18,6 +18,7 @@ public static class AuctionMapper
         CreatedAt = auction.CreatedAt,
         UpdatedAt = auction.UpdatedAt,
         AuctionEnd = auction.AuctionEnd,
+        Injury = auction.Injury,
         Status = auction.Status,
         Item = auction.Item.ToDto()
     };
@@ -30,6 +31,9 @@ public static class AuctionMapper
         PlayerNumber = item.PlayerNumber,
         Season = item.Season,
         Size = item.Size,
+        PitToPit = item.PitToPit,
+        BackLength = item.BackLength,
+        BackNumber = item.BackNumber,
         Color = item.Color,
         KitType = item.KitType,
         Condition = item.Condition,
@@ -68,6 +72,9 @@ public static class AuctionMapper
                 PlayerNumber = dto.Item.PlayerNumber,
                 Season = dto.Item.Season.Trim(),
                 Size = dto.Item.Size.Trim().ToUpperInvariant(),
+                PitToPit = dto.Item.PitToPit,
+                BackLength = dto.Item.BackLength,
+                BackNumber = dto.Item.BackNumber,
                 Color = dto.Item.Color.Trim(),
                 KitType = dto.Item.KitType.Trim(),
                 Condition = dto.Item.Condition.Trim(),
@@ -107,6 +114,15 @@ public static class AuctionMapper
 
         if (dto.Size is not null)
             auction.Item.Size = dto.Size.Trim().ToUpperInvariant();
+
+        if (dto.PitToPit is not null)
+            auction.Item.PitToPit = dto.PitToPit;
+
+        if (dto.BackLength is not null)
+            auction.Item.BackLength = dto.BackLength;
+
+        if (dto.BackNumber is not null)
+            auction.Item.BackNumber = dto.BackNumber;
 
         if (dto.Color is not null)
             auction.Item.Color = dto.Color.Trim();
@@ -161,12 +177,16 @@ public static class AuctionMapper
         CreatedAt = auction.CreatedAt,
         UpdatedAt = auction.UpdatedAt,
         AuctionEnd = auction.AuctionEnd,
+        Injury = auction.Injury,
         Status = auction.Status.ToString(),
         Club = auction.Item.Club,
         PlayerName = auction.Item.PlayerName,
         PlayerNumber = auction.Item.PlayerNumber,
         Season = auction.Item.Season,
         Size = auction.Item.Size,
+        PitToPit = auction.Item.PitToPit,
+        BackLength = auction.Item.BackLength,
+        BackNumber = auction.Item.BackNumber,
         Color = auction.Item.Color,
         KitType = auction.Item.KitType,
         Condition = auction.Item.Condition,
@@ -195,12 +215,16 @@ public static class AuctionMapper
         CreatedAt = auction.CreatedAt,
         UpdatedAt = auction.UpdatedAt,
         AuctionEnd = auction.AuctionEnd,
+        Injury = auction.Injury,
         Status = auction.Status.ToString(),
         Club = auction.Item.Club,
         PlayerName = auction.Item.PlayerName,
         PlayerNumber = auction.Item.PlayerNumber,
         Season = auction.Item.Season,
         Size = auction.Item.Size,
+        PitToPit = auction.Item.PitToPit,
+        BackLength = auction.Item.BackLength,
+        BackNumber = auction.Item.BackNumber,
         Color = auction.Item.Color,
         KitType = auction.Item.KitType,
         Condition = auction.Item.Condition,
