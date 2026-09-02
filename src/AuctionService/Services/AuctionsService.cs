@@ -138,10 +138,41 @@ public sealed class AuctionsService(
         auction.Status = Status.Live;
         auction.AuctionEnd = auctionEnd.ToUniversalTime();
         auction.Injury = false;
+        auction.InjuryCount = 0;
         auction.CurrentHighBid = null;
         auction.HighBidder = null;
         auction.Winner = null;
         auction.SoldAmount = null;
+        auction.UpdatedAt = DateTime.UtcNow;
+        await db.SaveChangesAsync(cancellationToken);
+        await publishEndpoint.Publish(auction.ToAuctionUpdated(), cancellationToken);
+        await InvalidateLotAsync(auction.Id, cancellationToken);
+
+        return Result<AuctionDto>.Success(auction.ToDto());
+    }
+
+    public async Task<Result<AuctionDto>> TakeAsync(Guid id, string seller, CancellationToken cancellationToken)
+    {
+        var auction = await db.Auctions
+            .Include(x => x.Item)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (auction is null)
+            return Result<AuctionDto>.NotFound($"Auction '{id}' was not found.");
+
+        if (!string.Equals(auction.Seller, seller, StringComparison.OrdinalIgnoreCase))
+            return Result<AuctionDto>.Forbidden("Only the seller can take this bid.");
+
+        if (auction.Status is not Status.ReserveNotMet)
+            return Result<AuctionDto>.Conflict("Only unsold lots can take the last bid.");
+
+        if (auction.CurrentHighBid is not int hammer || hammer <= 0 || string.IsNullOrWhiteSpace(auction.HighBidder))
+            return Result<AuctionDto>.Conflict("Nobody bid. Hang it again.");
+
+        auction.Status = Status.Finished;
+        auction.Winner = auction.HighBidder;
+        auction.SoldAmount = hammer;
+        auction.Injury = false;
         auction.UpdatedAt = DateTime.UtcNow;
         await db.SaveChangesAsync(cancellationToken);
         await publishEndpoint.Publish(auction.ToAuctionUpdated(), cancellationToken);

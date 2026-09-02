@@ -19,6 +19,7 @@ public interface IAuctionsService
     Task<Result> ScratchAsync(Guid id, CancellationToken cancellationToken);
     Task<Result<AuctionDto>> VerifyAsync(Guid id, string steward, CancellationToken cancellationToken);
     Task<Result<AuctionDto>> RelistAsync(Guid id, DateTime auctionEnd, string seller, CancellationToken cancellationToken);
+    Task<Result<AuctionDto>> TakeAsync(Guid id, string seller, CancellationToken cancellationToken);
     Task<int> CloseExpiredAsync(CancellationToken cancellationToken);
     Task<Result> WatchAsync(Guid id, string watcher, CancellationToken cancellationToken);
     Task<Result> UnwatchAsync(Guid id, string watcher, CancellationToken cancellationToken);

@@ -24,6 +24,7 @@ public class SettlementOpenedConsumer(
             Seller = message.Seller,
             Buyer = message.Buyer,
             Amount = message.Amount,
+            Hammer = message.Hammer,
             Club = message.Club,
             PlayerName = message.PlayerName,
             Status = TillStatus.Held,

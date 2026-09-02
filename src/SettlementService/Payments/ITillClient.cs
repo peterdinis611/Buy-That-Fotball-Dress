@@ -6,6 +6,8 @@ namespace SettlementService.Payments;
 
 public sealed record TillCharge(string? Slip, string? CheckoutUrl);
 
+public sealed record TillPayout(string? PayoutRef);
+
 public interface ITillClient
 {
     Task<Result<TillCharge>> ChargeAsync(
@@ -13,4 +15,6 @@ public interface ITillClient
         string buyer,
         PayDeskDto? pay,
         CancellationToken cancellationToken);
+
+    Task<Result<TillPayout>> ReleaseAsync(Settlement desk, CancellationToken cancellationToken);
 }

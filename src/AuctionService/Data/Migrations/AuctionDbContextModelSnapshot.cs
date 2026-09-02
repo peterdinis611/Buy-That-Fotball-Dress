@@ -38,6 +38,9 @@ namespace AuctionService.Data.Migrations
                     b.Property<bool>("Injury")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("InjuryCount")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ReservePrice")
                         .HasColumnType("INTEGER");
 

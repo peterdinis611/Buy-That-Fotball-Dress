@@ -13,4 +13,5 @@ public interface ISettlementsService
     Task<Result<SettlementDto>> ReceiveAsync(Guid id, string username, CancellationToken cancellationToken);
     Task<Result<SettlementDto>> DisputeAsync(Guid id, string username, string? note, CancellationToken cancellationToken);
     Task<Result<SettlementDto>> WhistleAsync(Guid id, CancellationToken cancellationToken);
+    Task<int> RequestOverdueReleasesAsync(CancellationToken cancellationToken);
 }

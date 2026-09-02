@@ -82,6 +82,26 @@ public class SettlementsServiceTests
     }
 
     [Fact]
+    public async Task Pay_is_idempotent_once_paid()
+    {
+        await using var sqlite = SqliteHarness.Settlement();
+        var desk = OpenDesk();
+        desk.Status = DeskStatus.Paid;
+        desk.PaymentRef = "TILL-ALREADY";
+        sqlite.Db.Settlements.Add(desk);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var service = new SettlementsService(sqlite.Db, publish, new FakeTillClient());
+
+        var result = await service.PayAsync(desk.Id, "kitvault", default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(DeskStatus.Paid, result.Value!.Status);
+        Assert.Equal("TILL-ALREADY", result.Value.PaymentRef);
+        await publish.DidNotReceive().Publish(Arg.Any<SettlementPaid>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task Ship_waits_for_pay()
     {
         await using var sqlite = SqliteHarness.Settlement();
@@ -123,6 +143,28 @@ public class SettlementsServiceTests
         var result = await service.ReceiveAsync(desk.Id, "kitvault", default);
 
         Assert.Equal(409, result.StatusCode);
+    }
+
+    [Fact]
+    public async Task Receive_pays_the_hammer()
+    {
+        await using var sqlite = SqliteHarness.Settlement();
+        var desk = OpenDesk();
+        desk.Status = DeskStatus.Shipped;
+        desk.Hammer = 620;
+        desk.Tracking = "DHL-1234";
+        desk.ShippedAt = DateTime.UtcNow.AddDays(-1);
+        sqlite.Db.Settlements.Add(desk);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var service = new SettlementsService(sqlite.Db, publish, new FakeTillClient());
+
+        var result = await service.ReceiveAsync(desk.Id, "kitvault", default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(DeskStatus.Received, result.Value!.Status);
+        Assert.StartsWith("HAMMER-", result.Value.PayoutRef);
+        await publish.Received(1).Publish(Arg.Any<SettlementReceived>(), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -213,6 +255,59 @@ public class SettlementsServiceTests
         await consumer.Consume(context);
 
         Assert.Empty(sqlite.Db.Settlements);
+    }
+
+    [Fact]
+    public async Task Till_slip_marks_an_open_desk_paid()
+    {
+        await using var sqlite = SqliteHarness.Settlement();
+        var desk = OpenDesk();
+        sqlite.Db.Settlements.Add(desk);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var consumer = new PaymentCapturedConsumer(sqlite.Db, publish, NullLogger<PaymentCapturedConsumer>.Instance);
+        var context = Substitute.For<ConsumeContext<PaymentCaptured>>();
+        context.Message.Returns(new PaymentCaptured
+        {
+            Id = Guid.NewGuid(),
+            SettlementId = desk.Id,
+            AuctionId = desk.AuctionId,
+            Seller = desk.Seller,
+            Buyer = desk.Buyer,
+            Amount = desk.Amount,
+            Club = desk.Club,
+            PlayerName = desk.PlayerName,
+            Slip = "pi_webhook",
+            CapturedAt = DateTime.UtcNow
+        });
+        context.CancellationToken.Returns(CancellationToken.None);
+
+        await consumer.Consume(context);
+
+        Assert.Equal(DeskStatus.Paid, sqlite.Db.Settlements.Single().Status);
+        Assert.Equal("pi_webhook", sqlite.Db.Settlements.Single().PaymentRef);
+        await publish.Received(1).Publish(Arg.Any<SettlementPaid>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Overdue_ship_asks_the_till_to_release()
+    {
+        await using var sqlite = SqliteHarness.Settlement();
+        var desk = OpenDesk();
+        desk.Status = DeskStatus.Shipped;
+        desk.Hammer = 620;
+        desk.ShippedAt = DateTime.UtcNow.AddDays(-8);
+        sqlite.Db.Settlements.Add(desk);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var service = new SettlementsService(sqlite.Db, publish, new FakeTillClient());
+
+        var count = await service.RequestOverdueReleasesAsync(default);
+
+        Assert.Equal(1, count);
+        await publish.Received(1).Publish(
+            Arg.Is<EscrowReleaseRequested>(x => x.SettlementId == desk.Id && x.Hammer == 620),
+            Arg.Any<CancellationToken>());
     }
 
     private static Settlement OpenDesk() => new()

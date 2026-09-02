@@ -13,6 +13,7 @@ public sealed class PaymentSeedHostedService(
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
         await db.Database.EnsureCreatedAsync(cancellationToken);
+        await TryAddEscrowColumnsAsync(db, cancellationToken);
 
         var settlementId = Guid.Parse("c0a1d2e3-4b56-7890-abcd-ef1234567890");
         if (await db.Tills.AnyAsync(x => x.SettlementId == settlementId, cancellationToken))
@@ -26,6 +27,7 @@ public sealed class PaymentSeedHostedService(
             Seller = "selecao.archive",
             Buyer = "kitvault",
             Amount = 682,
+            Hammer = 620,
             Club = "Brazil",
             PlayerName = "Ronaldo Nazário",
             Status = TillStatus.Held,
@@ -36,4 +38,40 @@ public sealed class PaymentSeedHostedService(
     }
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
+    private static async Task TryAddEscrowColumnsAsync(PaymentDbContext db, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync(
+                "ALTER TABLE Tills ADD COLUMN Hammer INTEGER NOT NULL DEFAULT 0",
+                cancellationToken);
+        }
+        catch
+        {
+            // Column already exists.
+        }
+
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync(
+                "ALTER TABLE Tills ADD COLUMN PayoutRef TEXT",
+                cancellationToken);
+        }
+        catch
+        {
+            // Column already exists.
+        }
+
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync(
+                "ALTER TABLE Tills ADD COLUMN ReleasedAt TEXT",
+                cancellationToken);
+        }
+        catch
+        {
+            // Column already exists.
+        }
+    }
 }

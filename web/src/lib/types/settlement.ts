@@ -18,6 +18,7 @@ export type Settlement = {
   paidAt?: string;
   shippedAt?: string;
   receivedAt?: string;
+  payoutRef?: string;
   disputedBy?: string;
   disputeNote?: string;
 };

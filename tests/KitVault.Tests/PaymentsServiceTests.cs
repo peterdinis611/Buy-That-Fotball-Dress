@@ -102,6 +102,63 @@ public class PaymentsServiceTests
         Assert.Equal(opened.Id, till.SettlementId);
         Assert.Equal("kitvault", till.Buyer);
         Assert.Equal(TillStatus.Held, till.Status);
+        Assert.Equal(620, till.Hammer);
+        Assert.Equal(620, till.Amount);
+    }
+
+    [Fact]
+    public async Task Release_pays_the_hammer()
+    {
+        await using var sqlite = SqliteHarness.Payment();
+        var till = HeldTill();
+        till.Status = TillStatus.Captured;
+        till.Slip = "CARD-TEST";
+        till.CapturedAt = DateTime.UtcNow;
+        sqlite.Db.Tills.Add(till);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var service = new TillsService(sqlite.Db, new HouseTillDrawer(), publish);
+
+        var result = await service.ReleaseAsync(till.SettlementId, default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(TillStatus.Released, result.Value!.Status);
+        Assert.StartsWith("HAMMER-", result.Value.PayoutRef);
+        await publish.Received(1).Publish(
+            Arg.Is<PaymentReleased>(x => x.SettlementId == till.SettlementId && x.Hammer == 620),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Release_is_idempotent()
+    {
+        await using var sqlite = SqliteHarness.Payment();
+        var till = HeldTill();
+        till.Status = TillStatus.Released;
+        till.Slip = "CARD-TEST";
+        till.PayoutRef = "HAMMER-ALREADY";
+        sqlite.Db.Tills.Add(till);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var service = new TillsService(sqlite.Db, new HouseTillDrawer(), publish);
+
+        var result = await service.ReleaseAsync(till.SettlementId, default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal("HAMMER-ALREADY", result.Value!.PayoutRef);
+        await publish.DidNotReceive().Publish(Arg.Any<PaymentReleased>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task House_webhook_is_a_no_op()
+    {
+        await using var sqlite = SqliteHarness.Payment();
+        var service = new TillsService(sqlite.Db, new HouseTillDrawer(), Substitute.For<IPublishEndpoint>());
+
+        var result = await service.ApplyWebhookAsync("{}", "", default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Empty(sqlite.Db.Tills);
     }
 
     private static Till HeldTill() => new()
@@ -112,6 +169,7 @@ public class PaymentsServiceTests
         Seller = "selecao.archive",
         Buyer = "kitvault",
         Amount = 620,
+        Hammer = 620,
         Club = "Brazil",
         PlayerName = "Ronaldo Nazário",
         Status = TillStatus.Held,
@@ -125,6 +183,7 @@ public class PaymentsServiceTests
         Seller = "selecao.archive",
         Buyer = "kitvault",
         Amount = 620,
+        Hammer = 620,
         Club = "Brazil",
         PlayerName = "Ronaldo Nazário",
         OpenedAt = DateTime.UtcNow

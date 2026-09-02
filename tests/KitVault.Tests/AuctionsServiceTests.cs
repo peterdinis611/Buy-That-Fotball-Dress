@@ -282,4 +282,44 @@ public class AuctionsServiceTests
 
         Assert.Equal(409, result.StatusCode);
     }
+
+    [Fact]
+    public async Task Take_finishes_an_unsold_lot_on_the_high_bid()
+    {
+        await using var sqlite = SqliteHarness.Auction();
+        var auction = Lots.LiveAuction();
+        auction.Status = Status.ReserveNotMet;
+        auction.CurrentHighBid = 410;
+        auction.HighBidder = "kitvault";
+        sqlite.Db.Auctions.Add(auction);
+        await sqlite.Db.SaveChangesAsync();
+        var publish = Substitute.For<IPublishEndpoint>();
+        var service = new AuctionsService(sqlite.Db, publish, new MemoryPitchCache());
+
+        var result = await service.TakeAsync(auction.Id, auction.Seller, default);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(Status.Finished, result.Value!.Status);
+        Assert.Equal("kitvault", result.Value.Winner);
+        Assert.Equal(410, result.Value.SoldAmount);
+        await publish.Received(1).Publish(
+            Arg.Is<AuctionUpdated>(x => x.Status == "Finished" && x.Winner == "kitvault" && x.SoldAmount == 410),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Take_needs_a_bid()
+    {
+        await using var sqlite = SqliteHarness.Auction();
+        var auction = Lots.LiveAuction();
+        auction.Status = Status.ReserveNotMet;
+        sqlite.Db.Auctions.Add(auction);
+        await sqlite.Db.SaveChangesAsync();
+        var service = new AuctionsService(sqlite.Db, Substitute.For<IPublishEndpoint>(), new MemoryPitchCache());
+
+        var result = await service.TakeAsync(auction.Id, auction.Seller, default);
+
+        Assert.Equal(409, result.StatusCode);
+        Assert.Equal("Nobody bid. Hang it again.", result.Error);
+    }
 }

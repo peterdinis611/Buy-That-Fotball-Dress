@@ -8,4 +8,5 @@ public class LetterDto
     public required string Subject { get; set; }
     public required string Body { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime? ReadAt { get; set; }
 }

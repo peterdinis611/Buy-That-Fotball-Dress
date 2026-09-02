@@ -121,6 +121,17 @@ export async function relistAuction(id: string, auctionEnd: string) {
   return (await response.json()) as Auction;
 }
 
+export async function takeAuction(id: string) {
+  const response = await fetch(`${apiBase()}/api/auctions/${id}/take`, {
+    method: "POST",
+    headers: authHeaders(),
+  });
+
+  if (response.status === 401) throw new Error("Sign in first.");
+  if (!response.ok) throw new Error(await readError(response));
+  return (await response.json()) as Auction;
+}
+
 export async function watchAuction(id: string) {
   const response = await fetch(`${apiBase()}/api/auctions/${id}/watch`, {
     method: "POST",

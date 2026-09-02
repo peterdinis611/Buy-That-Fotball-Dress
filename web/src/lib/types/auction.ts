@@ -39,6 +39,7 @@ export type Auction = {
   updatedAt: string;
   auctionEnd: string;
   injury?: boolean;
+  injuryCount?: number;
   status: AuctionStatus;
   item: AuctionItem;
 };
@@ -116,6 +117,7 @@ export type KitListing = {
   currentHighBid?: number;
   auctionEnd: string;
   injury?: boolean;
+  injuryCount?: number;
   status: AuctionStatus;
   club: string;
   playerName: string;
@@ -224,6 +226,7 @@ export function fromAuction(auction: Auction): KitListing {
     currentHighBid: auction.currentHighBid,
     auctionEnd: auction.auctionEnd,
     injury: auction.injury,
+    injuryCount: auction.injuryCount,
     status: auction.status,
     club: auction.item.club,
     playerName: auction.item.playerName,

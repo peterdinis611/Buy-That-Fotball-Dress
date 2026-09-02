@@ -49,6 +49,7 @@ public class AuctionUpdatedConsumer(
             Seller = row.Seller,
             Buyer = row.Buyer,
             Amount = row.Amount,
+            Hammer = row.Hammer,
             Club = row.Club,
             PlayerName = row.PlayerName,
             OpenedAt = row.OpenedAt

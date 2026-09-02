@@ -12,6 +12,7 @@ public static class LetterMapper
         Kind = row.Kind,
         Subject = row.Subject,
         Body = row.Body,
-        CreatedAt = row.CreatedAt
+        CreatedAt = row.CreatedAt,
+        ReadAt = row.ReadAt
     };
 }

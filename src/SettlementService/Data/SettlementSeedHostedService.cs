@@ -15,6 +15,7 @@ public sealed class SettlementSeedHostedService(
         await db.Database.EnsureCreatedAsync(cancellationToken);
         await TryAddPaymentRefAsync(db, cancellationToken);
         await TryAddCutColumnsAsync(db, cancellationToken);
+        await TryAddPayoutRefAsync(db, cancellationToken);
 
         var auctionId = Guid.Parse("9c5b1e08-6a24-4d73-8f91-3e0b7c2a5466");
         if (await db.Settlements.AnyAsync(x => x.AuctionId == auctionId, cancellationToken))
@@ -71,6 +72,20 @@ public sealed class SettlementSeedHostedService(
         {
             await db.Database.ExecuteSqlRawAsync(
                 "ALTER TABLE Settlements ADD COLUMN Desk INTEGER NOT NULL DEFAULT 0",
+                cancellationToken);
+        }
+        catch
+        {
+            // Column already exists.
+        }
+    }
+
+    private static async Task TryAddPayoutRefAsync(SettlementDbContext db, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync(
+                "ALTER TABLE Settlements ADD COLUMN PayoutRef TEXT",
                 cancellationToken);
         }
         catch

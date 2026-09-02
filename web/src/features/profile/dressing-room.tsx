@@ -27,6 +27,7 @@ export function DressingRoom({ user }: { user: AuthUser }) {
   const desks = useMySettlementsQuery(true);
   const tape = useSavedPegsQuery(true);
   const letters = useMyLettersQuery(true);
+  const unreadLetters = letters.data?.filter((row) => !row.readAt).length ?? 0;
   const number = squadNumber(user.username);
   const listed = (sheet.data?.listed ?? []).map(fromAuction);
   const chasing = (sheet.data?.chasing ?? []).map(fromAuction);
@@ -171,7 +172,7 @@ export function DressingRoom({ user }: { user: AuthUser }) {
             >
               <span className="bay-tab-no">07</span>
               <span className="bay-tab-name">Letters</span>
-              <span className="bay-tab-count">{letters.data?.length ?? 0}</span>
+              <span className="bay-tab-count">{unreadLetters}</span>
             </button>
         </nav>
 
@@ -181,7 +182,7 @@ export function DressingRoom({ user }: { user: AuthUser }) {
               <div className="mb-4 flex items-end justify-between gap-4">
                 <h2 className="text-5xl leading-none text-[var(--ink)] md:text-6xl">Letters</h2>
                 <p className="font-[family-name:var(--font-display)] text-lg tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
-                  {letters.data?.length ?? 0} on the hook
+                  {unreadLetters} unread
                 </p>
               </div>
               <div className="peg-rail" />

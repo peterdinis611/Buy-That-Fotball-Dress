@@ -23,6 +23,7 @@ public static class SettlementMapper
         PaidAt = row.PaidAt,
         ShippedAt = row.ShippedAt,
         ReceivedAt = row.ReceivedAt,
+        PayoutRef = row.PayoutRef,
         DisputedBy = row.DisputedBy,
         DisputeNote = row.DisputeNote
     };

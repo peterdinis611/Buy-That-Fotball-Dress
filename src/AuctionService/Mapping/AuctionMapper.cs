@@ -19,6 +19,7 @@ public static class AuctionMapper
         UpdatedAt = auction.UpdatedAt,
         AuctionEnd = auction.AuctionEnd,
         Injury = auction.Injury,
+        InjuryCount = auction.InjuryCount,
         Status = auction.Status,
         Item = auction.Item.ToDto()
     };

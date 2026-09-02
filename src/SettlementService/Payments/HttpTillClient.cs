@@ -77,9 +77,53 @@ public sealed class HttpTillClient(IHttpClientFactory http) : ITillClient
         }
     }
 
+    public async Task<Result<TillPayout>> ReleaseAsync(Settlement desk, CancellationToken cancellationToken)
+    {
+        var client = http.CreateClient("Payment");
+        HttpResponseMessage response;
+        try
+        {
+            response = await client.PostAsync($"/api/payments/{desk.Id}/release", null, cancellationToken);
+        }
+        catch (HttpRequestException)
+        {
+            return Result<TillPayout>.Fail("The till is shut. Try again in a minute.", StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (TaskCanceledException)
+        {
+            return Result<TillPayout>.Fail("The till did not answer. Try again in a minute.", StatusCodes.Status503ServiceUnavailable);
+        }
+
+        using (response)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadFromJsonAsync<TillSlip>(Json, cancellationToken);
+                if (string.IsNullOrWhiteSpace(body?.PayoutRef))
+                    return Result<TillPayout>.Fail("The till did not pay the hammer.", StatusCodes.Status502BadGateway);
+                return Result<TillPayout>.Success(new TillPayout(body.PayoutRef));
+            }
+
+            var title = "The till refused that payout.";
+            try
+            {
+                var hint = await response.Content.ReadFromJsonAsync<ProblemHint>(Json, cancellationToken);
+                if (!string.IsNullOrWhiteSpace(hint?.Title))
+                    title = hint.Title;
+            }
+            catch
+            {
+                // keep fallback
+            }
+
+            return Result<TillPayout>.Fail(title, (int)response.StatusCode);
+        }
+    }
+
     private sealed class TillSlip
     {
         public string? Slip { get; set; }
+        public string? PayoutRef { get; set; }
         public string? CheckoutUrl { get; set; }
     }
 

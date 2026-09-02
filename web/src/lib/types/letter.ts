@@ -5,4 +5,5 @@ export type BoardLetter = {
   subject: string;
   body: string;
   createdAt: string;
+  readAt?: string | null;
 };

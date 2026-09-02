@@ -10,6 +10,7 @@ import {
   getPlayerSheet,
   placeBid,
   relistAuction,
+  takeAuction,
   unwatchAuction,
   updateAuction,
   watchAuction,
@@ -135,6 +136,19 @@ export function useRelistAuctionMutation(auctionId: string) {
     onSuccess: (auction) => {
       queryClient.setQueryData(queryKeys.auctions.detail(auction.id), auction);
       bumpCaches(queryClient);
+    },
+  });
+}
+
+export function useTakeAuctionMutation(auctionId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => takeAuction(auctionId),
+    onSuccess: (auction) => {
+      queryClient.setQueryData(queryKeys.auctions.detail(auction.id), auction);
+      bumpCaches(queryClient);
+      void queryClient.invalidateQueries({ queryKey: queryKeys.settlements.all });
     },
   });
 }

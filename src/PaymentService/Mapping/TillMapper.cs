@@ -13,11 +13,14 @@ public static class TillMapper
         Seller = row.Seller,
         Buyer = row.Buyer,
         Amount = row.Amount,
+        Hammer = row.Hammer,
         Club = row.Club,
         PlayerName = row.PlayerName,
         Status = row.Status,
         Slip = row.Slip,
+        PayoutRef = row.PayoutRef,
         OpenedAt = row.OpenedAt,
-        CapturedAt = row.CapturedAt
+        CapturedAt = row.CapturedAt,
+        ReleasedAt = row.ReleasedAt
     };
 }

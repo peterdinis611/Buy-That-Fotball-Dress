@@ -27,6 +27,7 @@ public class Settlement
     public DateTime? PaidAt { get; set; }
     public DateTime? ShippedAt { get; set; }
     public DateTime? ReceivedAt { get; set; }
+    public string? PayoutRef { get; set; }
     public DateTime? DisputedAt { get; set; }
     public string? DisputedBy { get; set; }
     public string? DisputeNote { get; set; }

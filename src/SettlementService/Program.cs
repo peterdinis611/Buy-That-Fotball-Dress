@@ -75,6 +75,7 @@ builder.Services.AddMassTransit(x =>
 });
 
 builder.Services.AddHostedService<SettlementSeedHostedService>();
+builder.Services.AddHostedService<SettlementEscrowHostedService>();
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 

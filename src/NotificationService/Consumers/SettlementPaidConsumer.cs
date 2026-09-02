@@ -30,12 +30,12 @@ public class SettlementPaidConsumer(
                     message.Seller,
                     "Paid",
                     player,
-                    $"{message.Buyer} paid. You take {hammer}. Ship it.",
+                    $"{message.Buyer} paid. Hammer sits at the house until the shirt is received.",
                     href),
                 new Letter(
                     message.Seller,
                     $"Paid · {player}",
-                    $"{message.Buyer} paid at the till ({message.PaymentRef}). You take {hammer} (hammer). Desk is house. Add a tracking number and mark it shipped.\n{href}",
+                    $"{message.Buyer} paid due at the till ({message.PaymentRef}). Money sits at the house until the shirt is received — then you take {hammer} (hammer). Desk is house. Add a tracking number and mark it shipped.\n{href}",
                     "paid"),
                 context.CancellationToken);
         }

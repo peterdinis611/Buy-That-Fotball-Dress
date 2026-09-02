@@ -91,24 +91,29 @@ function Till({ row, buyer, seller }: { row: Settlement; buyer: boolean; seller:
       </p>
 
       {row.status === "Opened" && buyer ? (
-        <p className="till-hint">Pay hammer plus desk by card. The seller takes the hammer.</p>
+        <p className="till-hint">Pay due by card. Money sits at the house until you confirm the shirt.</p>
       ) : null}
       {row.status === "Opened" && seller ? (
-        <p className="till-hint">Waiting for {row.buyer} to pay. You take the hammer; desk is house.</p>
+        <p className="till-hint">Waiting for {row.buyer} to pay due. Hammer stays at the house until received.</p>
       ) : null}
       {row.status === "Paid" && seller ? (
-        <p className="till-hint">Paid. Add a tracking number, then mark it shipped.</p>
+        <p className="till-hint">Paid — house is holding. Add a tracking number, then mark it shipped. You take hammer when the shirt is received.</p>
       ) : null}
       {row.status === "Paid" && buyer ? (
-        <p className="till-hint">Paid. Waiting for {row.seller} to ship.</p>
+        <p className="till-hint">Paid. House holds until you confirm. Waiting for {row.seller} to ship.</p>
       ) : null}
       {row.status === "Shipped" && buyer ? (
-        <p className="till-hint">On the way. Confirm when the shirt is in your hands.</p>
+        <p className="till-hint">On the way. Confirm when the shirt is in your hands — then {row.seller} takes hammer. Seven days after ship, the house releases it anyway.</p>
       ) : null}
       {row.status === "Shipped" && seller ? (
-        <p className="till-hint">Shipped. Waiting for {row.buyer} to confirm.</p>
+        <p className="till-hint">Shipped. Hammer sits at the house until {row.buyer} confirms, or seven days after ship.</p>
       ) : null}
-      {row.status === "Received" ? <p className="till-hint">Closed. Shirt received.</p> : null}
+      {row.status === "Received" ? (
+        <p className="till-hint">
+          Closed. Shirt received.
+          {row.payoutRef ? ` Seller took hammer · ${row.payoutRef}.` : " Seller took hammer."}
+        </p>
+      ) : null}
       {row.status === "Disputed" ? (
         <p className="till-hint">
           Raised by {row.disputedBy}

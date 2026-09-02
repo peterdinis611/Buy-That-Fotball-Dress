@@ -50,6 +50,8 @@ public sealed class SettlementsService(
         var row = await db.Settlements.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (row is null) return Result<SettlementDto>.NotFound("Desk not found.");
         if (!Same(username, row.Buyer)) return Result<SettlementDto>.Forbidden("Only the buyer can pay.");
+        if (row.Status is DeskStatus.Paid or DeskStatus.Shipped or DeskStatus.Received)
+            return Result<SettlementDto>.Success(row.ToDto());
         if (row.Status != DeskStatus.Opened) return Result<SettlementDto>.Conflict("This desk is not waiting for payment.");
 
         var charge = await till.ChargeAsync(row, username, pay, cancellationToken);
@@ -123,10 +125,18 @@ public sealed class SettlementsService(
         var row = await db.Settlements.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (row is null) return Result<SettlementDto>.NotFound("Desk not found.");
         if (!Same(username, row.Buyer)) return Result<SettlementDto>.Forbidden("Only the buyer can confirm receipt.");
+        if (row.Status == DeskStatus.Received)
+            return Result<SettlementDto>.Success(row.ToDto());
         if (row.Status != DeskStatus.Shipped) return Result<SettlementDto>.Conflict("The shirt has not shipped yet.");
+
+        var payout = await till.ReleaseAsync(row, cancellationToken);
+        if (!payout.IsSuccess)
+            return Result<SettlementDto>.Fail(payout.Error ?? "The till did not pay the hammer.", payout.StatusCode);
 
         row.Status = DeskStatus.Received;
         row.ReceivedAt = DateTime.UtcNow;
+        if (!string.IsNullOrWhiteSpace(payout.Value?.PayoutRef))
+            row.PayoutRef = payout.Value.PayoutRef;
         await db.SaveChangesAsync(cancellationToken);
         await publishEndpoint.Publish(new SettlementReceived { Id = row.Id, AuctionId = row.AuctionId, ReceivedAt = row.ReceivedAt.Value }, cancellationToken);
         return Result<SettlementDto>.Success(row.ToDto());
@@ -178,6 +188,33 @@ public sealed class SettlementsService(
         row.DisputeNote = null;
         await db.SaveChangesAsync(cancellationToken);
         return Result<SettlementDto>.Success(row.ToDto());
+    }
+
+    public async Task<int> RequestOverdueReleasesAsync(CancellationToken cancellationToken)
+    {
+        var cutoff = DateTime.UtcNow - EscrowHold.AfterShip;
+        var rows = await db.Settlements
+            .Where(x =>
+                x.Status == DeskStatus.Shipped
+                && x.ShippedAt != null
+                && x.ShippedAt <= cutoff
+                && x.PayoutRef == null)
+            .ToListAsync(cancellationToken);
+
+        foreach (var row in rows)
+        {
+            var hammer = row.Hammer > 0 ? row.Hammer : row.Amount;
+            await publishEndpoint.Publish(new EscrowReleaseRequested
+            {
+                SettlementId = row.Id,
+                AuctionId = row.AuctionId,
+                Seller = row.Seller,
+                Buyer = row.Buyer,
+                Hammer = hammer
+            }, cancellationToken);
+        }
+
+        return rows.Count;
     }
 
     private static bool Same(string left, string right) =>

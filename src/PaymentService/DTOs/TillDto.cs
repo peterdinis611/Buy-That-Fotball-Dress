@@ -14,9 +14,12 @@ public class TillDto
     public string PlayerName { get; set; } = string.Empty;
     public TillStatus Status { get; set; }
     public string? Slip { get; set; }
+    public string? PayoutRef { get; set; }
     public string? CheckoutUrl { get; set; }
     public DateTime OpenedAt { get; set; }
     public DateTime? CapturedAt { get; set; }
+    public DateTime? ReleasedAt { get; set; }
+    public int Hammer { get; set; }
 }
 
 public class ChargeDeskDto

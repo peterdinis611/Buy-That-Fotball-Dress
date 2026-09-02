@@ -19,6 +19,7 @@ import {
   usePlaceBidMutation,
   usePlayerSheetQuery,
   useRelistAuctionMutation,
+  useTakeAuctionMutation,
   useWatchMutation,
 } from "@/hooks";
 import { BidTape } from "./bid-tape";
@@ -250,8 +251,11 @@ function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
   const router = useRouter();
   const takeDown = useDeleteAuctionMutation();
   const hangAgain = useRelistAuctionMutation(auction.id);
+  const takeBid = useTakeAuctionMutation(auction.id);
   const [banner, setBanner] = useState<string | null>(null);
   const unsold = auction.status === "ReserveNotMet";
+  const lastBid = auction.currentHighBid ?? 0;
+  const canTake = unsold && lastBid > 0 && Boolean(auction.highBidder);
 
   async function remove() {
     setBanner(null);
@@ -273,6 +277,16 @@ function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
       router.refresh();
     } catch (err) {
       setBanner(err instanceof Error ? err.message : "Could not hang this shirt again.");
+    }
+  }
+
+  async function take() {
+    setBanner(null);
+    try {
+      await takeBid.mutateAsync();
+      router.refresh();
+    } catch (err) {
+      setBanner(err instanceof Error ? err.message : "Could not take that bid.");
     }
   }
 
@@ -301,16 +315,38 @@ function SellerDesk({ auction, live }: { auction: Auction; live: boolean }) {
         </div>
       ) : unsold ? (
         <div className="mt-4">
-          <p className="text-[var(--muted-foreground)]">Reserve not met. Hang it again with a new clock.</p>
-          <ConfirmAct
-            title={`Hang ${auction.item.playerName} again?`}
-            body="Same shirt, new clock. Seven days from now. Old bids come off the book."
-            confirmLabel="Hang again"
-            pending={hangAgain.isPending}
-            triggerClassName="mt-4 inline-flex h-11 items-center bg-[var(--bib)] px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--stud)] uppercase"
-            triggerLabel="Hang again"
-            onConfirm={relist}
-          />
+          <p className="text-[var(--muted-foreground)]">
+            Reserve not met.
+            {canTake
+              ? ` Take ${formatMoney(lastBid)} from ${auction.highBidder} with no new clock, or hang it again.`
+              : " Hang it again with a new clock."}
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            {canTake ? (
+              <ConfirmAct
+                title={`Take ${formatMoney(lastBid)}?`}
+                body={`${auction.highBidder} stays the winner. No new clock. The desk opens for that hammer.`}
+                confirmLabel={`Take ${formatMoney(lastBid)}`}
+                pending={takeBid.isPending}
+                triggerClassName="inline-flex h-11 items-center bg-[var(--bib)] px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--stud)] uppercase"
+                triggerLabel={`Take ${formatMoney(lastBid)}`}
+                onConfirm={take}
+              />
+            ) : null}
+            <ConfirmAct
+              title={`Hang ${auction.item.playerName} again?`}
+              body="Same shirt, new clock. Seven days from now. Old bids come off the book."
+              confirmLabel="Hang again"
+              pending={hangAgain.isPending}
+              triggerClassName={
+                canTake
+                  ? "inline-flex h-11 items-center border border-white/25 px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--chalk)] uppercase"
+                  : "inline-flex h-11 items-center bg-[var(--bib)] px-5 font-[family-name:var(--font-display)] text-xl tracking-[0.08em] text-[var(--stud)] uppercase"
+              }
+              triggerLabel="Hang again"
+              onConfirm={relist}
+            />
+          </div>
         </div>
       ) : (
         <p className="mt-3 text-[var(--muted-foreground)]">The clock has run out. This lot stays on your sheet.</p>

@@ -21,7 +21,7 @@ const rules = [
     card: "Desk cut",
     tone: "yellow" as const,
     title: "Hammer plus desk",
-    copy: "The bid board is hammer. Buyer pays hammer plus 10% desk. Seller takes hammer. House keeps desk.",
+    copy: "The bid board is hammer. Buyer pays hammer plus 10% desk. Money sits at the house until the shirt is received — then the seller takes hammer. House keeps desk.",
   },
 ];
 

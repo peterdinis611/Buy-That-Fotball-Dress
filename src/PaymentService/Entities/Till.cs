@@ -4,6 +4,7 @@ public enum TillStatus
 {
     Held,
     Captured,
+    Released,
     Voided
 }
 
@@ -15,10 +16,13 @@ public class Till
     public required string Seller { get; set; }
     public required string Buyer { get; set; }
     public int Amount { get; set; }
+    public int Hammer { get; set; }
     public string Club { get; set; } = string.Empty;
     public string PlayerName { get; set; } = string.Empty;
     public TillStatus Status { get; set; } = TillStatus.Held;
     public string? Slip { get; set; }
     public DateTime OpenedAt { get; set; } = DateTime.UtcNow;
     public DateTime? CapturedAt { get; set; }
+    public string? PayoutRef { get; set; }
+    public DateTime? ReleasedAt { get; set; }
 }
